@@ -13,7 +13,8 @@ import store from './store'
 import router from './router'
 
 import '@/icons' // icon
-import '@/permission' // permission control
+
+import BaiduMap from 'vue-baidu-map'
 
 /**
  * If you don't want to use mock-server
@@ -26,6 +27,7 @@ import '@/permission' // permission control
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
+Vue.use(BaiduMap, { ak: 'YZk52XHYbwtDoWnnlDO53ysCNBHCG0v6' })
 
 Vue.config.productionTip = false
 

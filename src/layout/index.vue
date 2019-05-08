@@ -4,15 +4,16 @@
     <sidebar class="sidebar-container" />
     <div class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
+        <transition name="draw"><navbar v-show="!hideNav" /></transition>
       </div>
+      <tags-view />
       <app-main />
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from './components'
+import { Navbar, Sidebar, AppMain, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
@@ -20,9 +21,15 @@ export default {
   components: {
     Navbar,
     Sidebar,
-    AppMain
+    AppMain,
+    TagsView
   },
   mixins: [ResizeMixin],
+  data() {
+    return {
+      hideNav: false
+    }
+  },
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar
@@ -40,6 +47,16 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
+    }
+  },
+  watch: {
+    '$store.state.app.navbar': {
+      handler: function(newer, older) {
+        console.log('change')
+        console.log(newer)
+        this.hideNav = newer.hide
+      },
+      deep: true // 开启深度监听
     }
   },
   methods: {
@@ -89,5 +106,12 @@ export default {
 
   .mobile .fixed-header {
     width: 100%;
+  }
+
+  .draw-enter-active, .draw-leave-active {
+    transition: all 0.3s ease;
+  }
+  .draw-enter, .draw-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    height: 0;
   }
 </style>
