@@ -5,14 +5,19 @@
       <!--<bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_LEFT" />-->
       <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
       <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
-      <bm-marker :position="{lng: 116.404, lat: 39.915}" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">
-        <bm-label content="我爱北京天安门" :label-style="{color: 'red', fontSize : '24px'}" :offset="{width: -35, height: 30}"/>
+
+      <bm-marker :position="markerPoint" @click="infoWindowOpen">
+        <bm-info-window title="Test" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
+          {{ infoWindow.contents }}
+          <el-button @click="isVideoMonitoringVisible">视频监控</el-button>
+        </bm-info-window>
       </bm-marker>
+
     </baidu-map>
     <!--地图右侧弹出-->
     <div class="mapright" />
 
-    <el-dialog title="智能选车" :visible.sync="dialogTableVisible">
+    <el-dialog title="智能选车" :visible.sync="carSelectionVisible">
       <el-transfer
         v-model="value2"
         filterable
@@ -22,12 +27,21 @@
       />
     </el-dialog>
 
+    <el-dialog title="视频监控" :visible.sync="videoMonitoringVisible">
+      <video-player
+        ref="videoPlayer"
+        class="video-player vjs-custom-skin"
+        :playsinline="true"
+        :options="playerOptions"
+      />
+    </el-dialog>
+
     <div class="mapbottom">
 
       <!--<el-button type="primary" icon="el-icon-search" class="item-mapbottom" @click="dialogTableVisible = true">智能选车</el-button>-->
       <div class="item-mapbottom">
         <svg-icon icon-class="search" />
-        <el-button type="text" @click="isDialogTableVisible">智能选车</el-button>
+        <el-button type="text" @click="isCarSelectionVisible">智能选车</el-button>
       </div>
       <div class="item-mapbottom" @click="clearFilter">
         <svg-icon icon-class="all" />
@@ -94,7 +108,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
   data() {
-    const generateData2 = _ => {
+    const generateData2 = () => {
       const data = []
       const cities = ['上海', '北京', '广州', '深圳', '南京', '西安', '成都']
       const pinyin = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'nanjing', 'xian', 'chengdu']
@@ -120,7 +134,18 @@ export default {
       alarm: 0,
       warning: 0,
 
-      dialogTableVisible: false,
+      carSelectionVisible: false,
+      videoMonitoringVisible: false,
+
+      infoWindowShow: false,
+      infoWindow: {
+        show: false,
+        contents: '视频监控'
+      },
+      markerPoint: {
+        lng: 116.404,
+        lat: 39.900
+      },
 
       data2: generateData2(),
       value2: [],
@@ -146,7 +171,30 @@ export default {
         date: '2016-05-03',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      }],
+      playerOptions: {
+        // playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+        autoplay: false, // 如果true,浏览器准备好时开始回放。
+        muted: false, // 默认情况下将会消除任何音频。
+        loop: false, // 导致视频一结束就重新开始。
+        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+        language: 'zh-CN',
+        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+        sources: [{
+          type: 'application/dash+xml',
+          src: 'http://202.194.14.72:8080/dash/test.mpd'
+        }],
+        // poster: "poster.jpg", // 你的封面地址
+        width: document.documentElement.clientWidth
+        // notSupportedMessage: '此视频暂无法播放，请稍后再试'
+        //  controlBar: {
+        //   timeDivider: true,
+        //   durationDisplay: true,
+        //   remainingTimeDisplay: false,
+        //   fullscreenToggle: true //全屏按钮
+        //  }
+      }
     }
   },
   computed: {
@@ -170,8 +218,8 @@ export default {
   methods: {
     handler({ BMap, map }) {
       console.log(BMap, map)
-      this.center.lng = 113.822348
-      this.center.lat = 22.635538
+      this.center.lng = 116.404
+      this.center.lat = 39.915
       this.zoom = this.zoom
     },
     getClickInfo(e) {
@@ -180,11 +228,15 @@ export default {
       this.center.lng = e.point.lng
       this.center.lat = e.point.lat
     },
+    // 展开车辆列表
     showTable() {
       this.isShow = !this.isShow
     },
-    isDialogTableVisible() {
-      this.dialogTableVisible = !this.dialogTableVisible
+    isCarSelectionVisible() {
+      this.carSelectionVisible = !this.carSelectionVisible
+    },
+    isVideoMonitoringVisible() {
+      this.videoMonitoringVisible = !this.videoMonitoringVisible
     },
     clearFilter() {
       this.$refs.filterTable.clearFilter()
@@ -192,6 +244,12 @@ export default {
     filterHandler(value, row, column) {
       const property = column['property']
       return row[property] === value
+    },
+    infoWindowClose() {
+      this.infoWindow.show = false
+    },
+    infoWindowOpen() {
+      this.infoWindow.show = true
     }
   }
 }

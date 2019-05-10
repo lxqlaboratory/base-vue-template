@@ -16,6 +16,10 @@ import '@/icons' // icon
 
 import BaiduMap from 'vue-baidu-map'
 
+import VideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+import 'vue-video-player/src/custom-theme.css'
+
 /**
  * If you don't want to use mock-server
  * you want to use mockjs for request interception
@@ -28,6 +32,7 @@ import BaiduMap from 'vue-baidu-map'
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 Vue.use(BaiduMap, { ak: 'YZk52XHYbwtDoWnnlDO53ysCNBHCG0v6' })
+Vue.use(VideoPlayer)
 
 Vue.config.productionTip = false
 
