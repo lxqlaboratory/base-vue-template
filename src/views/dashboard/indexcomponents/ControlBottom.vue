@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bottom-container" :class="{active:isShow}">
     <el-dialog title="智能选车" :visible.sync="carSelectionVisible">
       <el-transfer
         v-model="value2"
@@ -17,42 +17,49 @@
         <svg-icon icon-class="search" />
         <el-button type="text" @click="isCarSelectionVisible">智能选车</el-button>
       </div>
-      <div class="item-mapbottom" @click="clearFilter">
+      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
+      <div class="item-mapbottom">
         <svg-icon icon-class="all" />
-        全部&nbsp;&nbsp;&nbsp;{{ all }}
+        <el-button type="text" style="color:green" @click="clearFilter">全部</el-button>&nbsp;&nbsp;&nbsp;{{ all }}
       </div>
+      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
       <div class="item-mapbottom">
         <svg-icon icon-class="location" />
-        运行&nbsp;&nbsp;&nbsp;{{ running }}
+        <el-button type="text" style="color:red" @click="clearFilter">运行</el-button>&nbsp;&nbsp;&nbsp;{{ running }}
       </div>
+      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
       <div class="item-mapbottom">
         <svg-icon icon-class="car_park" />
-        停车&nbsp;&nbsp;&nbsp;{{ parking }}
+        <el-button type="text" style="color:blueviolet" @click="clearFilter">停车</el-button>&nbsp;&nbsp;&nbsp;{{ parking }}
       </div>
+      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
       <div class="item-mapbottom">
         <svg-icon icon-class="offline" />
-        离线&nbsp;&nbsp;&nbsp;{{ offline }}
+        <el-button type="text" style="color:gray" @click="clearFilter">离线</el-button>&nbsp;&nbsp;&nbsp;{{ offline }}
       </div>
+      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
       <div class="item-mapbottom">
         <svg-icon icon-class="alarm" />
-        报警&nbsp;&nbsp;&nbsp;{{ alarm }}
+        <el-button type="text" style="color:red" @click="clearFilter">报警</el-button>&nbsp;&nbsp;&nbsp;{{ alarm }}
       </div>
+      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
       <div class="item-mapbottom">
         <svg-icon icon-class="warning" />
-        预警&nbsp;&nbsp;&nbsp;{{ warning }}
+        <el-button type="text" style="color:red" @click="clearFilter">预警</el-button>&nbsp;&nbsp;&nbsp;{{ warning }}
       </div>
-
+      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
       <div class="item-mapbottom">
         &nbsp;&nbsp;&nbsp;车辆在线数：&nbsp;{{ vehicle_num }}&nbsp;&nbsp;&nbsp;当前在线率：&nbsp;{{ online_rate }}
       </div>
 
       <div class="item-mapbottom-right">
-        <svg-icon icon-class="arrow-up" @click="showTable" />
-        <svg-icon icon-class="maxscreen" />
+        <svg-icon icon-class="arrow-up" :class="{transformPictureDiv:isShow}" @click="showTable" />
+        <svg-icon icon-class="maxscreen" @click="showTableMax" />
       </div>
     </div>
-    <div v-show="isShow" class="mapBottomTable" style="width: 100%">
-      <el-table :data="tableData" height="250" border style="width: 100%">
+
+    <div v-show="isShow" class="mapBottomTable">
+      <el-table :data="tableData" min-height="250" border style="width: 100%">
         <el-table-column prop="vehicle_name" label="车牌号" sortable />
         <el-table-column prop="sim_num" label="SIM卡号" sortable />
         <el-table-column prop="last_time" label="最后上线时间" min-width="110" sortable />
@@ -79,7 +86,9 @@
         <el-table-column prop="note" label="备注" sortable />
       </el-table>
     </div>
+
   </div>
+
 </template>
 
 <script>
@@ -121,28 +130,15 @@ export default {
 
       value1: [1, 4],
 
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      tableData: []
     }
   },
   methods: {
     // 展开车辆列表
     showTable() {
+      this.isShow = !this.isShow
+    },
+    showTableMax() {
       this.isShow = !this.isShow
     },
     isCarSelectionVisible() {
@@ -161,23 +157,57 @@ export default {
 </script>
 
 <style scoped>
+
+  .transformPictureDiv {
+    transform:rotate(180deg);
+    -ms-transform:rotate(180deg); /* Internet Explorer */
+    -moz-transform:rotate(180deg); /* Firefox */
+    -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+    -o-transform:rotate(180deg); /* Opera */
+  }
+
+  .active {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    min-height: 40vh;
+    border-top: 1px solid gray;
+    width: 100%;
+    background-color: ghostwhite;
+    flex-direction: column;
+    cursor: n-resize
+  }
+
+  .bottom-container{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4.5vh;
+    border-top: 1px solid gray;
+    width: 100%;
+    background-color: ghostwhite;
+    flex-direction: column;
+  }
+
   .mapBottomTable {
     position: absolute;
-    bottom: 4.5vh;
+    top: 4.5vh;
+    bottom: 0;
     left: 0;
+    min-height: 40vh;
     border-top: 1px solid gray;
     width: 100%;
     background-color: ghostwhite;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
+    /*align-items: center;*/
     z-index: 99;
   }
 
   .mapbottom {
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
     height: 4.5vh;
     border-top: 1px solid gray;
@@ -215,7 +245,7 @@ export default {
 
   .item-mapbottom-right svg {
     margin-right: 15px !important;
-    height: 1.5em !important;
-    width: 1.5em !important;
+    height: 1.2em !important;
+    width: 1.2em !important;
   }
 </style>
