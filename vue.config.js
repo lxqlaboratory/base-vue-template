@@ -18,6 +18,7 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
+
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
@@ -33,11 +34,11 @@ module.exports = {
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
-      [process.env.VUE_APP_BASE_API]: {
-        target: `http://localhost:${port}/mock`,
+      '/api': {
+        target: `http://localhost:80/vehicle-monitoring/`,
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
+          '^/api': '/'
         }
       }
     }

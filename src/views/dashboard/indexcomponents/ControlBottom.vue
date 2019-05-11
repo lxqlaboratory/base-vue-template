@@ -17,37 +17,37 @@
         <svg-icon icon-class="search" />
         <el-button type="text" @click="isCarSelectionVisible">智能选车</el-button>
       </div>
-      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
+      <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="all" />
         <el-button type="text" style="color:green" @click="clearFilter">全部</el-button>&nbsp;&nbsp;&nbsp;{{ all }}
       </div>
-      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
+      <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="location" />
         <el-button type="text" style="color:red" @click="clearFilter">运行</el-button>&nbsp;&nbsp;&nbsp;{{ running }}
       </div>
-      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
+      <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="car_park" />
         <el-button type="text" style="color:blueviolet" @click="clearFilter">停车</el-button>&nbsp;&nbsp;&nbsp;{{ parking }}
       </div>
-      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
+      <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="offline" />
         <el-button type="text" style="color:gray" @click="clearFilter">离线</el-button>&nbsp;&nbsp;&nbsp;{{ offline }}
       </div>
-      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
+      <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="alarm" />
         <el-button type="text" style="color:red" @click="clearFilter">报警</el-button>&nbsp;&nbsp;&nbsp;{{ alarm }}
       </div>
-      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
+      <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="warning" />
         <el-button type="text" style="color:red" @click="clearFilter">预警</el-button>&nbsp;&nbsp;&nbsp;{{ warning }}
       </div>
-      <div style="width: 1px;height: 4.5vh; background: gray;"></div>
+      <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         &nbsp;&nbsp;&nbsp;车辆在线数：&nbsp;{{ vehicle_num }}&nbsp;&nbsp;&nbsp;当前在线率：&nbsp;{{ online_rate }}
       </div>
