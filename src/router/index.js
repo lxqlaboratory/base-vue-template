@@ -56,23 +56,109 @@ export const constantRoutes = [
   },
 
   {
+    path: '/base-manage',
+    component: Layout,
+    redirect: '/base-manage',
+    name: 'base-manage',
+    meta: { title: '基础信息管理', icon: 'example' },
+    children: [
+      {
+        path: 'base-manage',
+        name: 'base-manage',
+        component: () => import('@/views/base-manage/vehicle-manage'),
+        meta: { title: '车辆管理', icon: 'table' }
+      },
+      {
+        path: 'base-manage',
+        name: 'base-manage',
+        component: () => import('@/views/base-manage/driver-manage'),
+        meta: { title: '驾驶员管理', icon: 'table' }
+      },
+      {
+        path: 'base-manage',
+        name: 'base-manage',
+        component: () => import('@/views/base-manage/fleet-manage'),
+        meta: { title: '车队管理', icon: 'table' }
+      },
+      {
+        path: 'base-manage',
+        name: 'base-manage',
+        component: () => import('@/views/base-manage/template-manage'),
+        meta: { title: '短信模板管理', icon: 'table' }
+      }
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    meta: { title: '统计分析', icon: 'example' },
     children: [
       {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: '里程统计', icon: 'table' }
       },
       {
         path: 'tree',
         name: 'Tree',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: '超速统计', icon: 'tree' }
+      },
+      {
+        path: 'tree',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '疲劳统计', icon: 'tree' }
+      }
+    ]
+  },
+
+  {
+    path: '/example',
+    component: Layout,
+    redirect: '/example/table',
+    name: 'Example',
+    meta: { title: '历史信息查询', icon: 'example' },
+    children: [
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/table/index'),
+        meta: { title: '违章历史查询', icon: 'table' }
+      },
+      {
+        path: 'tree',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '离线预警历史', icon: 'tree' }
+      },
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/table/index'),
+        meta: { title: '用户消息历史', icon: 'table' }
+      },
+      {
+        path: 'tree',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '终端状态历史', icon: 'tree' }
+      },
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/table/index'),
+        meta: { title: '终端报警历史', icon: 'table' }
+      },
+      {
+        path: 'tree',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '查岗历史查询', icon: 'tree' }
       }
     ]
   },
