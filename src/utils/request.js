@@ -39,7 +39,7 @@ service.interceptors.response.use(
 
   /**
    * Determine the request status by custom code
-   * Here is just an example
+   * Here is just an
    * You can also judge the status by HTTP Status Code
    */
   response => {

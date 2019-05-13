@@ -7,9 +7,7 @@
       <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
     </baidu-map>
     <!--地图右侧弹出-->
-    <div class="mapright">
-
-    </div>
+    <div class="mapright" />
 
     <div class="mapbottom">
       <div class="item-mapbottom">
@@ -30,8 +28,8 @@
         智能选车
       </div>
       <div class="item-mapbottom-right">
-        <svg-icon icon-class="arrow-up"></svg-icon>
-        <svg-icon icon-class="maxscreen"></svg-icon>
+        <svg-icon icon-class="arrow-up" />
+        <svg-icon icon-class="maxscreen" />
       </div>
     </div>
   </div>

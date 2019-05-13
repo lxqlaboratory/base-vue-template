@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-/* Layout */
+
 import Layout from '@/layout'
 
 /**
@@ -76,13 +76,56 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/',
+    component: Layout,
+    name: 'Example',
+    meta: { title: '历史信息查询', icon: 'tool' },
+    children: [
+      {
+        path: 'violationHistory',
+        name: 'violationHistory',
+        component: () => import('@/views/historySearch/violationHistory'),
+        meta: { title: '违章历史查询', icon: 'table' }
+      },
+      {
+        path: 'offlineWarning',
+        name: 'offlineWarning',
+        component: () => import('@/views/historySearch/offlineWarning'),
+        meta: { title: '离线预警历史', icon: 'tree' }
+      },
+      {
+        path: 'userMessage',
+        name: 'userMessage',
+        component: () => import('@/views/historySearch/userMessage'),
+        meta: { title: '用戶消息历史', icon: 'tree' }
+      },
+      {
+        path: 'terminalState',
+        name: 'terminalState',
+        component: () => import('@/views/historySearch/terminalState'),
+        meta: { title: '終端状态历史', icon: 'tree' }
+      },
+      {
+        path: 'terminalAlarm',
+        name: 'terminalAlarm',
+        component: () => import('@/views/historySearch/terminalAlarm'),
+        meta: { title: '終端报警历史', icon: 'tree' }
+      },
+      {
+        path: 'checkHistory',
+        name: 'checkHistory',
+        component: () => import('@/views/historySearch/checkHistory'),
+        meta: { title: '查岗历史查询', icon: 'tree' }
+      }
+    ]
+  },
   {
     path: '/form',
     component: Layout,
     children: [
       {
-        path: 'index',
+        path: 'index2.vue',
         name: 'Form',
         component: () => import('@/views/form/index'),
         meta: { title: 'Form', icon: 'form' }
