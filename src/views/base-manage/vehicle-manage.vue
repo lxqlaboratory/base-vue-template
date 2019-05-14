@@ -6,7 +6,6 @@
       fit
       highlight-current-row
     >
-
       <el-table-column align="center" label="ID" width="50">
         <template slot-scope="scope">
           {{ scope.$index+1 }}

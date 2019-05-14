@@ -15,12 +15,12 @@
       </el-table-column>
       <el-table-column label="车队名称"width="250" align="center">
         <template slot-scope="scope">
-          {{ scope.row.driverName }}
+          {{ scope.row.companyName }}
         </template>
       </el-table-column>
       <el-table-column label="车辆数量" width="250" align="center">
         <template slot-scope="scope">
-          {{ scope.row.driverPhoneNum }}
+
         </template>
       </el-table-column>
       <el-table-column label="车队负责人" width="150" align="center">
@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column label="负责人电话" width="250" align="center">
         <template slot-scope="scope">
-
+          {{ scope.row.telephone }}
         </template>
       </el-table-column>
     </el-table>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { getFleetList } from '@/api/fleet-manage'
 
 export default {
   filters: {
@@ -55,6 +55,10 @@ export default {
   },
   methods: {
     fetchData() {
+      this.listLoading = true
+      getFleetList().then(response => {
+        this.list = response.data
+      })
       this.listLoading = false
     }
   }

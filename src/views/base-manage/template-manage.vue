@@ -15,12 +15,12 @@
       </el-table-column>
       <el-table-column label="信息内容"width="800" align="center">
         <template slot-scope="scope">
-          {{ scope.row.driverName }}
+          {{ scope.row.messageContent }}
         </template>
       </el-table-column>
       <el-table-column label="添加时间" width="150" align="center">
         <template slot-scope="scope">
-          {{ scope.row.driverPhoneNum }}
+          {{ scope.row.addTime }}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150" align="center">
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import { getList } from '@/api/table'
+  import { getMessageTemplateList } from '@/api/template-manage'
 
   export default {
     filters: {
@@ -50,6 +50,10 @@
     },
     methods: {
       fetchData() {
+        this.listLoading = true
+        getMessageTemplateList().then(response => {
+          this.list = response.data
+        })
         this.listLoading = false
       }
     }
