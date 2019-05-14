@@ -63,26 +63,26 @@ export const constantRoutes = [
     meta: { title: '基础信息管理', icon: 'example' },
     children: [
       {
-        path: 'base-manage',
-        name: 'base-manage',
+        path: 'vehiclemanage',
+        name: 'vehiclemanage',
         component: () => import('@/views/base-manage/vehicle-manage'),
         meta: { title: '车辆管理', icon: 'table' }
       },
       {
-        path: 'base-manage',
-        name: 'base-manage',
+        path: 'drivermanage',
+        name: 'drivermanage',
         component: () => import('@/views/base-manage/driver-manage'),
         meta: { title: '驾驶员管理', icon: 'table' }
       },
       {
-        path: 'base-manage',
-        name: 'base-manage',
+        path: 'fleetmanage',
+        name: 'fleetmanage',
         component: () => import('@/views/base-manage/fleet-manage'),
         meta: { title: '车队管理', icon: 'table' }
       },
       {
-        path: 'base-manage',
-        name: 'base-manage',
+        path: 'templatemanage',
+        name: 'templatemanage',
         component: () => import('@/views/base-manage/template-manage'),
         meta: { title: '短信模板管理', icon: 'table' }
       }

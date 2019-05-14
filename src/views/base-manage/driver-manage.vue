@@ -8,106 +8,59 @@
     >
       <el-table-column align="center" label="ID" width="50">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="车牌号"width="110" align="center">
+      <el-table-column label="驾驶员姓名"width="150" align="center">
         <template slot-scope="scope">
-          {{ scope.row.title }}
+          {{ scope.row.driverName }}
         </template>
       </el-table-column>
-      <el-table-column label="所属车队" width="200" align="center">
+      <el-table-column label="联系电话" width="150" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
+          {{ scope.row.driverPhoneNum }}
         </template>
       </el-table-column>
-      <el-table-column label="司机姓名" width="110" align="center">
+      <el-table-column label="从业资格证类型" width="150" align="center">
         <template slot-scope="scope">
-          {{ scope.row.pageviews }}
+
         </template>
       </el-table-column>
-      <el-table-column label="司机电话" width="110" align="center">
+      <el-table-column label="是否兼职押运员" width="150" align="center">
         <template slot-scope="scope">
-          {{ scope.row.pageviews }}
+
         </template>
       </el-table-column>
-      <el-table-column label="随车电话" width="110" align="center">
+      <el-table-column label="驾驶证号" width="250" align="center">
         <template slot-scope="scope">
-          {{ scope.row.pageviews }}
+          {{ scope.row.drivingLicenseNum }}
         </template>
       </el-table-column>
-      <el-table-column label="年审时间" width="110" align="center">
+      <el-table-column label="从业资格证号" width="150" align="center">
         <template slot-scope="scope">
-          {{ scope.row.pageviews }}
+
         </template>
       </el-table-column>
-      <el-table-column label="距离年审天数" width="110" align="center">
+      <el-table-column label="操作" width="135" align="center">
         <template slot-scope="scope">
-          {{ scope.row.pageviews }}
+
         </template>
       </el-table-column>
-      <el-table-column label="二级维护时间" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column label="距二级维护天数" width="150" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column label="业主电话" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column label="押运员电话" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column label="安全员电话" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column label="亲属电话" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column label="公司法人电话" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
+
     </el-table>
   </div>
 </template>
 
 <script>
-  import { getList } from '@/api/table'
+  import { getDriverList } from '@/api/driver-manage'
 
   export default {
     filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'gray',
-          deleted: 'danger'
-        }
-        return statusMap[status]
-      }
+
     },
     data() {
       return {
         list: null,
-        listLoading: true
       }
     },
     created() {
@@ -115,7 +68,10 @@
     },
     methods: {
       fetchData() {
-        //this.listLoading = true
+        getDriverList().then(response => {
+            console.log(response)
+            this.list = response.data
+          })
       }
     }
   }
