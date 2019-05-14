@@ -16,6 +16,7 @@
     </baidu-map>
     <!--地图右侧弹出-->
 
+
     <el-dialog title="视频监控" :visible.sync="videoMonitoringVisible">
       <video-player
         ref="videoPlayer"
