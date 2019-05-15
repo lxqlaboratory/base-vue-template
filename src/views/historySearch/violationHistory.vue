@@ -1,85 +1,109 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="我的">
-        <el-input v-model="form.name" />
-      </el-form-item>
-      <el-form-item label="Activity zone">
-        <el-select v-model="form.region" placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Activity time">
-        <el-col :span="11">
-          <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date" style="width: 100%;" />
-        </el-col>
-        <el-col :span="2" class="line">-</el-col>
-        <el-col :span="11">
-          <el-time-picker v-model="form.date2" type="fixed-time" placeholder="Pick a time" style="width: 100%;" />
-        </el-col>
-      </el-form-item>
-      <el-form-item label="Instant delivery">
-        <el-switch v-model="form.delivery" />
-      </el-form-item>
-      <el-form-item label="Activity type">
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="Online activities" name="type" />
-          <el-checkbox label="Promotion activities" name="type" />
-          <el-checkbox label="Offline activities" name="type" />
-          <el-checkbox label="Simple brand exposure" name="type" />
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="Resources">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="Sponsor" />
-          <el-radio label="Venue" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Activity form">
-        <el-input v-model="form.desc" type="textarea" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button @click="onCancel">Cancel</el-button>
-      </el-form-item>
-    </el-form>
+
+    <div class="block">
+
+      <el-date-picker
+        v-model="time"
+        type="datetimerange"
+        align="right"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :default-time="['12:00:00', '08:00:00']">
+      </el-date-picker>
+      <span style="margin-left:10px">车牌号</span>
+     <el-select v-model="plateValue" filterable placeholder="请选择车牌号码">
+      <el-option
+        v-for="item in plateList"
+        :key="item.vehicleId"
+        :label="item.plateNum"
+        :value="item.vehicleId">
+      </el-option>
+    </el-select>
+      <span style="margin-left:10px">报警内容</span>
+      <el-select v-model="violationTypeValue" filterable placeholder="请选择">
+        <el-option
+          v-for="item in violationTypeList"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <el-button style="margin-left:10px" type="primary" icon="el-icon-search">搜索</el-button>
+    </div>
+    <el-table :data="list" border  fit highlight-current-row >
+      <el-table-column align="center" label="ID" width="50">
+        <template slot-scope="scope">
+          {{ scope.$index+1 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="车牌号"width="110" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.plateNum }}
+        </template>
+      </el-table-column>
+      <el-table-column label="报警类型" width="250" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.violationParameterName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="报警时间" width="160" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.violationTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="车队名称" width="180" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.violationTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="公司名称" width="260" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.violationTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="位置" width="160" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.location }}</span>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+  import { getViolationQueryFormList } from '@/api/history-search'
+  import { getVehicleMonitoringViolationType } from '@/api/history-search'
+  import { getCarList } from '@/api/vehicle-manage'
+  export default {
+    filters: {
+
+    },
+    data() {
+      return {
+        list: null,
+        violationTypeList:null,
+        violationTypeValue:null,
+        time:null,
+        plateValue:null,
+        plateList:null,
+      }
+    },
+    created() {
+      this.fetchData()
+    },
+    methods: {
+      fetchData() {
+        getViolationQueryFormList().then(response => {
+          this.list = response.data
+        }),
+        getVehicleMonitoringViolationType().then(response => {
+          this.violationTypeList= response.data
+        }),
+        getCarList().then(response => {
+            this.plateList= response.data
+          })
       }
     }
-  },
-  methods: {
-    onSubmit() {
-      this.$message('submit!')
-    },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
-    }
   }
-}
 </script>
-
-<style scoped>
-.line{
-  text-align: center;
-}
-</style>
-
