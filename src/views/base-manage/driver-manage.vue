@@ -1,5 +1,14 @@
 <template>
   <div class="app-container">
+    驾驶员姓名：
+    <el-select v-model="driverNameQuery" filterable placeholder="请选择">
+      <el-option
+        v-for="item in list"
+        :key="item.driverName"
+        :label="item.driverName"
+        :value="item.driverName">
+      </el-option>
+    </el-select>
     <el-table
       :data="list"
       border
@@ -61,6 +70,7 @@
     data() {
       return {
         list: null,
+        driverNameQuery:'',
       }
     },
     created() {
