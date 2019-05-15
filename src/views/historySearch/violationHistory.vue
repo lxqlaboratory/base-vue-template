@@ -31,6 +31,7 @@
       </el-select>
       <el-button style="margin-left:10px" type="primary" icon="el-icon-search">搜索</el-button>
     </div>
+    
     <el-table :data="list" border  fit highlight-current-row >
       <el-table-column align="center" label="ID" width="50">
         <template slot-scope="scope">
