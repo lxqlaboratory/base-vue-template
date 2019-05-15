@@ -1,5 +1,14 @@
 <template>
   <div class="app-container">
+    车队名称：
+    <el-select v-model="companyNameQuery" filterable placeholder="请选择">
+      <el-option
+        v-for="item in list"
+        :key="item.companyName"
+        :label="item.companyName"
+        :value="item.companyName">
+      </el-option>
+    </el-select>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -47,7 +56,8 @@ export default {
   data() {
     return {
       list: null,
-      listLoading: true
+      listLoading: true,
+      companyNameQuery:'',
     }
   },
   created() {

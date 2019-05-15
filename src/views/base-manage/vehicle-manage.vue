@@ -1,7 +1,25 @@
 <template>
   <div class="app-container">
+    车牌号：
+    <el-select v-model="plateNumQuery" filterable placeholder="请选择">
+      <el-option
+        v-for="item in list"
+        :key="item.plateNum"
+        :label="item.plateNum"
+        :value="item.plateNum">
+      </el-option>
+    </el-select>
+    车队：
+    <el-select v-model="fleetNameQuery" filterable placeholder="请选择">
+      <el-option
+        v-for="item in list"
+        :key="item.plateNum"
+        :label="item.fleetName"
+        :value="item.fleetName">
+      </el-option>
+    </el-select>
     <el-table
-      :data="list"
+      :data="tableList"
       border
       fit
       highlight-current-row
@@ -92,18 +110,38 @@
 
 <script>
 import { getCarList } from '@/api/vehicle-manage'
+import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
 
 export default {
+  components: {ElInput},
   filters: {
 
   },
   data() {
     return {
-      list: null,
+      list: [
+//        {
+//
+//
+//        }
+      ],
+      plateNumQuery:'',
+      fleetNameQuery:'',
+
     }
   },
   created() {
     this.fetchData()
+  },
+  computed:{
+    'tableList':function () {
+      return this.list.filter(item=>{
+
+        if(!this.plateNumQuery||item.plateNum==this.plateNumQuery)
+          return true
+        return false
+      })
+    }
   },
   methods: {
     fetchData() {
