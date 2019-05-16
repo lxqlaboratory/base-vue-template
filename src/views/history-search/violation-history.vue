@@ -93,6 +93,17 @@
     created() {
       this.fetchData()
     },
+    computed:{
+      'list':function () {
+        return this.plateList.filter(item=>{
+          console.log("this.plateValue="+this.plateValue);
+          console.log("item="+item);
+          if(!this.plateValue||item.vehicleId==this.plateValue)
+            return true
+          return false
+        })
+      }
+    },
     methods: {
       fetchData() {
         getViolationQueryFormList().then(response => {

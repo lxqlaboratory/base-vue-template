@@ -125,37 +125,37 @@ export const constantRoutes = [
       {
         path: 'violationHistory',
         name: 'violationHistory',
-        component: () => import('@/views/historySearch/violationHistory'),
+        component: () => import('@/views/history-search/violation-history'),
         meta: { title: '违章历史查询', icon: 'table' }
       },
       {
         path: 'offlineWarning',
         name: 'offlineWarning',
-        component: () => import('@/views/historySearch/offlineWarning'),
+        component: () => import('@/views/history-search/offline-warning'),
         meta: { title: '离线预警历史', icon: 'tree' }
       },
       {
         path: 'userMessage',
         name: 'userMessage',
-        component: () => import('@/views/historySearch/userMessage'),
+        component: () => import('@/views/history-search/user-message'),
         meta: { title: '用戶消息历史', icon: 'tree' }
       },
       {
         path: 'terminalState',
         name: 'terminalState',
-        component: () => import('@/views/historySearch/terminalState'),
+        component: () => import('@/views/history-search/terminal-state'),
         meta: { title: '終端状态历史', icon: 'tree' }
       },
       {
         path: 'terminalAlarm',
         name: 'terminalAlarm',
-        component: () => import('@/views/historySearch/terminalAlarm'),
+        component: () => import('@/views/history-search/terminal-alarm'),
         meta: { title: '終端报警历史', icon: 'tree' }
       },
       {
         path: 'checkHistory',
         name: 'checkHistory',
-        component: () => import('@/views/historySearch/checkHistory'),
+        component: () => import('@/views/history-search/check-history'),
         meta: { title: '查岗历史查询', icon: 'tree' }
       }
     ]
