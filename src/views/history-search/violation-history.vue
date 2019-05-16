@@ -2,15 +2,12 @@
   <div class="app-container">
 
     <div class="block">
-
-      <el-date-picker
-        v-model="time"
-        type="datetimerange"
-        align="right"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :default-time="['12:00:00', '08:00:00']">
-      </el-date-picker>
+        开始时间：
+        <el-date-picker v-model="createDate" type="datetime"  value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间" @change="startTimeStatus" :picker-options="pickerOptionsStart" style="margin-right: 10px;">
+        </el-date-picker>
+        至
+        <el-date-picker v-model="overDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间" @change="endTimeStatus" :picker-options="pickerOptionsEnd" style="margin-left: 10px;">
+        </el-date-picker>
       <span style="margin-left:10px">车牌号</span>
      <el-select v-model="plateValue" filterable placeholder="请选择车牌号码">
       <el-option
@@ -21,7 +18,7 @@
       </el-option>
     </el-select>
       <span style="margin-left:10px">报警内容</span>
-      <el-select v-model="violationTypeValue" filterable placeholder="请选择">
+      <el-select v-model="violationTypeValue" filterable  placeholder="请选择">
         <el-option
           v-for="item in violationTypeList"
           :key="item.value"
@@ -32,7 +29,7 @@
       <el-button style="margin-left:10px" type="primary" icon="el-icon-search">搜索</el-button>
     </div>
 
-    <el-table :data="list" border  fit highlight-current-row style="margin-top:10px">
+    <el-table :data="tableList" border  fit highlight-current-row style="margin-top:10px">
       <el-table-column align="center" label="ID" width="50">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -76,7 +73,10 @@
   import { getViolationQueryFormList } from '@/api/history-search'
   import { getVehicleMonitoringViolationType } from '@/api/history-search'
   import { getCarList } from '@/api/vehicle-manage'
+  import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
+
   export default {
+    components: {ElInput},
     filters: {
 
     },
@@ -85,21 +85,50 @@
         list: null,
         violationTypeList:null,
         violationTypeValue:null,
-        time:null,
         plateValue:null,
         plateList:null,
+        createDate: '',
+        overDate:'',
+        pickerOptionsStart: {
+          disabledDate: time => {
+            let endDateVal = this.overDate;
+            if (endDateVal) {
+              return time.getTime() > new Date(endDateVal).getTime();
+            }
+          }
+        },
+        pickerOptionsEnd: {
+          disabledDate: time => {
+            let beginDateVal = this.createDate;
+            if (beginDateVal) {
+              return (
+                time.getTime() <
+                new Date(beginDateVal).getTime()
+              );
+            }
+          },
+        },
+
       }
     },
     created() {
       this.fetchData()
     },
     computed:{
-      'list':function () {
-        return this.plateList.filter(item=>{
-          console.log("this.plateValue="+this.plateValue);
-          console.log("item="+item);
+
+      'tableList':function () {
+        return this.list.filter(item=>{
           if(!this.plateValue||item.vehicleId==this.plateValue)
-            return true
+          {
+            if(!this.violationTypeValue||item.violationParameter==this.violationTypeValue)
+            {
+              if(!this.createDate||!this.overDate)
+                return true
+              if(item.violationTime>this.createDate&&item.violationTime<this.overDate)
+                return true
+            }
+          }
+          else
           return false
         })
       }
@@ -109,13 +138,20 @@
         getViolationQueryFormList().then(response => {
           this.list = response.data
         }),
-        getVehicleMonitoringViolationType().then(response => {
-          this.violationTypeList= response.data
-        }),
-        getCarList().then(response => {
-            this.plateList= response.data
+          getVehicleMonitoringViolationType().then(response => {
+            this.violationTypeList = response.data
+          }),
+          getCarList().then(response => {
+            this.plateList = response.data
           })
-      }
+      },
+      startTimeStatus:function(value){
+        this.createDate = value
+      },
+      // 时间结束选择器
+      endTimeStatus:function(value){
+        this.overDate = value
+      },
     }
   }
 </script>
