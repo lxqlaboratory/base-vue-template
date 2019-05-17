@@ -12,3 +12,9 @@ export function getVehicleMonitoringViolationType() {
     method: 'POST'
   })
 }
+export function getViolationAlarmFormList() {
+  return request({
+    url: '/func/web/getVueAlarmProcessInfo',
+    method: 'POST'
+  })
+}
