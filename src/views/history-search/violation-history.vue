@@ -73,10 +73,10 @@
   import { getViolationQueryFormList } from '@/api/history-search'
   import { getVehicleMonitoringViolationType } from '@/api/history-search'
   import { getCarList } from '@/api/vehicle-manage'
-  import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
+
 
   export default {
-    components: {ElInput},
+
     filters: {
 
     },
@@ -104,7 +104,7 @@
               return (
                 time.getTime() <
                 new Date(beginDateVal).getTime()
-              );
+              )
             }
           },
         },
