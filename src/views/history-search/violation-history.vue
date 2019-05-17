@@ -113,6 +113,7 @@
     },
     created() {
       this.fetchData()
+
     },
     computed:{
 
