@@ -13,7 +13,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="信息内容"width="800" align="center">
+      <el-table-column label="信息内容" width="800" align="center">
         <template slot-scope="scope">
           {{ scope.row.messageContent }}
         </template>
@@ -24,38 +24,36 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150" align="center">
-        <template slot-scope="scope">
-
-        </template>
+        <template slot-scope="" />
       </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
-  import { getMessageTemplateList } from '@/api/template-manage'
+import { getMessageTemplateList } from '@/api/template-manage'
 
-  export default {
-    filters: {
+export default {
+  filters: {
 
-    },
-    data() {
-      return {
-        list: null,
-        listLoading: true
-      }
-    },
-    created() {
-      this.fetchData()
-    },
-    methods: {
-      fetchData() {
-        this.listLoading = true
-        getMessageTemplateList().then(response => {
-          this.list = response.data
-        })
-        this.listLoading = false
-      }
+  },
+  data() {
+    return {
+      list: null,
+      listLoading: true
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      getMessageTemplateList().then(response => {
+        this.list = response.data
+      })
+      this.listLoading = false
     }
   }
+}
 </script>

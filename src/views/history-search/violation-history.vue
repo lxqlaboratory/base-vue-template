@@ -112,8 +112,8 @@ export default {
 
     'tableList': function() {
       return this.list.filter(item => {
-        if (!this.plateValue || item.plateNum == this.plateValue) {
-          if (!this.violationTypeValue || item.violationParameter == this.violationTypeValue) {
+        if (!this.plateValue || item.plateNum === this.plateValue) {
+          if (!this.violationTypeValue || item.violationParameter === this.violationTypeValue) {
             if (!this.createDate || !this.overDate) {
               return true
             }
