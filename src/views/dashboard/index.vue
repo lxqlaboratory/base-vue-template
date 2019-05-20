@@ -123,12 +123,12 @@
           //   fullscreenToggle: true //全屏按钮
           //  }
         },
-        vehicleInfo:{
+        vehicleInfo:[{
           plateNum:'鲁YPL666',
           driverName:'杨培林',
           speed:'666km/h',
           time:'2018-12-25 10:49:48',
-        }
+        }]
       }
     },
     watch: {

@@ -23,8 +23,11 @@
           {{ scope.row.addTime }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150" align="center">
-        <template slot-scope="" />
+      <el-table-column label="操作" width="135" align="center">
+        <template slot-scope="scope">
+          <el-button @click="show(scope.row)" type="text" size="small">查看</el-button>
+          <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -53,7 +56,13 @@ export default {
         this.list = response.data
       })
       this.listLoading = false
-    }
+    },
+    show(row) {
+      console.log(row);
+    },
+    edit(row) {
+      console.log(row);
+    },
   }
 }
 </script>

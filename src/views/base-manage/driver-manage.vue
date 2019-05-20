@@ -45,7 +45,10 @@
         <template slot-scope="scope" />
       </el-table-column>
       <el-table-column label="操作" width="135" align="center">
-        <template slot-scope="scope" />
+        <template slot-scope="scope">
+          <el-button @click="show(scope.row)" type="text" size="small">查看</el-button>
+          <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
+        </template>
       </el-table-column>
 
     </el-table>
@@ -74,7 +77,13 @@ export default {
         console.log(response)
         this.list = response.data
       })
-    }
+    },
+    show(row) {
+      console.log(row);
+    },
+    edit(row) {
+      console.log(row);
+    },
   }
 }
 </script>
