@@ -1,8 +1,8 @@
 <template>
   <div style="height: calc(100vh - 34px);width: 100%;">
     <el-container style="height: calc(100vh - 34px);" >
-    <el-aside width="265px">
-      <el-input style="width:230px;margin-left: 18px;margin-bottom: 10px;margin-top: 8px"
+    <el-aside width="265px"  >
+      <el-input style="width:230px;margin-left: 18px;margin-bottom: 10px;margin-top: 8px;background-color:#304156;"
         placeholder="输入关键字进行过滤"
         v-model="filterText">
       </el-input>
@@ -173,6 +173,13 @@ export default {
       font-size: 30px;
       line-height: 46px;
     }
+  }
+  .el-aside {
+    background-color:#304156;
+  }
+  .el-tree {
+    background-color:#304156;
+    color:#9b9b83
   }
 
 </style>
