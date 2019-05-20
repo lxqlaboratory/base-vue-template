@@ -18,3 +18,10 @@ export function getViolationAlarmFormList() {
     method: 'POST'
   })
 }
+
+export function getUserMassageFormList() {
+  return request({
+    url: '/func/web/getVueUserMassageInfo',
+    method: 'POST'
+  })
+}
