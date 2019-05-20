@@ -2,7 +2,7 @@
   <div style="height: calc(100vh - 34px);width: 100%;">
     <el-container style="height: calc(100vh - 34px);" >
     <el-aside width="265px">
-      <el-input style="width:230px;margin-left: 18px;margin-bottom: 10px"
+      <el-input style="width:230px;margin-left: 18px;margin-bottom: 10px;margin-top: 8px"
         placeholder="输入关键字进行过滤"
         v-model="filterText">
       </el-input>
