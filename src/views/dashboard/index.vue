@@ -25,9 +25,12 @@
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
 
           <bm-marker :position="markerPoint" @click="infoWindowOpen">
-            <bm-info-window title="Test" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
-              {{ infoWindow.contents }}
+            <bm-info-window title="车辆信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
+              <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
+              <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
               <el-button @click="isVideoMonitoringVisible">视频监控</el-button>
+              <el-button >定位跟踪</el-button>
+              <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
             </bm-info-window>
           </bm-marker>
 
@@ -46,6 +49,22 @@
     </el-dialog>
     <controlbottom />
 
+    <el-dialog  title="轨迹回放" width="80vw;"  :visible.sync="trackPlaybackVisible">
+      开始时间：<input id="trackPlaybackStartTime" type="date" />
+      结束时间：<input id="trackPlaybackEndTime" type="date" />
+      <button id="trackPlaybackQuery">查询</button>
+      <button id="trackPlaybackRun">开始</button>
+      <button id="trackPlaybackStop">停止</button>
+      <button id="trackPlaybackPause">暂停</button>
+      <div div id="trackPlaybackMap" style="width: 100%;height: 50vh;">
+        <baidu-map id="trackPlaybackMap" :center="center" :zoom="zoom" style="height: 100%;width: 100%;"  >
+          <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" />
+          <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
+          <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
+        </baidu-map>
+      </div>
+    </el-dialog>
+    <controlbottom />
   </div>
 </template>
 
@@ -79,6 +98,7 @@
         center: { lng: 0, lat: 0 },
         zoom: 13,
         videoMonitoringVisible: false,
+        trackPlaybackVisible: false,
 
         playerOptions: {
           // playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
@@ -102,6 +122,12 @@
           //   remainingTimeDisplay: false,
           //   fullscreenToggle: true //全屏按钮
           //  }
+        },
+        vehicleInfo:{
+          plateNum:'鲁YPL666',
+          driverName:'杨培林',
+          speed:'666km/h',
+          time:'2018-12-25 10:49:48',
         }
       }
     },
@@ -140,6 +166,9 @@
       },
       isVideoMonitoringVisible() {
         this.videoMonitoringVisible = !this.videoMonitoringVisible
+      },
+      isTrackPlaybackVisible(){
+        this.trackPlaybackVisible=!this.trackPlaybackVisible
       },
       getClickInfo(e) {
         console.log(e.point.lng)
