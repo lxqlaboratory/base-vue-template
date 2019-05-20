@@ -6,8 +6,8 @@
         v-for="item in list"
         :key="item.driverName"
         :label="item.driverName"
-        :value="item.driverName">
-      </el-option>
+        :value="item.driverName"
+      />
     </el-select>
     <el-table
       :data="list"
@@ -31,14 +31,10 @@
         </template>
       </el-table-column>
       <el-table-column label="从业资格证类型" width="150" align="center">
-        <template slot-scope="scope">
-
-        </template>
+        <template slot-scope="scope" />
       </el-table-column>
       <el-table-column label="是否兼职押运员" width="150" align="center">
-        <template slot-scope="scope">
-
-        </template>
+        <template slot-scope="scope" />
       </el-table-column>
       <el-table-column label="驾驶证号" width="250" align="center">
         <template slot-scope="scope">
@@ -46,14 +42,10 @@
         </template>
       </el-table-column>
       <el-table-column label="从业资格证号" width="150" align="center">
-        <template slot-scope="scope">
-
-        </template>
+        <template slot-scope="scope" />
       </el-table-column>
       <el-table-column label="操作" width="135" align="center">
-        <template slot-scope="scope">
-
-        </template>
+        <template slot-scope="scope" />
       </el-table-column>
 
     </el-table>
@@ -61,28 +53,28 @@
 </template>
 
 <script>
-  import { getDriverList } from '@/api/driver-manage'
+import { getDriverList } from '@/api/driver-manage'
 
-  export default {
-    filters: {
+export default {
+  filters: {
 
-    },
-    data() {
-      return {
-        list: null,
-        driverNameQuery:'',
-      }
-    },
-    created() {
-      this.fetchData()
-    },
-    methods: {
-      fetchData() {
-        getDriverList().then(response => {
-            console.log(response)
-            this.list = response.data
-          })
-      }
+  },
+  data() {
+    return {
+      list: null,
+      driverNameQuery: ''
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      getDriverList().then(response => {
+        console.log(response)
+        this.list = response.data
+      })
     }
   }
+}
 </script>

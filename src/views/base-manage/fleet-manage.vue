@@ -6,8 +6,8 @@
         v-for="item in list"
         :key="item.companyName"
         :label="item.companyName"
-        :value="item.companyName">
-      </el-option>
+        :value="item.companyName"
+      />
     </el-select>
     <el-table
       v-loading="listLoading"
@@ -28,14 +28,10 @@
         </template>
       </el-table-column>
       <el-table-column label="车辆数量" width="250" align="center">
-        <template slot-scope="scope">
-
-        </template>
+        <template slot-scope="" />
       </el-table-column>
       <el-table-column label="车队负责人" width="150" align="center">
-        <template slot-scope="scope">
-
-        </template>
+        <template slot-scope="" />
       </el-table-column>
       <el-table-column label="负责人电话" width="250" align="center">
         <template slot-scope="scope">
@@ -57,7 +53,7 @@ export default {
     return {
       list: null,
       listLoading: true,
-      companyNameQuery:'',
+      companyNameQuery: ''
     }
   },
   created() {
