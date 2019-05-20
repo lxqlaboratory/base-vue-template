@@ -1,21 +1,40 @@
 <template>
   <div style="height: calc(100vh - 34px);width: 100%;">
-    <baidu-map :center="center" :zoom="zoom" style="height: 100%;width: 100%;" @ready="handler" @click="getClickInfo">
-      <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" />
-      <!--<bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_LEFT" />-->
-      <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
-      <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
+    <el-container style="height: calc(100vh - 34px);" >
+    <el-aside width="265px"  >
+      <el-input style="width:230px;margin-left: 18px;margin-bottom: 10px;margin-top: 8px;background-color:#304156;"
+        placeholder="输入关键字进行过滤"
+        v-model="filterText">
+      </el-input>
+      <el-tree
+        class="filter-tree"
+        :data="data"
+        border-radius:0px
+        show-checkbox
+        :props="defaultProps"
+        default-expand-all
+        :filter-node-method="filterNode"
+        ref="tree2">
+      </el-tree>
+    </el-aside>
+    <el-main style="height: calc(100vh - 34px);padding:0px;">
+      <baidu-map :center="center" :zoom="zoom" style="height: 100%;width: 100%;" @ready="handler" @click="getClickInfo">
+        <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" />
+        <!--<bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_LEFT" />-->
+        <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
+        <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
 
-      <bm-marker :position="markerPoint" @click="infoWindowOpen">
-        <bm-info-window title="Test" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
-          {{ infoWindow.contents }}
-          <el-button @click="isVideoMonitoringVisible">视频监控</el-button>
-        </bm-info-window>
-      </bm-marker>
+        <bm-marker :position="markerPoint" @click="infoWindowOpen">
+          <bm-info-window title="Test" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
+            {{ infoWindow.contents }}
+            <el-button @click="isVideoMonitoringVisible">视频监控</el-button>
+          </bm-info-window>
+        </bm-marker>
 
-    </baidu-map>
-    <!--地图右侧弹出-->
-
+      </baidu-map>
+      <!--地图右侧弹出-->
+    </el-main>
+      </el-container>
 
     <el-dialog title="视频监控" :visible.sync="videoMonitoringVisible">
       <video-player
@@ -34,7 +53,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
-
+import { getTreeVehicleFormList } from '@/api/vehicle-list-index'
 export default {
   name: 'Dashboard',
   components: {
@@ -42,6 +61,12 @@ export default {
   },
   data() {
     return {
+      filterText: '',
+      data:{},
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
       infoWindowShow: false,
       infoWindow: {
         show: false,
@@ -80,6 +105,11 @@ export default {
       }
     }
   },
+  watch: {
+    filterText(val) {
+      this.$refs.tree2.filter(val)
+    }
+  },
   computed: {
     ...mapGetters([
       'name'
@@ -93,8 +123,15 @@ export default {
   },
   created: function() {
     this.$store.commit('app/hideNavbar')
+    this.fetchData()
   },
   methods: {
+    fetchData() {
+      getTreeVehicleFormList().then(response => {
+        this.data = response.data
+        console.log("this.data="+this.data )
+      })
+    },
     handler({ BMap, map }) {
       console.log(BMap, map)
       this.center.lng = 116.404
@@ -116,6 +153,10 @@ export default {
     },
     infoWindowOpen() {
       this.infoWindow.show = true
+    },
+    filterNode(value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
     }
   }
 }
@@ -132,6 +173,13 @@ export default {
       font-size: 30px;
       line-height: 46px;
     }
+  }
+  .el-aside {
+    background-color:#304156;
+  }
+  .el-tree {
+    background-color:#304156;
+    color:#9b9b83
   }
 
 </style>

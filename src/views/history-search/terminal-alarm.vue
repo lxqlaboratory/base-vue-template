@@ -63,76 +63,76 @@
 </template>
 
 <script>
-import { getViolationAlarmFormList } from '@/api/history-search'
-import { getCarList } from '@/api/vehicle-manage'
+  import { getViolationAlarmFormList } from '@/api/history-search'
+  import { getCarList } from '@/api/vehicle-manage'
 
-export default {
+  export default {
 
-  filters: {
+    filters: {
 
-  },
-  data() {
-    return {
-      list: [],
-      alamTypeValue: [],
-      plateValue: [],
-      plateList: [],
-      createDate: '',
-      overDate: '',
-      pickerOptionsStart: {
-        disabledDate: time => {
-          const endDateVal = this.overDate
-          if (endDateVal) {
-            return time.getTime() > new Date(endDateVal).getTime()
+    },
+    data() {
+      return {
+        list: [],
+        alamTypeValue: [],
+        plateValue: [],
+        plateList: [],
+        createDate: '',
+        overDate: '',
+        pickerOptionsStart: {
+          disabledDate: time => {
+            const endDateVal = this.overDate
+            if (endDateVal) {
+              return time.getTime() > new Date(endDateVal).getTime()
+            }
           }
-        }
-      },
-      pickerOptionsEnd: {
-        disabledDate: time => {
-          const beginDateVal = this.createDate
-          if (beginDateVal) {
-            return (
-              time.getTime() <
+        },
+        pickerOptionsEnd: {
+          disabledDate: time => {
+            const beginDateVal = this.createDate
+            if (beginDateVal) {
+              return (
+                time.getTime() <
                 new Date(beginDateVal).getTime()
-            )
+              )
+            }
           }
         }
+
       }
-
-    }
-  },
-  computed: {
-
-    'tableList': function() {
-      return this.list.filter(item => {
-        if (!this.plateValue || item.plateNum === this.plateValue) {
-          if (!this.alamTypeValue || item.alarmContent === this.alamTypeValue) {
-            if (!this.createDate || !this.overDate) { return true }
-            if (item.updateTime > this.createDate && item.updateTime < this.overDate) { return true }
-          }
-        } else { return false }
-      })
-    }
-  },
-  created() {
-    this.fetchData()
-  },
-  methods: {
-    fetchData() {
-      getViolationAlarmFormList().then(response => {
-        this.list = response.data
-      }),
-      getCarList().then(response => {
-        this.plateList = response.data
-      })
     },
-    startTimeStatus: function(value) {
-      this.createDate = value
+    computed: {
+
+      'tableList': function() {
+        return this.list.filter(item => {
+          if (!this.plateValue || item.plateNum === this.plateValue) {
+            if (!this.alamTypeValue || item.alarmContent === this.alamTypeValue) {
+              if (!this.createDate || !this.overDate) { return true }
+              if (item.updateTime > this.createDate && item.updateTime < this.overDate) { return true }
+            }
+          } else { return false }
+        })
+      }
     },
-    // 时间结束选择器
-    endTimeStatus: function(value) {
-      this.overDate = value
+    created() {
+      this.fetchData()
+    },
+    methods: {
+      fetchData() {
+        getViolationAlarmFormList().then(response => {
+          this.list = response.data
+        }),
+          getCarList().then(response => {
+            this.plateList = response.data
+          })
+      },
+      startTimeStatus: function(value) {
+        this.createDate = value
+      },
+      // 时间结束选择器
+      endTimeStatus: function(value) {
+        this.overDate = value
+      }
     }
   }
-}
 </script>
