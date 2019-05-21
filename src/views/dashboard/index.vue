@@ -130,7 +130,9 @@
           speed:'666km/h',
           time:'2018-12-25 10:49:48',
         }],
-        checkedNodes:[],
+       checkedNodes:[],
+        plateNumList:[],
+        plateNumList2:[],
       }
     },
     watch: {
@@ -192,6 +194,12 @@
       getChecked() {
         this.checkedNodes=this.$refs.tree2.getCheckedNodes()
         console.log(this.checkedNodes)
+        this.checkedNodes.forEach(item => {
+          if(item.plateNum)
+            this.plateNumList.push(item.plateNum)
+        })
+        this.plateNumList2=new Set(this.plateNumList)
+        console.log(this.plateNumList2)
       },
     }
   }
