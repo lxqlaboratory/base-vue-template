@@ -87,8 +87,6 @@
     </div>
 
   </div>
-
-
 </template>
 
 <script>
@@ -128,9 +126,9 @@ export default {
       })
     },
     edit(item) {
-      this.insertRow = item;
+      this.insertRow = item
       this.dialogFormVisible = true
-    },
+    }
   }
 }
 </script>
