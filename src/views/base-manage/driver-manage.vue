@@ -59,7 +59,7 @@
 
     <div>
       <el-dialog title="编辑" :visible.sync="dialogFormVisible" width="35%">
-        <el-form :model="insertRow" label-position="left" label-width="120px" style="width: 430px; margin-left:50px;">
+        <el-form :model="insertRow" label-position="left" label-width="200px" style="width: 430px; margin-left:50px;">
           <el-form-item label="驾驶员姓名:">
             <el-input v-model="insertRow.driverName"  autocomplete="off" />
           </el-form-item>
