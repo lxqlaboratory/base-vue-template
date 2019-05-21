@@ -51,17 +51,31 @@
     <controlbottom />
 
     <el-dialog  title="轨迹回放" width="80vw;"  :visible.sync="trackPlaybackVisible">
-      开始时间：<input id="trackPlaybackStartTime" type="date" />
+      <!--开始时间：<input id="trackPlaybackStartTime" type="date" />
       结束时间：<input id="trackPlaybackEndTime" type="date" />
       <button id="trackPlaybackQuery">查询</button>
       <button id="trackPlaybackRun">开始</button>
       <button id="trackPlaybackStop">停止</button>
-      <button id="trackPlaybackPause">暂停</button>
-      <div div id="trackPlaybackMap" style="width: 100%;height: 50vh;">
-        <baidu-map id="trackPlaybackMap" :center="center" :zoom="zoom" style="height: 100%;width: 100%;"  >
-          <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" />
-          <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
-          <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
+      <button id="trackPlaybackPause">暂停</button>-->
+      <el-button style="position:absolute;top: 5px;right: 15px;" @click="trackPlaybackStart" >开始</el-button>
+      <div  style="width: 100%;height: 50vh;">
+        <baidu-map class="map" :center="{lng: 116.404, lat: 39.915}" :zoom="11" style="height: 100%;width: 100%;">
+          <bm-driving
+            :start="trackPlaybackStartPoint"
+            :end="trackPlaybackEndPoint"
+            :waypoints="trackPlaybackWayPointList"
+            @searchcomplete="handleSearchComplete"
+            :panel="false"
+            :autoViewport="true" >
+          </bm-driving>
+          <bm-lushu
+            ref="lushu"
+            @stop="reset"
+            :path="path"
+            :icon="icon"
+            :play="play"
+            :rotation="true">
+          </bm-lushu>
         </baidu-map>
       </div>
     </el-dialog>
@@ -74,9 +88,14 @@
   import { mapGetters } from 'vuex'
   import ControlBottom from './indexcomponents/ControlBottom'
   import { getTreeVehicleFormList } from '@/api/vehicle-list-index'
+  import BmLushu from "../../../node_modules/vue-baidu-map/components/extra/Lushu.vue"
+  import {BmlLushu} from 'vue-baidu-map'
+  import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
   export default {
     name: 'Dashboard',
     components: {
+      ElButton,
+      BmLushu,
       Controlbottom: ControlBottom
     },
     data() {
@@ -133,6 +152,23 @@
        checkedNodes:[],
         plateNumList:[],
         plateNumList2:[],
+        //下边是轨迹回放的data
+        play: true,
+        path: [
+
+        ],
+        icon: {
+          url: 'http://api.map.baidu.com/library/LuShu/1.2/examples/car.png',
+          size: {width: 52, height: 26},
+          opts: {anchor: {width: 27, height:13}}
+        },
+        trackPlaybackStartPoint: {lng:116.404844,lat:39.911836},
+        trackPlaybackEndPoint:{lng:116.308102,lat:40.056057},
+        trackPlaybackWayPointList:[
+          {lng:116.404844,lat:39.911836},
+          {lng:116.308102,lat:40.056057},
+        ],
+        //******************************************//
       }
     },
     watch: {
@@ -199,8 +235,22 @@
             this.plateNumList.push(item.plateNum)
         })
         this.plateNumList2=new Set(this.plateNumList)
-        console.log(this.plateNumList2)
+        console.log(this.plateNumList)
       },
+      //轨迹回放用到的方法
+      reset () {
+        this.play = false
+      },
+      handleSearchComplete (res) {
+
+        this.path = res.getPlan(0).getRoute(0).getPath()
+
+        console.log(this.path)
+      },
+      trackPlaybackStart(){
+        this.$refs.lushu.$emit("start",this.$refs.lushu)
+      }
+      //////////////////////////////////////////////
     }
   }
 
