@@ -14,6 +14,7 @@
           :props="defaultProps"
           default-expand-all
           :filter-node-method="filterNode"
+          @check-change="getChecked"
           ref="tree2">
         </el-tree>
       </el-aside>
@@ -128,7 +129,8 @@
           driverName:'杨培林',
           speed:'666km/h',
           time:'2018-12-25 10:49:48',
-        }]
+        }],
+        checkedNodes:[],
       }
     },
     watch: {
@@ -186,7 +188,11 @@
       filterNode(value, data) {
         if (!value) return true
         return data.label.indexOf(value) !== -1
-      }
+      },
+      getChecked() {
+        this.checkedNodes=this.$refs.tree2.getCheckedNodes()
+        console.log(this.checkedNodes)
+      },
     }
   }
 
