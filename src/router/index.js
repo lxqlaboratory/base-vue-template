@@ -160,9 +160,9 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/ ',
+    path: '/networkMonitor ',
     component: Layout,
-    name: 'Example',
+    name: 'networkMonitor',
     meta: { title: '联网监控', icon: 'tool' },
     children: [
       {
@@ -174,10 +174,30 @@ export const constantRoutes = [
       {
         path: 'violationStatistic',
         name: 'violationStatistic',
-        component: () => import('@/views/network-control/violation-statistic.vue'),
+        component: () => import('@/views/network-control/violation-statistic'),
         meta: { title: '违章统计', icon: 'tree' }
       }
       ]
+  },
+  {
+    path: '/activeSafety ',
+    component: Layout,
+    name: 'activeSafety',
+    meta: { title: '主动安全防御', icon: 'tool' },
+    children: [
+      {
+        path: 'companyPortrait',
+        name: 'companyPortrait',
+        component: () => import('@/views/active-safety/company-portrait'),
+        meta: { title: '企业画像', icon: 'tree' }
+      },
+      {
+        path: 'driverPortrait',
+        name: 'driverPortrait',
+        component: () => import('@/views/active-safety/driver-portrait'),
+        meta: { title: '驾驶员画像', icon: 'tree' }
+      }
+    ]
   },
   {
     path: 'external-link',
