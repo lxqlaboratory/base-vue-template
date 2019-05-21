@@ -160,16 +160,16 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/',
+    path: '/ ',
     component: Layout,
-    name: 'Example2',
+    name: 'Example',
     meta: { title: '联网监控', icon: 'tool' },
     children: [
       {
         path: 'violationDriverStatistic',
         name: 'violationDriverStatistic',
         component: () => import('@/views/network-control/violation-driver-statistic'),
-        meta: { title: '驾驶员违章统计', icon: 'table' }
+        meta: { title: '驾驶员违章统计', icon: 'tree' }
       },
       {
         path: 'violationStatistic',
