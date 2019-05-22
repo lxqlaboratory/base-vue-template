@@ -13,7 +13,7 @@
       </el-select>
     </div>
 
-    <el-table :data="tableList" border fit highlight-current-row style="margin-top:10px">
+    <el-table :data="tableList" border fit highlight-current-row style="margin-top:10px" @row-click="openDetails">
 
       <el-table-column align="center" label="ID" min-width="20">
         <template slot-scope="scope">
@@ -36,11 +36,43 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog title="违章信息" :visible.sync="dialogTableVisible">
+      <el-table :data="gridData" border fit highlight-current-row style="margin-top:10px">
+        <el-table-column align="center" label="ID" min-width="20">
+          <template slot-scope="scope">
+            {{ scope.$index+1 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="车牌号" min-width="40" align="center">
+          <template slot-scope="scope">
+            {{ scope.row.plateNum }}
+          </template>
+        </el-table-column>
+        <el-table-column label="违章类型" min-width="50" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.violationParameterName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="违章时间" min-width="50" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.violationTime }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="驾驶员姓名" min-width="20" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.driverName }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
+
+
 </template>
 
 <script>
   import { getVehicleMonitoringViolationType } from '@/api/history-search'
+  import { getViolationQueryFormList } from '@/api/history-search'
   import { getDriverList } from '@/api/driver-manage'
   import { getViolationInfoByParameters } from '@/api/network-monitor'
   export default {
@@ -57,6 +89,9 @@
         driverValue: null,
         driverList:null,
         violationParameterList:null,
+        dialogTableVisible:false,
+        violationParameter:null,
+        violationList:[]
       }
     },
     computed: {
@@ -66,7 +101,15 @@
             return false
           }
           )
-        }
+        },
+      'gridData'() {
+        return this.violationList.filter(item => {
+            if (item.violationParameter === this.violationParameter ) return true
+            return false
+          }
+        )
+      },
+
     },
     created() {
       this.fetchData()
@@ -82,7 +125,17 @@
         getViolationInfoByParameters().then(response => {
             this.list = response.data
           })
-      }
+        ,
+        getViolationQueryFormList().then(response => {
+            this.violationList = response.data
+          })
+      },
+      openDetails (row, column, event) {
+        console.log(row.violationParameter)
+        this.violationParameter=row.violationParameter
+        //具体操作
+        this.dialogTableVisible = !this.dialogTableVisible
+      },
     }
   }
 </script>
