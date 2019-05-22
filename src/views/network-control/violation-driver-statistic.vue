@@ -6,13 +6,13 @@
       <el-date-picker v-model="createDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间" :picker-options="pickerOptionsStart" style="margin-right: 10px;" @change="startTimeStatus" />
       至
       <el-date-picker v-model="overDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间" :picker-options="pickerOptionsEnd" style="margin-left: 10px;" @change="endTimeStatus" />
-      <span style="margin-left:10px">车牌号</span>
-      <el-select v-model="plateValue" filterable placeholder="请选择车牌号码">
+      <span style="margin-left:10px">驾驶员</span>
+      <el-select v-model="driverValue" filterable placeholder="请选择驾驶员姓名">
         <el-option
-          v-for="item in plateList"
-          :key="item.vehicleId"
-          :label="item.plateNum"
-          :value="item.plateNum"
+          v-for="item in driverList"
+          :key="item.personId"
+          :label="item.driverName"
+          :value="item.personId"
         />
       </el-select>
       <span style="margin-left:10px">报警内容</span>
@@ -53,9 +53,9 @@
           <span>{{ scope.row.fleetName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="公司名称" width="260" align="center">
+      <el-table-column label="驾驶员姓名" width="260" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.companyName }}</span>
+          <span>{{ scope.row.driverName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="位置" width="160" align="center">
@@ -70,7 +70,7 @@
 <script>
 import { getViolationQueryFormList } from '@/api/history-search'
 import { getVehicleMonitoringViolationType } from '@/api/history-search'
-import { getCarList } from '@/api/vehicle-manage'
+import { getDriverList } from '@/api/driver-manage'
 
 export default {
 
@@ -83,7 +83,8 @@ export default {
       violationTypeList: null,
       violationTypeValue: null,
       plateValue: null,
-      plateList: null,
+      driverValue: null,
+      driverList:null,
       createDate: '',
       overDate: '',
       pickerOptionsStart: {
@@ -111,7 +112,7 @@ export default {
 
     'tableList': function() {
       return this.list.filter(item => {
-        if (!this.plateValue || item.plateNum === this.plateValue) {
+        if (!this.driverValue || item.driverId === this.driverValue) {
           if (!this.violationTypeValue || item.violationParameter === this.violationTypeValue) {
             if (!this.createDate || !this.overDate) {
               return true
@@ -133,8 +134,8 @@ export default {
       getVehicleMonitoringViolationType().then(response => {
         this.violationTypeList = response.data
       }),
-      getCarList().then(response => {
-        this.plateList = response.data
+      getDriverList().then(response => {
+          this.driverList = response.data
       })
     },
     startTimeStatus: function(value) {
