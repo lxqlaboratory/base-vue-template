@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" style="height: calc(100vh - 1px);">
   <div class="div-a">
-    <div style="height:10%;margin-top: 10px;text-align:center">企业名称：鑫华汽车运输公司 近三个月报警总数</div>
+    <div style="height:10%;margin-top: 10px;text-align:center">企业名称：鑫华汽车运输公司 近一年报警总数</div>
     <div class="chart" style="height:90%;margin-bottom: 10px"></div>
   </div>
   <div class="div-b">
@@ -14,22 +14,22 @@
       </el-date-picker>
     </div>
     <el-table
-      :data="tableData"
+      :data="list"
       height="220"
       border
       style="width: 100%;margin-top: 10px;">
       <el-table-column
-        prop="date"
+        prop="violationParameterName"
         label="报警类型"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="count"
         label="报警数量"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="rate"
         label="报警占比">
       </el-table-column>
     </el-table>
@@ -45,43 +45,26 @@
 </template>
 
 <script>
+  import { getViolationInfoByParameterAndMonth } from '@/api/active-safety'
 export default {
-  name: 'recordChart',
+
+  created() {
+    this.fetchData()
+  },
   data() {
     return {
       monthvalue:null,
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }]
+      tableData: [],
+      list:[]
     }
   },
   methods: {
+    fetchData() {
+      getViolationInfoByParameterAndMonth().then(response => {
+        this.list = response.data
+        console.log("list="+this.list)
+      })
+    },
     // 初始化echartlegendArr
     initChart () {
       var myChart = this.$echarts.init(document.querySelector('.chart'));
@@ -300,7 +283,7 @@ export default {
           }
         ]
       });
-    }
+    },
   },
   mounted () {
     this.$nextTick(() => {
@@ -308,6 +291,24 @@ export default {
       this.initChart2()
       this.initChart4()
     })
+  },
+  watch: {
+    monthvalue(val) {
+      var y = this.monthvalue.getFullYear();
+      var m = this.monthvalue.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = this.monthvalue.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      /*var h = this.monthvalue.getHours();
+      var minute = this.monthvalue.getMinutes();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      var second= this.monthvalue.getSeconds();
+      second = minute < 10 ? ('0' + second) : second;
+      */
+      var data1=y + '-' + m + '-' + d;
+      console.log("this.monthvalue="+this.monthvalue)
+      console.log("data1="+data1)
+    }
   }
 }
 </script>
@@ -316,6 +317,4 @@ export default {
   .div-b{ height:40%;float:right;width:49%;box-shadow:0px 0px 10px #aaa;}
   .div-c{ height:50%;float:left;width:49%;margin-top:20px;box-shadow:0px 0px 10px #aaa;}
   .div-d{ height:50%;float:right;width:49%;margin-top:20px;box-shadow:0px 0px 10px #aaa;}
-
-
 </style>
