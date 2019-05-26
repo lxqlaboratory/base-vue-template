@@ -1,5 +1,14 @@
 <template>
   <div class="bottom-container" :class="{active:isShow}">
+
+    <div id="menu">
+      <div class="menu">功能1</div>
+      <div class="menu">功能2</div>
+      <div class="menu">功能3</div>
+      <div class="menu">功能4</div>
+      <div class="menu">功能5</div>
+    </div>
+
     <el-dialog title="智能选车" :visible.sync="carSelectionVisible">
       <el-transfer
         v-model="value2"
@@ -59,31 +68,33 @@
     </div>
 
     <div v-show="isShow" class="mapBottomTable">
-      <el-table :data="tableData" min-height="250" border style="width: 100%">
-        <el-table-column prop="vehicle_name" label="车牌号" sortable />
-        <el-table-column prop="sim_num" label="SIM卡号" sortable />
-        <el-table-column prop="last_time" label="最后上线时间" min-width="110" sortable />
-        <el-table-column prop="acc" label="ACC" sortable />
-        <el-table-column prop="speed" label="卫星速度" sortable />
-        <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable />
-        <el-table-column prop="longitude" label="经度" sortable />
-        <el-table-column prop="latitude" label="纬度" sortable />
-        <el-table-column prop="vehicle_loc" label="位置信息" sortable />
-        <el-table-column prop="direction" label="方向" sortable />
-        <el-table-column prop="oil_volume" label="油量(L)" sortable />
+      <el-table :data="tableData" height="35.5vh" border style="width: 100%" @row-contextmenu="row_contextmenu">
+        <el-table-column type="selection" min-width="50" />
+        <el-table-column prop="vehicle_name" label="车牌号" sortable min-width="100" />
+        <el-table-column prop="sim_num" label="SIM卡号" sortable min-width="120" />
         <el-table-column
           prop="is_online"
           label="是否在线"
           sortable
           :filter-method="filterHandler"
           :filters="[{ text: '在线', value: '在线' }, { text: '离线', value: '离线' }]"
+          min-width="120"
         />
-        <el-table-column prop="sim_flow" label="已用流量(M)" sortable />
-        <el-table-column prop="stopTime" label="停车时长(分钟)" sortable />
-        <el-table-column prop="driver_name" label="驾驶员" sortable />
-        <el-table-column prop="driverLicense" label="驾驶证号" sortable />
-        <el-table-column prop="team_name" label="车队名称" sortable />
-        <el-table-column prop="note" label="备注" sortable />
+        <el-table-column prop="acc" label="ACC" sortable min-width="80" />
+        <el-table-column prop="speed" label="卫星速度" sortable min-width="110" />
+        <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />
+        <el-table-column prop="longitude" label="经度" sortable min-width="80" />
+        <el-table-column prop="latitude" label="纬度" sortable min-width="80" />
+        <el-table-column prop="last_time" label="最后上线时间" min-width="140" sortable />
+        <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />
+        <el-table-column prop="direction" label="方向" sortable min-width="80" />
+        <el-table-column prop="oil_volume" label="油量(L)" sortable min-width="100" />
+        <el-table-column prop="sim_flow" label="已用流量(M)" sortable min-width="130" />
+        <el-table-column prop="stopTime" label="停车时长(分钟)" sortable min-width="140" />
+        <el-table-column prop="driver_name" label="驾驶员" sortable min-width="120" />
+        <el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />
+        <el-table-column prop="team_name" label="车队名称" sortable min-width="200" />
+        <el-table-column prop="note" label="备注" sortable min-width="400" />
       </el-table>
     </div>
 
@@ -92,6 +103,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'ControlBottom',
   data() {
@@ -130,7 +142,15 @@ export default {
 
       value1: [1, 4],
 
-      tableData: []
+      tableData: [{
+        vehicle_name: '鲁N89689',
+        sim_num: '15153139702',
+        acc: '开',
+        speed: 80,
+        gbRecSpeed: 0,
+        longitude: 116.404,
+        latitude: 39.915
+      }]
     }
   },
   methods: {
@@ -151,12 +171,36 @@ export default {
     filterHandler(value, row, column) {
       const property = column['property']
       return row[property] === value
+    },
+    row_contextmenu(row, column, e) {
+      e.preventDefault()
+      const menu = document.querySelector('#menu')
+      menu.style.left = e.clientX + 'px'
+      menu.style.top = e.clientY + 'px'
+      menu.style.width = '130px'
     }
   }
 }
 </script>
 
 <style scoped>
+
+  #menu{
+    position: fixed;
+    width: 0; /*设置为0 隐藏自定义菜单*/
+    height: 125px;
+    overflow: hidden;
+    box-shadow: 0 1px 1px #888,1px 0 1px #ccc;
+    background-color: ghostwhite;
+    flex-direction: column;
+    z-index: 9999;
+  }
+  .menu{
+    width: 130px;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 10px;
+  }
 
   .transformPictureDiv {
     transform:rotate(180deg);
@@ -175,7 +219,7 @@ export default {
     width: 100%;
     background-color: ghostwhite;
     flex-direction: column;
-    cursor: n-resize
+    /*cursor: n-resize*/
   }
 
   .bottom-container{
