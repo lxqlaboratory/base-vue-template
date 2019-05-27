@@ -51,7 +51,7 @@
     </el-dialog>
     <controlbottom />
 
-    <el-dialog title="轨迹回放" width="80vw;" :visible.sync="trackPlaybackVisible">
+
       <el-dialog  title="轨迹回放" width="80vw;"  :visible.sync="trackPlaybackVisible">
         <el-input v-model="trackPlaybackStartTime" type="date" size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date"></el-input>
         <el-input v-model="trackPlaybackEndTime" type="date" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date"></el-input>
@@ -59,7 +59,7 @@
         <el-button  @click="trackPlaybackStart" >开始</el-button>
         <el-button  @click="trackPlaybackStop" >停止</el-button>
         <div  style="width: 100%;height: 50vh;">
-        <baidu-map class="map" :center="{lng: 116.404, lat: 39.915}" :zoom="11" style="height: 100%;width: 100%;">
+        <baidu-map class="map" :center="center" :zoom="11" style="height: 100%;width: 100%;">
           <bm-driving
             :start="trackPlaybackStartPoint"
             :end="trackPlaybackEndPoint"
@@ -261,6 +261,8 @@ export default {
             //console.log(this.markers)
             if(response.data!=null)
               this.markers.push({lng:response.data.longitude,lat:response.data.latitude})
+              this.center.lng=response.data.longitude
+              this.center.lat=response.data.latitude
           })
           this.markers2=new Set(this.markers)
           this.markers=this.markers2
