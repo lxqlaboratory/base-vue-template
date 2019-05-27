@@ -247,25 +247,25 @@ export default {
       this.checkedNodes = this.$refs.tree2.getCheckedNodes()
       console.log(this.checkedNodes)
       this.checkedNodes.forEach(item => {
-        if (item.plateNum) { this.plateNumList.push(item.plateNum) }
+        if (item.plateNum) { this.plateNumList2.push(item.plateNum) }
       })
-      this.plateNumList2 = new Set(this.plateNumList)
+      this.plateNumList = new Set(this.plateNumList2)
       console.log(this.plateNumList)
       this.doLocation()
     },
     doLocation() {
       this.plateNumList.forEach(item => {
           getSelectedVehiclePosition(item).then(response => {
-            console.log("response.data")
-            console.log(response.data)
-            //console.log(this.markers)
-            if(response.data!=null)
-              this.markers.push({lng:response.data.longitude,lat:response.data.latitude})
+            if(response.data!=null){
+              this.markers.push({
+                lng:response.data.longitude,
+                lat:response.data.latitude
+              })
               this.center.lng=response.data.longitude
               this.center.lat=response.data.latitude
+            }
           })
-          this.markers2=new Set(this.markers)
-          this.markers=this.markers2
+          this.markers=Array.from( new Set(this.markers))
           console.log(this.markers)
         }
       )
