@@ -21,7 +21,7 @@ import 'video.js/dist/video-js.css'
 import 'vue-video-player/src/custom-theme.css'
 import splitPane from 'vue-splitpane'
 import Stomp from 'stompjs'
-import Message from './utils/message'
+import Toast from './utils/message'
 /**
  * If you don't want to use mock-server
  * you want to use mockjs for request interception
@@ -39,7 +39,7 @@ Vue.use(Stomp)
 Vue.component('split-pane', splitPane)
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
-Vue.prototype.$my_message = Message.install;
+Vue.use(Toast);
 new Vue({
   el: '#app',
   router,

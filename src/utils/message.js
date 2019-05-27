@@ -1,32 +1,19 @@
 import Vue from 'vue'
-import Message from '../components/Message/Message.vue'
+import ToastComponent from '../components/Message/Message.vue'
 
-const messageBox = Vue.extend(Message)
-
-Message.install = function (options, type) {
-  console.log("MessageInstall")
-  if (options === undefined || options === null) {
-    options = {
-      content: ''
-    }
-  } else if (typeof options === 'string' || typeof options === 'number') {
-    options = {
-      content: options
-    }
-    if (type != undefined && options != null) {
-      options.type = type;
-    }
-  }
-
-  let instance = new messageBox({
-    data: options
-  }).$mount()
-
+const Toast = {}; // 注册Toast
+Toast.install = function (Vue) {
+  const ToastConstructor = Vue.extend(ToastComponent)
+  const instance = new ToastConstructor();
+  instance.$mount(document.createElement('div'))
   document.body.appendChild(instance.$el)
-
-  Vue.nextTick(() => {
-    instance.visible = true
-  })
+  Vue.prototype.$toast = (msg, duration = 1500) => {
+    instance.message = msg;
+    instance.visible = true;
+    console.log("进入注册Toast")
+    setTimeout(() => {
+      instance.visible = false;
+    }, duration);
+  }
 }
-
-export default Message
+export default Toast
