@@ -79,8 +79,8 @@ export default {
   },
   data() {
     return {
-      list: null,
-      violationTypeList: null,
+      list: [],
+      violationTypeList: [],
       violationTypeValue: null,
       plateValue: null,
       plateList: null,
@@ -123,6 +123,7 @@ export default {
     }
   },
   created() {
+    this.$my_message('这是一个warning','warning')
     this.fetchData()
   },
   methods: {
