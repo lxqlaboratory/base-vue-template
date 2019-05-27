@@ -26,7 +26,7 @@
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
 
-          <bm-marker :position="markerPoint" @click="infoWindowOpen">
+          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" @click="infoWindowOpen" title="杨培林">
             <bm-info-window title="车辆信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
               <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
               <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
@@ -52,14 +52,13 @@
     <controlbottom />
 
     <el-dialog title="轨迹回放" width="80vw;" :visible.sync="trackPlaybackVisible">
-      <!--开始时间：<input id="trackPlaybackStartTime" type="date" />
-      结束时间：<input id="trackPlaybackEndTime" type="date" />
-      <button id="trackPlaybackQuery">查询</button>
-      <button id="trackPlaybackRun">开始</button>
-      <button id="trackPlaybackStop">停止</button>
-      <button id="trackPlaybackPause">暂停</button>-->
-      <el-button style="position:absolute;top: 5px;right: 15px;" @click="trackPlaybackStart">开始</el-button>
-      <div style="width: 100%;height: 50vh;">
+      <el-dialog  title="轨迹回放" width="80vw;"  :visible.sync="trackPlaybackVisible">
+        <el-input v-model="trackPlaybackStartTime" type="date" size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date"></el-input>
+        <el-input v-model="trackPlaybackEndTime" type="date" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date"></el-input>
+        <el-button  @click="trackPlaybackDraw" >查询</el-button>
+        <el-button  @click="trackPlaybackStart" >开始</el-button>
+        <el-button  @click="trackPlaybackStop" >停止</el-button>
+        <div  style="width: 100%;height: 50vh;">
         <baidu-map class="map" :center="{lng: 116.404, lat: 39.915}" :zoom="11" style="height: 100%;width: 100%;">
           <bm-driving
             :start="trackPlaybackStartPoint"
@@ -84,14 +83,15 @@
   </div>
 </template>
 
-.
+
 <script>
-import { mapGetters } from 'vuex'
-import ControlBottom from './indexcomponents/ControlBottom'
-import { getTreeVehicleFormList } from '@/api/vehicle-list-index'
-import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
-import { BmlLushu } from 'vue-baidu-map'
-import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue'
+  import { mapGetters } from 'vuex'
+  import ControlBottom from './indexcomponents/ControlBottom'
+  import { getTreeVehicleFormList,getVehiclePositionFromList,getSelectedVehiclePosition } from '@/api/vehicle-list-index'
+  import BmLushu from "../../../node_modules/vue-baidu-map/components/extra/Lushu.vue"
+  import {BmlLushu} from 'vue-baidu-map'
+  import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
+  import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
 export default {
   name: 'Dashboard',
   components: {
@@ -112,10 +112,25 @@ export default {
         show: false,
         contents: '视频监控'
       },
-      markerPoint: {
-        lng: 116.404,
-        lat: 39.900
-      },
+      markers2: [],
+      markers: [
+        {
+          lng: 116.404,
+          lat: 39.900
+        },
+        {
+          lng: 116.405,
+          lat: 39.901
+        },
+        {
+          lng: 116.406,
+          lat: 39.899
+        },
+        {
+          lng: 116.404,
+          lat: 39.898
+        },
+      ],
       center: { lng: 0, lat: 0 },
       zoom: 13,
       videoMonitoringVisible: false,
@@ -236,8 +251,36 @@ export default {
       })
       this.plateNumList2 = new Set(this.plateNumList)
       console.log(this.plateNumList)
+      this.doLocation()
+    },
+    doLocation() {
+      this.plateNumList.forEach(item => {
+          getSelectedVehiclePosition(item).then(response => {
+            console.log("response.data")
+            console.log(response.data)
+            //console.log(this.markers)
+            if(response.data!=null)
+              this.markers.push({lng:response.data.longitude,lat:response.data.latitude})
+          })
+          this.markers2=new Set(this.markers)
+          this.markers=this.markers2
+          console.log(this.markers)
+        }
+      )
     },
     // 轨迹回放用到的方法
+    trackPlaybackDraw(){
+      getVehiclePositionFromList(this.trackPlaybackStartTime,this.trackPlaybackEndTime).then(response => {
+        this.vehiclePositionFromList = response.data
+        if(this.vehiclePositionFromList.style()>0){
+          console.log(this.vehiclePositionFromList)
+          console.log(this.vehiclePositionFromList[0])
+          this.trackPlaybackStartPoint={lng:this.vehiclePositionFromList[0].lng,lat:this.vehiclePositionFromList[0].lat}
+          this.trackPlaybackEndPoint== {lng:this.vehiclePositionFromList[ this.vehiclePositionFromList.style()-1].lng,lat:this.vehiclePositionFromList[ this.vehiclePositionFromList.style()-1].lat}
+          console.log("this.trackPlaybackStartPoint="+this.trackPlaybackStartPoint )
+        }
+      })
+    },
     reset() {
       this.play = false
     },
@@ -248,7 +291,13 @@ export default {
     },
     trackPlaybackStart() {
       this.$refs.lushu.$emit('start', this.$refs.lushu)
-    }
+    },
+    trackPlaybackStart(){
+      this.play=true
+    },
+    trackPlaybackStop(){
+      this.play=false
+    },
     // ////////////////////////////////////////////
   }
 }
