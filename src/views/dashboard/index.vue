@@ -169,7 +169,7 @@ export default {
       plateNumList: [],
       plateNumList2: [],
       // 下边是轨迹回放的data
-      play: true,
+      play: false,
       path: [
 
       ],
@@ -181,8 +181,8 @@ export default {
       trackPlaybackStartPoint: { lng: 116.404844, lat: 39.911836 },
       trackPlaybackEndPoint: { lng: 116.308102, lat: 40.056057 },
       trackPlaybackWayPointList: [
-        { lng: 116.404844, lat: 39.911836 },
-        { lng: 116.308102, lat: 40.056057 }
+        /*{ lng: 116.404844, lat: 39.911836 },
+        { lng: 116.308102, lat: 40.056057 }*/
       ]
       //* *****************************************//
     }
