@@ -6,3 +6,9 @@ export function getViolationInfoByParameterAndMonth() {
     method: 'POST'
   })
 }
+export function getViolationInfoByMonth() {
+  return request({
+    url: '/func/web/getViolationInfoByMonth',
+    method: 'POST'
+  })
+}

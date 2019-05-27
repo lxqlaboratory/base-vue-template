@@ -46,6 +46,7 @@
 
 <script>
   import { getViolationInfoByParameterAndMonth } from '@/api/active-safety'
+  import { getViolationInfoByMonth } from '@/api/active-safety'
 export default {
 
   created() {
@@ -55,14 +56,27 @@ export default {
     return {
       monthvalue:null,
       tableData: [],
-      list:[]
+      list:[],
+      treelist:[],
+      treelista:['08-07', '08-08', '08-09', '08-10', '08-11', '08-12', '08-13'],
+      treelistb:[10, 52, 200, 334, 390, 330, 220]
     }
   },
   methods: {
     fetchData() {
       getViolationInfoByParameterAndMonth().then(response => {
         this.list = response.data
-        console.log("list="+this.list)
+
+      }),
+      getViolationInfoByMonth().then(response => {
+           this.treelist = response.data;
+           console.log(this.treelist)
+        this.treelista.push('06-01'
+        )
+        this.treelistb.push(555)
+           this.treelist.forEach(item=>{
+
+         })
       })
     },
     // 初始化echartlegendArr
@@ -85,7 +99,7 @@ export default {
         xAxis : [
           {
             type : 'category',
-            data : ['08-07', '08-08', '08-09', '08-10', '08-11', '08-12', '08-13'],
+            data : this.treelista,
             axisTick: {
               alignWithLabel: true
             }
@@ -101,7 +115,7 @@ export default {
             name:'总共',
             type:'bar',
             barWidth: '60%',
-            data:[10, 52, 200, 334, 390, 330, 220]
+            data:this.treelistb
           }
         ]
       });
