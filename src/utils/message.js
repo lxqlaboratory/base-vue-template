@@ -10,10 +10,9 @@ Toast.install = function (Vue) {
   Vue.prototype.$toast = (msg, duration = 1500) => {
     instance.message = msg;
     instance.visible = true;
-    console.log("进入注册Toast")
-    setTimeout(() => {
+    /*setTimeout(() => {
       instance.visible = false;
-    }, duration);
+    }, duration);*/
   }
 }
 export default Toast
