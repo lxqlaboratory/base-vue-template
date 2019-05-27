@@ -123,7 +123,7 @@ export default {
     }
   },
   created() {
-    this.$my_message('这是一个warning','warning')
+    this.$toast("XXXXXXXXX");
     this.fetchData()
   },
   methods: {
