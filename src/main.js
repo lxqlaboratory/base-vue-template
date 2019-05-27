@@ -50,7 +50,7 @@ const ws = new WebSocket('ws://202.194.14.72:15674/ws')
 const client = Stomp.over(ws)
 const on_connect = function() {
   console.log('connected')
-  client.subscribe('JT808Server_LocationData_Exchange', function(message) {
+  client.subscribe('JT808Server_LocationData_Queue', function(message) {
     const p = JSON.parse(message.body)
     console.log(p)
   })
