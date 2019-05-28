@@ -213,7 +213,12 @@ export default {
       client.subscribe('JT808Server_LocationData_Queue', function(message) {
         const p = JSON.parse(message.body)
         console.log("JT808Server_LocationData_Queue进入了")
-        console.log(p)
+        for(var item in p){
+          if(item=="getTired"){  //item 表示Json串中的属性，如'name'
+            var jValue=p[item]//key所对应的value
+            console.log("getTired")
+          }
+        }
       })
       client.subscribe('JT808Server_DriverIdentity_Queue', function(message) {
         const p = JSON.parse(message.body)
