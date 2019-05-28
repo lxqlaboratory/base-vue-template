@@ -212,14 +212,17 @@ export default {
       console.log('connected')
       client.subscribe('JT808Server_LocationData_Queue', function(message) {
         const p = JSON.parse(message.body)
+        console.log("JT808Server_LocationData_Queue进入了")
         console.log(p)
       })
       client.subscribe('JT808Server_DriverIdentity_Queue', function(message) {
         const p = JSON.parse(message.body)
+        console.log("JT808Server_DriverIdentity_Queue进入了")
         console.log(p)
       })
       client.subscribe('JT808Server_DigitWaybill_Queue', function(message) {
         const p = JSON.parse(message.body)
+        console.log("JT808Server_DigitWaybill_Queue进入了")
         console.log(p)
       })
     }
