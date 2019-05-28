@@ -26,7 +26,7 @@
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
 
-          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" @click="infoWindowOpen" title="杨培林">
+          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" title="杨培林" @click="infoWindowOpen">
             <bm-info-window title="车辆信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
               <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
               <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
@@ -51,14 +51,13 @@
     </el-dialog>
     <controlbottom />
 
-
-      <el-dialog  title="轨迹回放" width="80vw;"  :visible.sync="trackPlaybackVisible">
-        <el-input v-model="trackPlaybackStartTime" type="date" size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date"></el-input>
-        <el-input v-model="trackPlaybackEndTime" type="date" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date"></el-input>
-        <el-button  @click="trackPlaybackDraw" >查询</el-button>
-        <el-button  @click="trackPlaybackStart" >开始</el-button>
-        <el-button  @click="trackPlaybackStop" >停止</el-button>
-        <div  style="width: 100%;height: 50vh;">
+    <el-dialog title="轨迹回放" width="80vw;" :visible.sync="trackPlaybackVisible">
+      <el-input v-model="trackPlaybackStartTime" type="date" size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
+      <el-input v-model="trackPlaybackEndTime" type="date" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
+      <el-button @click="trackPlaybackDraw">查询</el-button>
+      <el-button @click="trackPlaybackStart">开始</el-button>
+      <el-button @click="trackPlaybackStop">停止</el-button>
+      <div style="width: 100%;height: 50vh;">
         <baidu-map class="map" :center="center" :zoom="11" style="height: 100%;width: 100%;">
           <bm-driving
             :start="trackPlaybackStartPoint"
@@ -83,15 +82,15 @@
   </div>
 </template>
 
-
 <script>
-  import { mapGetters } from 'vuex'
-  import ControlBottom from './indexcomponents/ControlBottom'
-  import { getTreeVehicleFormList,getVehiclePositionFromList,getSelectedVehiclePosition } from '@/api/vehicle-list-index'
-  import BmLushu from "../../../node_modules/vue-baidu-map/components/extra/Lushu.vue"
-  import {BmlLushu} from 'vue-baidu-map'
-  import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
-  import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
+import { mapGetters } from 'vuex'
+import ControlBottom from './indexcomponents/ControlBottom'
+import { getTreeVehicleFormList, getVehiclePositionFromList, getSelectedVehiclePosition } from '@/api/vehicle-list-index'
+import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
+import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue'
+import Stomp from 'stompjs'
+import PeerConnection from '../../utils/PeerConnection'
+
 export default {
   name: 'Dashboard',
   components: {
@@ -129,7 +128,7 @@ export default {
         {
           lng: 116.404,
           lat: 39.898
-        },
+        }
       ],
       center: { lng: 0, lat: 0 },
       zoom: 13,
@@ -181,7 +180,7 @@ export default {
       trackPlaybackStartPoint: { lng: 116.404844, lat: 39.911836 },
       trackPlaybackEndPoint: { lng: 116.308102, lat: 40.056057 },
       trackPlaybackWayPointList: [
-        /*{ lng: 116.404844, lat: 39.911836 },
+        /* { lng: 116.404844, lat: 39.911836 },
         { lng: 116.308102, lat: 40.056057 }*/
       ]
       //* *****************************************//
@@ -206,6 +205,56 @@ export default {
   created: function() {
     this.$store.commit('app/hideNavbar')
     this.fetchData()
+  },
+  mounted: function() {
+    const ws = new WebSocket('ws://202.194.14.72:15674/ws')
+    const client = Stomp.over(ws)
+    const on_connect = function() {
+      console.log('connected')
+      client.subscribe('JT808Server_LocationData_Queue', function(message) {
+        const p = JSON.parse(message.body)
+        console.log(p)
+      })
+      client.subscribe('JT808Server_DriverIdentity_Queue', function(message) {
+        const p = JSON.parse(message.body)
+        console.log(p)
+      })
+      client.subscribe('JT808Server_DigitWaybill_Queue', function(message) {
+        const p = JSON.parse(message.body)
+        console.log(p)
+      })
+    }
+    const on_error = function() {
+      console.log('error')
+    }
+    client.connect('admin', '123', on_connect, on_error, 'jt808')
+
+    const peer = new PeerConnection.PeerConnection('ws://211.87.225.206:10004/hello')
+
+    document.querySelector('#start').onclick = function() {
+      this.disabled = true
+      document.querySelector('#stop').onclick.disabled = false
+      getUserMedia()
+    }
+
+    document.querySelector('#stop').onclick = function() {
+      this.disabled = true
+      document.querySelector('#start').onclick.disabled = false
+      peer.close()
+    }
+
+    function getUserMedia() {
+      const hints = {
+        audio: true,
+        video: false
+      }
+      navigator.mediaDevices.getUserMedia(hints).then(function(stream) {
+        peer.MediaStream = stream
+        peer.startTransmitting(stream)
+      }).catch(function(error) {
+        console.log(error)
+      })
+    }
   },
   methods: {
     fetchData() {
@@ -255,31 +304,30 @@ export default {
     },
     doLocation() {
       this.plateNumList.forEach(item => {
-          getSelectedVehiclePosition(item).then(response => {
-            console.log("response.data")
-            console.log(response.data)
-            //console.log(this.markers)
-            if(response.data!=null)
-              this.markers.push({lng:response.data.longitude,lat:response.data.latitude})
-              this.center.lng=response.data.longitude
-              this.center.lat=response.data.latitude
-          })
-          this.markers2=new Set(this.markers)
-          this.markers=this.markers2
-          console.log(this.markers)
-        }
+        getSelectedVehiclePosition(item).then(response => {
+          console.log('response.data')
+          console.log(response.data)
+          // console.log(this.markers)
+          if (response.data != null) { this.markers.push({ lng: response.data.longitude, lat: response.data.latitude }) }
+          this.center.lng = response.data.longitude
+          this.center.lat = response.data.latitude
+        })
+        this.markers2 = new Set(this.markers)
+        this.markers = this.markers2
+        console.log(this.markers)
+      }
       )
     },
     // 轨迹回放用到的方法
-    trackPlaybackDraw(){
-      getVehiclePositionFromList(this.trackPlaybackStartTime,this.trackPlaybackEndTime).then(response => {
+    trackPlaybackDraw() {
+      getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
         this.vehiclePositionFromList = response.data
-        if(this.vehiclePositionFromList.style()>0){
+        if (this.vehiclePositionFromList.style() > 0) {
           console.log(this.vehiclePositionFromList)
           console.log(this.vehiclePositionFromList[0])
-          this.trackPlaybackStartPoint={lng:this.vehiclePositionFromList[0].lng,lat:this.vehiclePositionFromList[0].lat}
-          this.trackPlaybackEndPoint== {lng:this.vehiclePositionFromList[ this.vehiclePositionFromList.style()-1].lng,lat:this.vehiclePositionFromList[ this.vehiclePositionFromList.style()-1].lat}
-          console.log("this.trackPlaybackStartPoint="+this.trackPlaybackStartPoint )
+          this.trackPlaybackStartPoint = { lng: this.vehiclePositionFromList[0].lng, lat: this.vehiclePositionFromList[0].lat }
+          this.trackPlaybackEndPoint == { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.style() - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.style() - 1].lat }
+          console.log('this.trackPlaybackStartPoint=' + this.trackPlaybackStartPoint)
         }
       })
     },
@@ -294,12 +342,12 @@ export default {
     trackPlaybackStart() {
       this.$refs.lushu.$emit('start', this.$refs.lushu)
     },
-    trackPlaybackStart(){
-      this.play=true
+    trackPlaybackStart() {
+      this.play = true
     },
-    trackPlaybackStop(){
-      this.play=false
-    },
+    trackPlaybackStop() {
+      this.play = false
+    }
     // ////////////////////////////////////////////
   }
 }
