@@ -205,7 +205,7 @@ export default {
   created: function() {
     this.$store.commit('app/hideNavbar')
     this.fetchData()
-
+    /*接收WebSocket传过来的信息*/
     const ws = new WebSocket('ws://202.194.14.72:15674/ws')
     const client = Stomp.over(ws)
     const on_connect = function() {
@@ -229,7 +229,7 @@ export default {
     client.connect('admin', '123', on_connect, on_error, 'jt808')
 
     const peer = new PeerConnection.PeerConnection('ws://211.87.225.206:10004/hello')
-
+    /*接收WebSocket传过来的信息--end*/
     document.querySelector('#start').onclick = function() {
       this.disabled = true
       document.querySelector('#stop').onclick.disabled = false
