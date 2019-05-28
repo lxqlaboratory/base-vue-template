@@ -205,8 +205,7 @@ export default {
   created: function() {
     this.$store.commit('app/hideNavbar')
     this.fetchData()
-  },
-  mounted: function() {
+
     const ws = new WebSocket('ws://202.194.14.72:15674/ws')
     const client = Stomp.over(ws)
     const on_connect = function() {

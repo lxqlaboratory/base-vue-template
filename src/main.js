@@ -35,7 +35,6 @@ import Toast from './utils/message'
 Vue.use(ElementUI, { locale })
 Vue.use(BaiduMap, { ak: 'YZk52XHYbwtDoWnnlDO53ysCNBHCG0v6' })
 Vue.use(VideoPlayer)
-Vue.use(Stomp)
 Vue.component('split-pane', splitPane)
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
@@ -46,5 +45,4 @@ new Vue({
   store,
   render: h => h(App)
 })
-
 
