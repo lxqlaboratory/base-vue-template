@@ -219,6 +219,9 @@ export default {
       client.subscribe('JT808Server_LocationData_Queue', function(message) {
         const p = JSON.parse(message.body)
         console.log(p)
+        for (let key in p) {
+          console.log(key)
+        }
       })
       client.subscribe('JT808Server_DriverIdentity_Queue', function(message) {
         const p = JSON.parse(message.body)
