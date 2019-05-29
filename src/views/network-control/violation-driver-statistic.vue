@@ -79,8 +79,8 @@ export default {
   },
   data() {
     return {
-      list: null,
-      violationTypeList: null,
+      list: [],
+      violationTypeList: [],
       violationTypeValue: null,
       plateValue: null,
       driverValue: null,

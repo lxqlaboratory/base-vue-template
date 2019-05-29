@@ -178,6 +178,8 @@
         plateNumList: [],
         plateNumList2: [],
         // 下边是轨迹回放的data
+        trackPlaybackStartTime:'',
+        trackPlaybackEndTime:'',
         play: false,
         path: [],
         icon: {
