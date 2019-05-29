@@ -33,6 +33,7 @@
               <el-button @click="isVideoMonitoringVisible">视频监控</el-button>
               <el-button>定位跟踪</el-button>
               <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
+              <el-button @click="isTalkBackVisible">语音对讲</el-button>
             </bm-info-window>
           </bm-marker>
 
@@ -48,6 +49,10 @@
         :playsinline="true"
         :options="playerOptions"
       />
+    </el-dialog>
+
+    <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
+      <el-button @click="talkBackAction">{{ talkBack }}</el-button>
     </el-dialog>
     <controlbottom />
 
@@ -89,7 +94,7 @@ import { getTreeVehicleFormList, getVehiclePositionFromList, getSelectedVehicleP
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue'
 import Stomp from 'stompjs'
-import PeerConnection from '../../utils/PeerConnection'
+import RecordRTC from 'recordrtc'
 
 export default {
   name: 'Dashboard',
@@ -134,7 +139,8 @@ export default {
       zoom: 13,
       videoMonitoringVisible: false,
       trackPlaybackVisible: false,
-
+      talkBackVisible: false,
+      talkBack: '开始对讲',
       playerOptions: {
         // playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
         autoplay: false, // 如果true,浏览器准备好时开始回放。
@@ -228,31 +234,45 @@ export default {
     }
     client.connect('admin', '123', on_connect, on_error, 'jt808')
 
-    const peer = new PeerConnection.PeerConnection('ws://211.87.225.206:10004/hello')
-
-    document.querySelector('#start').onclick = function() {
-      this.disabled = true
-      document.querySelector('#stop').onclick.disabled = false
-      getUserMedia()
+    const peer = new WebSocket('ws://211.87.225.203:10004/hello')
+    peer.push = peer.send
+    peer.send = (data) => {
+      peer.push(data)
     }
-
-    document.querySelector('#stop').onclick = function() {
-      this.disabled = true
-      document.querySelector('#start').onclick.disabled = false
-      peer.close()
+    peer.onopen = () => {
+      peer.binaryType = 'blob'
+      console.log('talkBack connected.')
     }
-
-    function getUserMedia() {
-      const hints = {
-        audio: true,
-        video: false
+    let recorder
+    this.talkBackAction = () => {
+      if (this.talkBack === '开始对讲') {
+        navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: false
+        }).then(function(stream) {
+          peer.MediaStream = stream
+          recorder = RecordRTC(stream, {
+            type: 'audio',
+            recorderType: RecordRTC.StereoAudioRecorder,
+            disableLogs: true,
+            timeSlice: 1000,
+            ondataavailable: (blob) => {
+              peer.send(blob)
+            },
+            desiredSampRate: 16000
+          })
+          recorder.startRecording()
+          peer.send('start')
+        }).catch(function(error) {
+          console.log(error)
+        })
+        this.talkBack = '停止对讲'
+      } else {
+        recorder.stopRecording()
+        if (peer.MediaStream) peer.MediaStream.stop()
+        peer.send('stop')
+        this.talkBack = '开始对讲'
       }
-      navigator.mediaDevices.getUserMedia(hints).then(function(stream) {
-        peer.MediaStream = stream
-        peer.startTransmitting(stream)
-      }).catch(function(error) {
-        console.log(error)
-      })
     }
   },
   methods: {
@@ -273,6 +293,9 @@ export default {
     },
     isTrackPlaybackVisible() {
       this.trackPlaybackVisible = !this.trackPlaybackVisible
+    },
+    isTalkBackVisible() {
+      this.talkBackVisible = !this.talkBackVisible
     },
     getClickInfo(e) {
       console.log(e.point.lng)
