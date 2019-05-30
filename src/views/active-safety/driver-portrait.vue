@@ -307,10 +307,11 @@ export default {
   mounted () {
     setTimeout(()=>{
       this.initChart()
+      this.initChart2()
+      this.initChart4()
     },2000)
 
-    this.initChart2()
-    this.initChart4()
+
   },
   watch: {
     monthvalue(val) {
