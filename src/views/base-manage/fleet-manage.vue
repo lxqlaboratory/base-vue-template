@@ -11,7 +11,7 @@
     </el-select>
     <el-table
       v-loading="listLoading"
-      :data="list"
+      :data="tableList"
       element-loading-text="Loading"
       border
       fit
@@ -49,11 +49,20 @@ export default {
   filters: {
 
   },
+
   data() {
     return {
       list: [],
       listLoading: true,
       companyNameQuery: ''
+    }
+  },
+  computed: {
+    'tableList': function() {
+      return this.list.filter(item => {
+        if (!this.companyNameQuery || item.companyName == this.companyNameQuery) { return true }
+        return false
+      })
     }
   },
   created() {

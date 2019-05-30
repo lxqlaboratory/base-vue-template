@@ -10,7 +10,7 @@
       />
     </el-select>
     <el-table
-      :data="list"
+      :data="tableList"
       border
       fit
       highlight-current-row
@@ -106,6 +106,14 @@ export default {
         drivingLicenseNum: ''
       },
       driverNameQuery: ''
+    }
+  },
+  computed: {
+    'tableList': function() {
+      return this.list.filter(item => {
+        if (!this.driverNameQuery || item.driverName == this.driverNameQuery) { return true }
+        return false
+      })
     }
   },
   created() {
