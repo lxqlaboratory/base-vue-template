@@ -141,7 +141,6 @@ export default {
         show: false,
         contents: '视频监控'
       },
-      markers2: [],
       markers: [
         {
           lng: 116.404,
@@ -348,18 +347,19 @@ export default {
     },
     doLocation() {
       this.plateNumList.forEach(item => {
-        getSelectedVehiclePosition(item).then(response => {
-          console.log('response.data')
-          console.log(response.data)
-          // console.log(this.markers)
-          if (response.data != null) { this.markers.push({ lng: response.data.longitude, lat: response.data.latitude }) }
-          this.center.lng = response.data.longitude
-          this.center.lat = response.data.latitude
-        })
-        this.markers2 = new Set(this.markers)
-        this.markers = this.markers2
-        console.log(this.markers)
-      }
+          getSelectedVehiclePosition(item).then(response => {
+            if (response.data != null) {
+              this.markers.push({
+                lng: response.data.longitude,
+                lat: response.data.latitude
+              })
+              this.center.lng = response.data.longitude
+              this.center.lat = response.data.latitude
+            }
+          })
+          this.markers = Array.from(new Set(this.markers))
+          console.log(this.markers)
+        }
       )
     },
     // 轨迹回放用到的方法
