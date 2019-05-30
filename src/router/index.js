@@ -179,7 +179,7 @@ export const constantRoutes = [
         component: () => import('@/views/network-control/violation-statistic'),
         meta: { title: '违章统计', icon: 'tree' }
       }
-      ]
+    ]
   },
   {
     path: '/activeSafety ',
@@ -200,6 +200,18 @@ export const constantRoutes = [
         meta: { title: '驾驶员画像', icon: 'tree' }
       }
     ]
+  },
+  {
+    path: '/videoMonitor ',
+    component: Layout,
+    name: 'videoMonitor',
+    meta: { title: '视频监控', icon: 'tool' },
+    children: [{
+      path: 'videoMonitor',
+      name: 'VideoMonitor',
+      component: () => import('@/views/video-monitor/index'),
+      meta: { title: '视频监控', icon: 'dashboard' }
+    }]
   },
   {
     path: 'external-link',

@@ -39,11 +39,6 @@
         </baidu-map>
         <!--地图右侧弹出-->
         <el-dialog title="视频监控" :visible.sync="videoMonitoringVisible">
-          <video-player
-            class="vjs-custom-skin"
-            :options="playerOptions">
-          </video-player>
-          <video ref="videoElement"></video>
         </el-dialog>
 
         <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
@@ -90,46 +85,15 @@ import { getTreeVehicleFormList, getVehiclePositionFromList, getSelectedVehicleP
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
-import FlvJs from 'flv.js'
-import { mediaTransform } from '@/api/terminal'
-
-import videoPlayer from 'vue-video-player'
-import 'video.js/dist/video-js.css'
-import 'vue-video-player/src/custom-theme.css'
-
-require('@videojs/http-streaming/dist/videojs-http-streaming.min')
 
 export default {
   name: 'Dashboard',
   components: {
     BmLushu,
     Controlbottom: ControlBottom,
-    videoPlayer
   },
   data() {
     return {
-      /**
-       * terminal result
-       * 0：成功∕确认
-       * 1：失败
-       * 2：消息有误
-       * 3：不支持
-       */
-      videoMonitoringResult: 1,
-      //
-      playerOptions: {
-        sources: [{
-          withCredentials: false,
-          type: 'application/x-mpegURL',
-          src: 'http://202.194.14.72:8080/hls/test.m3u8'
-        }],
-        controlBar: {
-          timeDivider: false,
-          durationDisplay: false
-        },
-        flash: { hls: { withCredentials: false }},
-        html5: { hls: { withCredentials: false }}
-      },
       filterText: '',
       data: {},
       defaultProps: {
@@ -289,28 +253,8 @@ export default {
       this.center.lng = 116.404
       this.center.lat = 39.915
     },
-    testMethod() {
-      mediaTransform('15153139702', 64, 0).then(response => {
-        this.videoMonitoringResult = response.data.result
-        console.log('response.data ' + response.data.result)
-      })
-    },
     isVideoMonitoringVisible() {
       this.videoMonitoringVisible = !this.videoMonitoringVisible
-      console.log('hello')
-      mediaTransform('15153139702', 64, 0).then(response => {
-        this.videoMonitoringResult = response.data.result
-      })
-      console.log('videoMonitoringResult ' + this.videoMonitoringResult)
-      if (FlvJs.isSupported()) {
-        var flvPlayer = FlvJs.createPlayer({
-          type: 'flv',
-          url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
-        })
-        flvPlayer.attachMediaElement(this.$refs.videoElement)
-        flvPlayer.load()
-        flvPlayer.play()
-      }
     },
     isTrackPlaybackVisible() {
       this.trackPlaybackVisible = !this.trackPlaybackVisible
@@ -347,19 +291,19 @@ export default {
     },
     doLocation() {
       this.plateNumList.forEach(item => {
-          getSelectedVehiclePosition(item).then(response => {
-            if (response.data != null) {
-              this.markers.push({
-                lng: response.data.longitude,
-                lat: response.data.latitude
-              })
-              this.center.lng = response.data.longitude
-              this.center.lat = response.data.latitude
-            }
-          })
-          this.markers = Array.from(new Set(this.markers))
-          console.log(this.markers)
-        }
+        getSelectedVehiclePosition(item).then(response => {
+          if (response.data != null) {
+            this.markers.push({
+              lng: response.data.longitude,
+              lat: response.data.latitude
+            })
+            this.center.lng = response.data.longitude
+            this.center.lat = response.data.latitude
+          }
+        })
+        this.markers = Array.from(new Set(this.markers))
+        console.log(this.markers)
+      }
       )
     },
     // 轨迹回放用到的方法
