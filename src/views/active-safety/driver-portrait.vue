@@ -2,7 +2,7 @@
   <div class="app-container" style="height: calc(100vh - 1px);">
   <div class="div-a">
     <div style="height:10%;margin-top: 10px;text-align:center">企业名称：鑫华汽车运输公司 近一年报警总数</div>
-    <div class="chart" style="height:90%;margin-bottom: 10px"></div>
+    <div class="chart" style="padding: 5px;height:90%;margin-bottom: 10px"></div>
   </div>
   <div class="div-b">
     <div class="block" style="margin-left: 40px;">
@@ -35,11 +35,11 @@
     </el-table>
   </div>
   <div class="div-c">
-    <div class="chart2" style="height:100%;margin-bottom: 10px">
+    <div class="chart2" style="padding: 5px;width:100%;height:100%;margin-bottom: 10px">
     </div>
   </div>
   <div class="div-d">
-    <div class="chart4" style="height:100%;margin-bottom: 10px"></div>
+    <div class="chart4" style="padding: 5px;width:100%;height:100%;margin-bottom: 10px"></div>
   </div>
   </div>
 </template>
@@ -59,70 +59,45 @@ export default {
       list:[],
       treelist:[],
       treelista:['08-07', '08-08', '08-09', '08-10', '08-11', '08-12', '08-13'],
-      treelistb:[10, 52, 200, 334, 390, 330, 220]
-    }
-  },
-  methods: {
-    fetchData() {
-      getViolationInfoByParameterAndMonth().then(response => {
-        this.list = response.data
-
-      }),
-      getViolationInfoByMonth().then(response => {
-           this.treelist = response.data;
-           console.log(this.treelist)
-        this.treelista.push('06-01'
-        )
-        this.treelistb.push(555)
-           this.treelist.forEach(item=>{
-
-         })
-      })
-    },
-    // 初始化echartlegendArr
-    initChart () {
-      var myChart = this.$echarts.init(document.querySelector('.chart'));
-      myChart.setOption({
-        color: ['#3398DB'],
+      treelistb:[10, 52, 200, 334, 390, 330, 220],
+      option1:{
+      color: ['#3398DB'],
         tooltip : {
-          trigger: 'axis',
-          axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        grid: {
-          left: '3%',
+      trigger: 'axis',
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+      }
+      },
+      grid: {
+        left: '3%',
           right: '4%',
           bottom: '3%',
           containLabel: true
-        },
-        xAxis : [
-          {
-            type : 'category',
-            data : this.treelista,
-            axisTick: {
-              alignWithLabel: true
-            }
+      },
+      xAxis : [
+        {
+          type : 'category',
+          data : ['08-07', '08-08', '08-09', '08-10', '08-11', '08-12', '08-13'],
+          axisTick: {
+            alignWithLabel: true
           }
-        ],
+        }
+      ],
         yAxis : [
-          {
-            type : 'value'
-          }
-        ],
-        series : [
-          {
-            name:'总共',
-            type:'bar',
-            barWidth: '60%',
-            data:this.treelistb
-          }
-        ]
-      });
+      {
+        type : 'value'
+      }
+    ],
+      series : [
+      {
+        name:'总共',
+        type:'bar',
+        barWidth: '60%',
+        data:[10, 52, 200, 334, 390, 330, 220]
+      }
+    ]
     },
-    initChart2 () {
-      var myChart = this.$echarts.init(document.querySelector('.chart2'));
-      myChart.setOption({
+      option2:{
         backgroundColor: '#45515a',
         //标题
         title: {
@@ -215,11 +190,8 @@ export default {
             }
           }
         ]
-      });
-    },
-    initChart4 () {
-      var myChart = this.$echarts.init(document.querySelector('.chart4'));
-      myChart.setOption({
+      },
+      option4:{
         title: {
           text: '堆叠区域图'
         },
@@ -296,15 +268,49 @@ export default {
             data:[820, 932, 901, 934, 1290, 1330, 1320]
           }
         ]
-      });
+      },
+    }
+  },
+  methods: {
+    fetchData() {
+      getViolationInfoByParameterAndMonth().then(response => {
+        this.list = response.data
+
+      }),
+      getViolationInfoByMonth().then(response => {
+           this.treelist = response.data;
+           console.log("getViolationInfoByMonth()")
+           console.log(this.treelist)
+
+      })
+    },
+    //初始化echartlegendArr
+    initChart () {
+      var myChart = this.$echarts.init(document.querySelector('.chart'));
+      this.option1.xAxis[0].data=[]
+      this.option1.series[0].data=[]
+      this.treelist.filter(item => {
+        this.option1.xAxis[0].data.push(item.violationTime);
+        this.option1.series[0].data.push(item.count);
+      })
+      myChart.setOption(this.option1);
+    },
+    initChart2 () {
+      var myChart2 = this.$echarts.init(document.querySelector('.chart2'));
+      myChart2.setOption(this.option2);
+    },
+    initChart4 () {
+      var myChart4 = this.$echarts.init(document.querySelector('.chart4'));
+      myChart4.setOption(this.option4);
     },
   },
   mounted () {
-    this.$nextTick(() => {
+    setTimeout(()=>{
       this.initChart()
-      this.initChart2()
-      this.initChart4()
-    })
+    },2000)
+
+    this.initChart2()
+    this.initChart4()
   },
   watch: {
     monthvalue(val) {
