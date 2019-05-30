@@ -15,10 +15,6 @@ import router from './router'
 import '@/icons' // icon
 
 import BaiduMap from 'vue-baidu-map'
-
-import VideoPlayer from 'vue-video-player'
-import 'video.js/dist/video-js.css'
-import 'vue-video-player/src/custom-theme.css'
 import splitPane from 'vue-splitpane'
 import Toast from './utils/message'
 
@@ -34,7 +30,6 @@ import Toast from './utils/message'
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 Vue.use(BaiduMap, { ak: 'YZk52XHYbwtDoWnnlDO53ysCNBHCG0v6' })
-Vue.use(VideoPlayer)
 Vue.component('split-pane', splitPane)
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
