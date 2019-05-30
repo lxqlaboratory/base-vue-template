@@ -101,8 +101,8 @@ export default {
         backgroundColor: '#45515a',
         //标题
         title: {
-          text: '流量来源',
-          subtext:'饼图示例',
+          text: '违章类型',
+          subtext:'占比',
           left: 'center',
           top: 20,
           textStyle: {
@@ -126,14 +126,14 @@ export default {
           textStyle:{
             color:'#c8c8d0'
           },
-          data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']  //注意要和数据的name相对应
+          data:[]  //注意要和数据的name相对应
         },
         //工具箱
         //视觉映射组件，将数据映射到视觉元素上
         visualMap: {
           show: false,
-          min: 10,
-          max: 650,
+          min: 1,
+          max: 5,
           dimension: 0, //选取数据的维度，如人数据：[身高，体重]，则1代表将体重进行映射，默认值为数组的最后一位
           // seriesIndex: 4, //选取数据集合中的哪个数组，如{一班}，{二班}，默认选取data中的所有数据集
           inRange: {
@@ -146,17 +146,11 @@ export default {
 //数据
         series : [
           {
-            name:'访问来源',
+            name:'违章类型',
             type:'pie',
             radius : '55%',
             center: ['50%', '50%'],
-            data:[
-              {value:335, name:'直接访问'},
-              {value:310, name:'邮件营销'},
-              {value:274, name:'联盟广告'},
-              {value:235, name:'视频广告'},
-              {value:400, name:'搜索引擎'}
-            ].sort(function (a, b) { return a.value - b.value; }),
+            data:[].sort(function (a, b) { return a.value - b.value; }),
             roseType: 'radius',//角度和半径展现百分比，'area'只用半径展现
             label: { //饼图图形的文本标签
               normal: {  //下同，normal指在普通情况下样式，而非高亮时样式
@@ -182,7 +176,6 @@ export default {
                 shadowColor: 'rgba(0, 0, 0, 0.5)'//阴影颜色，一般黑
               }
             },
-
             animationType: 'scale', //初始动画效果，scale是缩放，expansion是展开
             animationEasing: 'elasticOut', //初始动画缓动效果
             animationDelay: function (idx) {  //数据更新动画时长，idx限定了每个数据块从无到有的速度
@@ -297,6 +290,25 @@ export default {
     },
     initChart2 () {
       var myChart2 = this.$echarts.init(document.querySelector('.chart2'));
+      // {value:335, name:'直接访问'},
+      var arr = [];
+      console.log("initChart2")
+      console.log(this.list)
+      this.option2.legend.data=[]
+      this.option2.series[0].data=[]
+      this.list.filter(itema => {
+        arr.push({
+          'value': itema.count,
+          'name':itema.violationParameterName
+        })
+      })
+      console.log(arr)
+      var i=0;
+      this.list.filter(itema => {
+        this.option2.legend.data.push(itema.violationParameterName);
+        this.option2.series[0].data.push(arr[i++]);
+      })
+      console.log(this.option2.legend.data)
       myChart2.setOption(this.option2);
     },
     initChart4 () {
