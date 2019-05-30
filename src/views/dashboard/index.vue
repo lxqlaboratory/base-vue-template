@@ -30,7 +30,7 @@
               <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
               <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
               <el-button @click="isVideoMonitoringVisible">视频监控</el-button>
-              <el-button>定位跟踪</el-button>
+              <el-button @click="testMethod">定位跟踪</el-button>
               <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
               <el-button @click="isTalkBackVisible">语音对讲</el-button>
             </bm-info-window>
@@ -43,7 +43,7 @@
             class="vjs-custom-skin"
             :options="playerOptions">
           </video-player>
-          <video ref="videoElement" style="height: 400px"></video>
+          <video ref="videoElement"></video>
         </el-dialog>
 
         <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
@@ -91,6 +91,7 @@ import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
 import FlvJs from 'flv.js'
+import { mediaTransform } from '@/api/terminal'
 
 import videoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
@@ -107,6 +108,15 @@ export default {
   },
   data() {
     return {
+      /**
+       * terminal result
+       * 0：成功∕确认
+       * 1：失败
+       * 2：消息有误
+       * 3：不支持
+       */
+      videoMonitoringResult: 1,
+      //
       playerOptions: {
         sources: [{
           withCredentials: false,
@@ -280,19 +290,25 @@ export default {
       this.center.lng = 116.404
       this.center.lat = 39.915
     },
+    testMethod() {
+      mediaTransform('15153139702', 64, 0).then(response => {
+        this.videoMonitoringResult = response.data.result
+        console.log('response.data ' + response.data.result)
+      })
+    },
     isVideoMonitoringVisible() {
       this.videoMonitoringVisible = !this.videoMonitoringVisible
+      console.log('hello')
+      mediaTransform('15153139702', 64, 0).then(response => {
+        this.videoMonitoringResult = response.data.result
+      })
+      console.log('videoMonitoringResult ' + this.videoMonitoringResult)
       if (FlvJs.isSupported()) {
-        console.log('hello')
-        console.log(this.$refs.videoElement)
-        var videoElement = this.$refs.videoElement
-        console.log(videoElement)
         var flvPlayer = FlvJs.createPlayer({
           type: 'flv',
           url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
         })
-        console.log(flvPlayer)
-        flvPlayer.attachMediaElement(videoElement)
+        flvPlayer.attachMediaElement(this.$refs.videoElement)
         flvPlayer.load()
         flvPlayer.play()
       }
