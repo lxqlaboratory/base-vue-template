@@ -30,7 +30,7 @@
               <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
               <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
               <el-button @click="toVideoMonitoring">视频监控</el-button>
-              <el-button>定位跟踪</el-button>
+              <el-button @click="doTempLocationTrack">定位跟踪</el-button>
               <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
               <el-button @click="isTalkBackVisible">语音对讲</el-button>
               <el-button @click="isPhotoShotVisible">图像监管</el-button>
@@ -46,8 +46,8 @@
             v-model="textMsg"
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入内容">
-          </el-input>
+            placeholder="请输入内容"
+          />
           <el-button @click="sendTextMsg">发送</el-button>
         </el-dialog>
         <el-dialog title="电子运单" :visible.sync="digitBillVisible">
@@ -64,8 +64,8 @@
             align="right"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['12:00:00', '08:00:00']">
-          </el-date-picker>
+            :default-time="['12:00:00', '08:00:00']"
+          />
           <el-button>查询图片</el-button>
           <el-radio-group v-model="radio">
             <el-radio :label="1">车前</el-radio>
@@ -103,8 +103,8 @@
             </baidu-map>
           </div>
         </el-dialog>
+        <controlbottom />
       </el-main>
-      <controlbottom />
     </el-container>
   </div>
 </template>
@@ -113,7 +113,7 @@
 import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
 import { getTreeVehicleFormList, getVehiclePositionFromList, getSelectedVehiclePosition } from '@/api/vehicle-list-index'
-import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg } from '@/api/terminal'
+import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg, tempLocationTrack } from '@/api/terminal'
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
@@ -222,7 +222,7 @@ export default {
         console.log(p)
       })
     }
-    /*const jsonObj= {"name":"傅红雪","age":"24","profession":"刺客"};
+    /* const jsonObj= {"name":"傅红雪","age":"24","profession":"刺客"};
     var eValue=jsonObj.age
     console.log(eValue)*/
     const on_error = function() {
@@ -381,13 +381,63 @@ export default {
     // ////////////////////////////////////////////
     // terminal
     cameraShot() {
+      const loading = this.$loading({
+        lock: true,
+        text: '消息发送中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       cameraPhoto('15153139702', this.radio).then(response => {
-        // console.log(response.data)
+        console.log(response.data.result)
+        loading.close()
+        if (response.data.result === -1) {
+          this.$message.error('消息发送失败')
+        } else {
+          this.$message({
+            message: '消息发送成功',
+            type: 'success'
+          })
+        }
       })
     },
     sendTextMsg() {
+      const loading = this.$loading({
+        lock: true,
+        text: '消息发送中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       textMsg('15153139702', 0, this.textMsg).then(response => {
         // console.log(response.data)
+        loading.close()
+        if (response.data.result === -1) {
+          this.$message.error('消息发送失败')
+        } else {
+          this.$message({
+            message: '消息发送成功',
+            type: 'success'
+          })
+        }
+      })
+    },
+    doTempLocationTrack() {
+      const loading = this.$loading({
+        lock: true,
+        text: '消息发送中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      tempLocationTrack('15153139702', 0, this.textMsg).then(response => {
+        // console.log(response.data)
+        loading.close()
+        if (response.data.result === -1) {
+          this.$message.error('消息发送失败')
+        } else {
+          this.$message({
+            message: '消息发送成功',
+            type: 'success'
+          })
+        }
       })
     }
   }

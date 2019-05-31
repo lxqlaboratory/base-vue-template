@@ -212,6 +212,26 @@ export const constantRoutes = [
       meta: { title: '视频监控', icon: 'dashboard' }
     }]
   },
+  {
+    path: '/terminalControl',
+    component: Layout,
+    name: 'TerminalControl',
+    meta: { title: '终端管理', icon: 'tool' },
+    children: [
+      {
+        path: 'terminalParam',
+        name: 'TerminalParam',
+        component: () => import('@/views/terminal-control/terminal-param'),
+        meta: { title: '终端参数管理', icon: 'dashboard' }
+      },
+      {
+        path: 'terminalAttribute',
+        name: 'TerminalAttribute',
+        component: () => import('@/views/terminal-control/terminal-attribute'),
+        meta: { title: '终端属性管理', icon: 'dashboard' }
+      }
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
