@@ -91,36 +91,35 @@ export const constantRoutes = [
   },
 
   {
-    path: '/example',
+    path: '/statistics',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
+    name: 'Statistics',
     meta: { title: '统计分析', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
+        path: 'mileage',
+        name: 'Mileage',
         component: () => import('@/views/table/index'),
         meta: { title: '里程统计', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'Speeding',
+        name: 'speeding',
         component: () => import('@/views/tree/index'),
         meta: { title: '超速统计', icon: 'tree' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'tired',
+        name: 'Tired',
         component: () => import('@/views/tree/index'),
         meta: { title: '疲劳统计', icon: 'tree' }
       }
     ]
   },
   {
-    path: '/',
+    path: '/history',
     component: Layout,
-    name: 'Example',
+    name: 'History',
     meta: { title: '历史信息查询', icon: 'tool' },
     children: [
       {
@@ -184,7 +183,7 @@ export const constantRoutes = [
   {
     path: '/activeSafety ',
     component: Layout,
-    name: 'activeSafety',
+    name: 'ActiveSafety',
     meta: { title: '主动安全防御', icon: 'tool' },
     children: [
       {
@@ -204,7 +203,7 @@ export const constantRoutes = [
   {
     path: '/videoMonitor',
     component: Layout,
-    name: 'videoMonitor',
+    name: 'VideoMonitor',
     meta: { title: '视频监控', icon: 'tool' },
     children: [{
       path: 'videoMonitor',
@@ -212,16 +211,6 @@ export const constantRoutes = [
       component: () => import('@/views/video-monitor/index'),
       meta: { title: '视频监控', icon: 'dashboard' }
     }]
-  },
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
   },
 
   // 404 page must be placed at the end !!!
