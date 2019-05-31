@@ -350,7 +350,7 @@ export default {
     trackPlaybackDraw() {
       getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
         this.vehiclePositionFromList = response.data
-        if (this.vehiclePositionFromList.style() > 0) {
+        if (this.vehiclePositionFromList.length() > 0) {
           console.log(this.vehiclePositionFromList)
           console.log(this.vehiclePositionFromList[0])
           this.trackPlaybackStartPoint = { lng: this.vehiclePositionFromList[0].lng, lat: this.vehiclePositionFromList[0].lat }
