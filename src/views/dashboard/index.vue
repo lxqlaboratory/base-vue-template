@@ -194,6 +194,9 @@ export default {
         console.log(p)
       })
     }
+    /*const jsonObj= {"name":"傅红雪","age":"24","profession":"刺客"};
+    var eValue=jsonObj.age
+    console.log(eValue)*/
     const on_error = function() {
       console.log('error')
     }
