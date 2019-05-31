@@ -277,8 +277,8 @@ export default {
   methods: {
     fetchData() {
       getTreeVehicleFormList().then(response => {
-        this.data = response.data
-        console.log('this.data=' + this.data)
+        this.vehicleList = response.data
+        console.log('this.vehicleList=' + this.vehicleList)
       })
     },
     handler({ BMap, map }) {

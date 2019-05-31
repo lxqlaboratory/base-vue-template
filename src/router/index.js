@@ -207,7 +207,7 @@ export const constantRoutes = [
     meta: { title: '视频监控', icon: 'tool' },
     children: [{
       path: 'videoMonitor',
-      name: 'VideoMonitor',
+      name: 'videoMonitor',
       component: () => import('@/views/video-monitor/index'),
       meta: { title: '视频监控', icon: 'dashboard' }
     }]
