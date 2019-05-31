@@ -314,7 +314,7 @@ export default {
           console.log(this.vehiclePositionFromList)
           console.log(this.vehiclePositionFromList[0])
           this.trackPlaybackStartPoint = { lng: this.vehiclePositionFromList[0].lng, lat: this.vehiclePositionFromList[0].lat }
-          this.trackPlaybackEndPoint === { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.style() - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.style() - 1].lat }
+          this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.length() - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.length() - 1].lat }
           console.log('this.trackPlaybackStartPoint=' + this.trackPlaybackStartPoint)
         }
       })
