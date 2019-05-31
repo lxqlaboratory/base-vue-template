@@ -202,7 +202,7 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/videoMonitor ',
+    path: '/videoMonitor',
     component: Layout,
     name: 'videoMonitor',
     meta: { title: '视频监控', icon: 'tool' },

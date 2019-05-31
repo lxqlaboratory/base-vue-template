@@ -33,16 +33,36 @@
               <el-button>定位跟踪</el-button>
               <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
               <el-button @click="isTalkBackVisible">语音对讲</el-button>
+              <el-button @click="isPhotoShotVisible">图像监管</el-button>
             </bm-info-window>
           </bm-marker>
 
         </baidu-map>
-        <!--地图右侧弹出-->
+        <!-- dialog -->
         <el-dialog title="视频监控" :visible.sync="videoMonitoringVisible">
         </el-dialog>
 
         <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
           <el-button @click="talkBackAction">{{ talkBack }}</el-button>
+        </el-dialog>
+
+        <el-dialog title="图像监管" :visible.sync="photoShotVisible">
+          <el-date-picker
+            v-model="value2"
+            type="datetimerange"
+            align="right"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :default-time="['12:00:00', '08:00:00']">
+          </el-date-picker>
+          <el-button>查询图片</el-button>
+          <el-checkbox-group v-model="checkList">
+            <el-checkbox label="车前"></el-checkbox>
+            <el-checkbox label="司机"></el-checkbox>
+            <el-checkbox label="罐左侧"></el-checkbox>
+            <el-checkbox label="罐右侧"></el-checkbox>
+          </el-checkbox-group>
+          <el-button @click="cameraShot">图片采集</el-button>
         </el-dialog>
 
         <el-dialog title="轨迹回放" width="80vw;" :visible.sync="trackPlaybackVisible">
@@ -82,6 +102,7 @@
 import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
 import { getTreeVehicleFormList, getVehiclePositionFromList, getSelectedVehiclePosition } from '@/api/vehicle-list-index'
+import { cameraPhoto } from '@/api/terminal'
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
@@ -90,7 +111,7 @@ export default {
   name: 'Dashboard',
   components: {
     BmLushu,
-    Controlbottom: ControlBottom,
+    Controlbottom: ControlBottom
   },
   data() {
     return {
@@ -128,6 +149,7 @@ export default {
       videoMonitoringVisible: false,
       trackPlaybackVisible: false,
       talkBackVisible: false,
+      photoShotVisible: false,
       talkBack: '开始对讲',
       vehicleInfo: [{
         plateNum: '鲁YPL666',
@@ -257,13 +279,17 @@ export default {
       this.center.lat = 39.915
     },
     isVideoMonitoringVisible() {
-      this.videoMonitoringVisible = !this.videoMonitoringVisible
+      // this.videoMonitoringVisible = !this.videoMonitoringVisible
+      this.$router.push({ path: '/videoMonitor/videoMonitor' })
     },
     isTrackPlaybackVisible() {
       this.trackPlaybackVisible = !this.trackPlaybackVisible
     },
     isTalkBackVisible() {
       this.talkBackVisible = !this.talkBackVisible
+    },
+    isPhotoShotVisible() {
+      this.photoShotVisible = !this.photoShotVisible
     },
     getClickInfo(e) {
       console.log(e.point.lng)
@@ -338,8 +364,14 @@ export default {
     },
     trackPlaybackStop() {
       this.play = false
-    }
+    },
     // ////////////////////////////////////////////
+    // terminal
+    cameraShot() {
+      cameraPhoto('15153139702', 64).then(response => {
+        console.log(response.data)
+      })
+    }
   }
 }
 
