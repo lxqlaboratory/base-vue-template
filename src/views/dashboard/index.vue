@@ -30,7 +30,7 @@
               <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
               <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
               <el-button @click="isVideoMonitoringVisible">视频监控</el-button>
-              <el-button @click="testMethod">定位跟踪</el-button>
+              <el-button>定位跟踪</el-button>
               <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
               <el-button @click="isTalkBackVisible">语音对讲</el-button>
             </bm-info-window>
