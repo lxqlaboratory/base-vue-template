@@ -10,7 +10,7 @@
         <el-tree
           ref="tree2"
           class="filter-tree"
-          :data="data"
+          :data="vehicleList"
           show-checkbox
           :props="defaultProps"
           default-expand-all
@@ -29,20 +29,51 @@
             <bm-info-window title="车辆信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
               <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
               <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
-              <el-button @click="isVideoMonitoringVisible">视频监控</el-button>
-              <el-button @click="testMethod">定位跟踪</el-button>
+              <el-button @click="toVideoMonitoring">视频监控</el-button>
+              <el-button @click="doTempLocationTrack">定位跟踪</el-button>
               <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
               <el-button @click="isTalkBackVisible">语音对讲</el-button>
+              <el-button @click="isPhotoShotVisible">图像监管</el-button>
+              <el-button @click="isDigitBillVisible">电子运单</el-button>
+              <el-button @click="isTextMsgVisible">文本下发</el-button>
             </bm-info-window>
           </bm-marker>
 
         </baidu-map>
-        <!--地图右侧弹出-->
-        <el-dialog title="视频监控" :visible.sync="videoMonitoringVisible">
+        <!-- dialog -->
+        <el-dialog title="文本下发" :visible.sync="textMsgVisible">
+          <el-input
+            v-model="textMsg"
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            placeholder="请输入内容"
+          />
+          <el-button @click="sendTextMsg">发送</el-button>
         </el-dialog>
-
+        <el-dialog title="电子运单" :visible.sync="digitBillVisible">
+          暂时还没有电子运单
+        </el-dialog>
         <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
           <el-button @click="talkBackAction">{{ talkBack }}</el-button>
+        </el-dialog>
+
+        <el-dialog title="图像监管" :visible.sync="photoShotVisible">
+          <el-date-picker
+            v-model="photoShotTime"
+            type="datetimerange"
+            align="right"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :default-time="['12:00:00', '08:00:00']"
+          />
+          <el-button>查询图片</el-button>
+          <el-radio-group v-model="radio">
+            <el-radio :label="1">车前</el-radio>
+            <el-radio :label="2">司机</el-radio>
+            <el-radio :label="3">罐左侧</el-radio>
+            <el-radio :label="4">罐右侧</el-radio>
+          </el-radio-group>
+          <el-button @click="cameraShot">图片采集</el-button>
         </el-dialog>
 
         <el-dialog title="轨迹回放" width="80vw;" :visible.sync="trackPlaybackVisible">
@@ -72,8 +103,8 @@
             </baidu-map>
           </div>
         </el-dialog>
+        <controlbottom />
       </el-main>
-      <controlbottom />
     </el-container>
   </div>
 </template>
@@ -82,6 +113,7 @@
 import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
 import { getTreeVehicleFormList, getVehiclePositionFromList, getSelectedVehiclePosition } from '@/api/vehicle-list-index'
+import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg, tempLocationTrack } from '@/api/terminal'
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
@@ -90,12 +122,17 @@ export default {
   name: 'Dashboard',
   components: {
     BmLushu,
-    Controlbottom: ControlBottom,
+    Controlbottom: ControlBottom
   },
   data() {
     return {
+      radio: 1,
+      photoShotTime: '',
+      textMsg: '',
+      trackPlaybackStartTime: '',
+      trackPlaybackEndTime: '',
       filterText: '',
-      data: {},
+      vehicleList: [{}],
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -109,18 +146,6 @@ export default {
         {
           lng: 116.404,
           lat: 39.900
-        },
-        {
-          lng: 116.405,
-          lat: 39.901
-        },
-        {
-          lng: 116.406,
-          lat: 39.899
-        },
-        {
-          lng: 116.404,
-          lat: 39.898
         }
       ],
       center: { lng: 0, lat: 0 },
@@ -128,6 +153,9 @@ export default {
       videoMonitoringVisible: false,
       trackPlaybackVisible: false,
       talkBackVisible: false,
+      photoShotVisible: false,
+      digitBillVisible: false,
+      textMsgVisible: false,
       talkBack: '开始对讲',
       vehicleInfo: [{
         plateNum: '鲁YPL666',
@@ -194,6 +222,9 @@ export default {
         console.log(p)
       })
     }
+    /* const jsonObj= {"name":"傅红雪","age":"24","profession":"刺客"};
+    var eValue=jsonObj.age
+    console.log(eValue)*/
     const on_error = function() {
       console.log('error')
     }
@@ -233,19 +264,21 @@ export default {
           console.log(error)
         })
         this.talkBack = '停止对讲'
+        mediaTransform('15153139702', 6, 2)
       } else {
         recorder.stopRecording()
         if (peer.MediaStream) peer.MediaStream.stop()
         peer.send('stop')
         this.talkBack = '开始对讲'
+        realTimeMediaControl('15153139702', 6, 4, 0, 0)
       }
     }
   },
   methods: {
     fetchData() {
       getTreeVehicleFormList().then(response => {
-        this.data = response.data
-        console.log('this.data=' + this.data)
+        this.vehicleList = response.data
+        console.log('this.vehicleList=' + this.vehicleList)
       })
     },
     handler({ BMap, map }) {
@@ -253,14 +286,23 @@ export default {
       this.center.lng = 116.404
       this.center.lat = 39.915
     },
-    isVideoMonitoringVisible() {
-      this.videoMonitoringVisible = !this.videoMonitoringVisible
+    toVideoMonitoring() {
+      this.$router.push({ path: '/videoMonitor/videoMonitor' })
     },
     isTrackPlaybackVisible() {
       this.trackPlaybackVisible = !this.trackPlaybackVisible
     },
     isTalkBackVisible() {
       this.talkBackVisible = !this.talkBackVisible
+    },
+    isPhotoShotVisible() {
+      this.photoShotVisible = !this.photoShotVisible
+    },
+    isDigitBillVisible() {
+      this.digitBillVisible = !this.digitBillVisible
+    },
+    isTextMsgVisible() {
+      this.textMsgVisible = !this.textMsgVisible
     },
     getClickInfo(e) {
       console.log(e.point.lng)
@@ -335,8 +377,69 @@ export default {
     },
     trackPlaybackStop() {
       this.play = false
-    }
+    },
     // ////////////////////////////////////////////
+    // terminal
+    cameraShot() {
+      const loading = this.$loading({
+        lock: true,
+        text: '消息发送中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      cameraPhoto('15153139702', this.radio).then(response => {
+        console.log(response.data.result)
+        loading.close()
+        if (response.data.result === -1) {
+          this.$message.error('消息发送失败')
+        } else {
+          this.$message({
+            message: '消息发送成功',
+            type: 'success'
+          })
+        }
+      })
+    },
+    sendTextMsg() {
+      const loading = this.$loading({
+        lock: true,
+        text: '消息发送中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      textMsg('15153139702', 0, this.textMsg).then(response => {
+        // console.log(response.data)
+        loading.close()
+        if (response.data.result === -1) {
+          this.$message.error('消息发送失败')
+        } else {
+          this.$message({
+            message: '消息发送成功',
+            type: 'success'
+          })
+        }
+      })
+    },
+    doTempLocationTrack() {
+      const loading = this.$loading({
+        lock: true,
+        text: '消息发送中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      tempLocationTrack('15153139702', 0, this.textMsg).then(response => {
+        // console.log(response.data)
+        loading.close()
+        if (response.data.result === -1) {
+          this.$message.error('消息发送失败')
+        } else {
+          this.$message({
+            message: '消息发送成功',
+            type: 'success'
+          })
+        }
+      })
+    }
   }
 }
 

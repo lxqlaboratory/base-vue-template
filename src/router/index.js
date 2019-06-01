@@ -91,36 +91,35 @@ export const constantRoutes = [
   },
 
   {
-    path: '/example',
+    path: '/statistics',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
+    name: 'Statistics',
     meta: { title: '统计分析', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
+        path: 'mileage',
+        name: 'Mileage',
         component: () => import('@/views/table/index'),
         meta: { title: '里程统计', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'Speeding',
+        name: 'speeding',
         component: () => import('@/views/tree/index'),
         meta: { title: '超速统计', icon: 'tree' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'tired',
+        name: 'Tired',
         component: () => import('@/views/tree/index'),
         meta: { title: '疲劳统计', icon: 'tree' }
       }
     ]
   },
   {
-    path: '/',
+    path: '/history',
     component: Layout,
-    name: 'Example',
+    name: 'History',
     meta: { title: '历史信息查询', icon: 'tool' },
     children: [
       {
@@ -184,7 +183,7 @@ export const constantRoutes = [
   {
     path: '/activeSafety ',
     component: Layout,
-    name: 'activeSafety',
+    name: 'ActiveSafety',
     meta: { title: '主动安全防御', icon: 'tool' },
     children: [
       {
@@ -202,24 +201,34 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/videoMonitor ',
+    path: '/videoMonitor',
     component: Layout,
-    name: 'videoMonitor',
+    name: 'VideoMonitor',
     meta: { title: '视频监控', icon: 'tool' },
     children: [{
       path: 'videoMonitor',
-      name: 'VideoMonitor',
+      name: 'videoMonitor',
       component: () => import('@/views/video-monitor/index'),
       meta: { title: '视频监控', icon: 'dashboard' }
     }]
   },
   {
-    path: 'external-link',
+    path: '/terminalControl',
     component: Layout,
+    name: 'TerminalControl',
+    meta: { title: '终端管理', icon: 'tool' },
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'terminalParam',
+        name: 'TerminalParam',
+        component: () => import('@/views/terminal-control/terminal-param'),
+        meta: { title: '终端参数管理', icon: 'dashboard' }
+      },
+      {
+        path: 'terminalAttribute',
+        name: 'TerminalAttribute',
+        component: () => import('@/views/terminal-control/terminal-attribute'),
+        meta: { title: '终端属性管理', icon: 'dashboard' }
       }
     ]
   },

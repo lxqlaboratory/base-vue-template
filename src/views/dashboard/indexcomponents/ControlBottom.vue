@@ -141,23 +141,23 @@ export default {
       tableData: [{
         vehicle_name: '鲁N89689',
         sim_num: '15153139702',
-        is_online:'在线',
+        is_online: '在线',
         acc: '开',
         speed: 80,
         gbRecSpeed: 0,
         longitude: 116.404,
         latitude: 39.915
       },
-        {
-          vehicle_name: '鲁NB3551',
-          sim_num: '15153139702',
-          is_online:'离线',
-          acc: '开',
-          speed: 80,
-          gbRecSpeed: 0,
-          longitude: 116.404,
-          latitude: 39.915
-        },
+      {
+        vehicle_name: '鲁NB3551',
+        sim_num: '15153139702',
+        is_online: '离线',
+        acc: '开',
+        speed: 80,
+        gbRecSpeed: 0,
+        longitude: 116.404,
+        latitude: 39.915
+      }
       ]
     }
   },
@@ -166,26 +166,24 @@ export default {
       return this.tableData.length
     },
     'online_num': function() {
-      var num=0
+      var num = 0
       this.tableData.forEach(item => {
-          if(item.is_online=='在线')
-            num++
-        }
+        if (item.is_online == '在线') { num++ }
+      }
       )
       return num
     },
     'offline_num': function() {
-      var num=0
+      var num = 0
       this.tableData.forEach(item => {
-          if(item.is_online=='离线')
-            num++
-        }
+        if (item.is_online == '离线') { num++ }
+      }
       )
       return num
     },
     'online_rate': function() {
-      return this.vehicle_num <= 0 ? "0%" : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00)+"%";
-    },
+      return this.vehicle_num <= 0 ? '0%' : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00) + '%'
+    }
   },
   methods: {
     // 展开车辆列表
@@ -212,7 +210,7 @@ export default {
       menu.style.left = e.clientX + 'px'
       menu.style.top = e.clientY + 'px'
       menu.style.width = '130px'
-    },
+    }
   }
 }
 </script>

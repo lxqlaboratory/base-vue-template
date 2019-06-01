@@ -1,10 +1,33 @@
 <template>
-  <div class="el-container">
-    <video-player
-      class="vjs-custom-skin"
-      :options="playerOptions"
-    />
-    <video ref="videoElement" />
+  <div style="height: calc(100vh - 84px);">
+    <el-container style="height: calc(100vh - 84px);">
+      <el-aside width="265px">
+        <el-input
+          v-model="filterText"
+          style="width:230px;margin-left: 18px;margin-bottom: 10px;margin-top: 8px;background-color:#304156;"
+          placeholder="输入关键字进行过滤"
+        />
+
+        <el-tree
+          ref="tree"
+          class="filter-tree"
+          :data="data"
+          :props="defaultProps"
+          default-expand-all
+          :filter-node-method="filterNode"
+        />
+      </el-aside>
+      <el-main class="video-div">
+        <video-player
+          class="vjs-custom-skin"
+          :options="playerOptions"
+        />
+        <video ref="channel1" class="video1" />
+        <video ref="channel2" class="video2" />
+        <video ref="channel3" class="video3" />
+        <video ref="channel4" class="video4" />
+      </el-main>
+    </el-container>
   </div>
 </template>
 
@@ -44,29 +67,159 @@ export default {
         flash: { hls: { withCredentials: false }},
         html5: { hls: { withCredentials: false }}
       },
+      filterText: '',
+      data: [{
+        id: 1,
+        label: '一级 1',
+        children: [{
+          id: 4,
+          label: '二级 1-1',
+          children: [{
+            id: 9,
+            label: '三级 1-1-1'
+          }, {
+            id: 10,
+            label: '三级 1-1-2'
+          }]
+        }]
+      }, {
+        id: 2,
+        label: '一级 2',
+        children: [{
+          id: 5,
+          label: '二级 2-1'
+        }, {
+          id: 6,
+          label: '二级 2-2'
+        }]
+      }, {
+        id: 3,
+        label: '一级 3',
+        children: [{
+          id: 7,
+          label: '二级 3-1'
+        }, {
+          id: 8,
+          label: '二级 3-2'
+        }]
+      }],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      }
+    }
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val)
+    }
+  },
+  mounted: function() {
+    if (FlvJs.isSupported()) {
+      const flvPlayer1 = FlvJs.createPlayer({
+        cors: true,
+        withCredentials: false,
+        isLive: true,
+        type: 'flv',
+        url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
+      })
+      const flvPlayer2 = FlvJs.createPlayer({
+        cors: true,
+        withCredentials: false,
+        isLive: true,
+        type: 'flv',
+        url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
+      })
+      const flvPlayer3 = FlvJs.createPlayer({
+        cors: true,
+        withCredentials: false,
+        isLive: true,
+        type: 'flv',
+        url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
+      })
+      const flvPlayer4 = FlvJs.createPlayer({
+        cors: true,
+        withCredentials: false,
+        isLive: true,
+        type: 'flv',
+        url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
+      })
+      flvPlayer1.attachMediaElement(this.$refs.channel1)
+      flvPlayer2.attachMediaElement(this.$refs.channel2)
+      flvPlayer3.attachMediaElement(this.$refs.channel3)
+      flvPlayer4.attachMediaElement(this.$refs.channel4)
+      flvPlayer1.load()
+      flvPlayer1.play()
+      flvPlayer2.load()
+      flvPlayer2.play()
+      flvPlayer3.load()
+      flvPlayer3.play()
+      flvPlayer4.load()
+      flvPlayer4.play()
     }
   },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
+    },
     testMethod() {
       mediaTransform('15153139702', 64, 0).then(response => {
         this.videoMonitoringResult = response.data.result
         console.log('response.data ' + response.data.result)
       })
       console.log('videoMonitoringResult ' + this.videoMonitoringResult)
-      if (FlvJs.isSupported()) {
-        const flvPlayer = FlvJs.createPlayer({
-          type: 'flv',
-          url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
-        })
-        flvPlayer.attachMediaElement(this.$refs.videoElement)
-        flvPlayer.load()
-        flvPlayer.play()
-      }
     }
   }
 }
 </script>
 
 <style scoped>
-
+  .video-div {
+    position: absolute;
+    top: 0;
+    left: 265px;
+    padding: 0;
+    width: 960px;
+    height: 860px;
+  }
+  .video1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 470px;
+    height: 400px;
+    background-color: black;
+  }
+  .video2 {
+    position: absolute;
+    top: 0;
+    left: 471px;
+    width: 470px;
+    height: 400px;
+    background-color: black;
+  }
+  .video3 {
+    position: absolute;
+    top: 401px;
+    left: 0;
+    width: 470px;
+    height: 400px;
+    background-color: black;
+  }
+  .video4 {
+    position: absolute;
+    top: 401px;
+    left: 471px;
+    width: 470px;
+    height: 400px;
+    background-color: black;
+  }
+  .el-aside {
+    background-color:#304156;
+  }
+  .el-tree {
+    background-color:#304156;
+    color:#9b9b83
+  }
 </style>
