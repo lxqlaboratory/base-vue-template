@@ -123,6 +123,7 @@ export default {
     }
   },
   created() {
+    this.$toast("XXXXXXXXX");
     this.fetchData()
   },
   methods: {
