@@ -185,15 +185,15 @@ export default {
       //* *****************************************//
     }
   },
-  watch: {
-    filterText(val) {
-      this.$refs.tree2.filter(val)
-    }
-  },
   computed: {
     ...mapGetters([
       'name'
     ])
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.tree2.filter(val)
+    }
   },
   activated: function() {
     this.$store.commit('app/hideNavbar')
@@ -205,7 +205,7 @@ export default {
     this.$store.commit('app/hideNavbar')
     this.fetchData()
 
-    const ws = new WebSocket('ws://202.194.14.72:15674/ws')
+    /* const ws = new WebSocket('ws://202.194.14.72:15674/ws')
     const client = Stomp.over(ws)
     const on_connect = function() {
       console.log('connected')
@@ -222,13 +222,10 @@ export default {
         console.log(p)
       })
     }
-    /* const jsonObj= {"name":"傅红雪","age":"24","profession":"刺客"};
-    var eValue=jsonObj.age
-    console.log(eValue)*/
     const on_error = function() {
       console.log('error')
     }
-    client.connect('admin', '123', on_connect, on_error, 'jt808')
+    client.connect('admin', '123', on_connect, on_error, 'jt808') */
 
     const peer = new WebSocket('ws://211.87.225.203:10004/hello')
     peer.push = peer.send
@@ -398,6 +395,8 @@ export default {
             type: 'success'
           })
         }
+      }).catch(() => {
+        loading.close()
       })
     },
     sendTextMsg() {
@@ -418,6 +417,8 @@ export default {
             type: 'success'
           })
         }
+      }).catch(() => {
+        loading.close()
       })
     },
     doTempLocationTrack() {
@@ -438,6 +439,8 @@ export default {
             type: 'success'
           })
         }
+      }).catch(() => {
+        loading.close()
       })
     }
   }
