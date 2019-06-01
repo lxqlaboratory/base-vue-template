@@ -117,7 +117,7 @@ import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg, tempLocatio
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
-
+import { getCarList } from '@/api/vehicle-manage'
 export default {
   name: 'Dashboard',
   components: {
@@ -133,6 +133,8 @@ export default {
       trackPlaybackEndTime: '',
       filterText: '',
       vehicleList: [{}],
+      carList:[],
+      socketPlateNum:'',
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -204,28 +206,9 @@ export default {
   created: function() {
     this.$store.commit('app/hideNavbar')
     this.fetchData()
-
-    /* const ws = new WebSocket('ws://202.194.14.72:15674/ws')
-    const client = Stomp.over(ws)
-    const on_connect = function() {
-      console.log('connected')
-      client.subscribe('JT808Server_LocationData_Queue', function(message) {
-        const p = JSON.parse(message.body)
-        console.log(p)
-      })
-      client.subscribe('JT808Server_DriverIdentity_Queue', function(message) {
-        const p = JSON.parse(message.body)
-        console.log(p)
-      })
-      client.subscribe('JT808Server_DigitWaybill_Queue', function(message) {
-        const p = JSON.parse(message.body)
-        console.log(p)
-      })
-    }
-    const on_error = function() {
-      console.log('error')
-    }
-    client.connect('admin', '123', on_connect, on_error, 'jt808') */
+    setTimeout(()=>{
+      this.webSocket()
+    },2000)
 
     const peer = new WebSocket('ws://211.87.225.203:10004/hello')
     peer.push = peer.send
@@ -276,6 +259,9 @@ export default {
       getTreeVehicleFormList().then(response => {
         this.vehicleList = response.data
         console.log('this.vehicleList=' + this.vehicleList)
+      }),
+      getCarList().then(response => {
+        this.carList = response.data
       })
     },
     handler({ BMap, map }) {
@@ -307,7 +293,134 @@ export default {
       this.center.lng = e.point.lng
       this.center.lat = e.point.lat
     },
-
+    webSocket() {
+      const ws = new WebSocket('ws://202.194.14.72:15674/ws')
+      var ref = this
+      const client = Stomp.over(ws)
+      const on_connect = function() {
+        console.log('connected')
+        client.subscribe('JT808Server_LocationData_Queue', function(message) {
+          const p = JSON.parse(message.body)
+          //console.log(p)
+          const terminalPhone = p.terminalPhone;
+          ref.carList.filter(item => {
+            console.log("filter")
+            console.log(item.simNum)
+            console.log(terminalPhone)
+            if(item.simNum == terminalPhone){
+              ref.socketPlateNum=item.plateNum
+              console.log("terminalPhone")
+            }
+          })
+          if(p.overSpeeding==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"车辆超速了");
+            console.log("超速了")
+          }
+          if(p.overTired==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"疲劳驾驶");
+          }
+          if(p.dangeous==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"危险预警");
+          }
+          if(p.GNSSFault==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"GNSS模块发生故障");
+          }
+          if(p.GNSSAntennaFault==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"GNSS天线未接或被剪断");
+          }
+          if(p.GNSSAntennaShortCircuit==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"GNSS天线短路");
+          }
+          if(p.terminalMainPowerUndervoltage==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"终端主电源欠压");
+          }
+          if(p.terminalMainPowerFailure==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"终端主电源掉电");
+          }
+          if(p.TerminalLCDFault==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"终端LED或显示屏故障");
+          }
+          if(p.TTSFault==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"TTS模块故障");
+          }
+          if(p.cameraFault==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"摄像头故障");
+          }
+          if(p.ICCardFault==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"道路运输证IC卡模块故障");
+          }
+          if(p.driveTimeout==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"当天累积驾驶超时");
+          }
+          if(p.parkingOvertime==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"超时停车");
+          }
+          if(p.roadTimeout==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"路段行驶时间/不足");
+          }
+          if(p.roadFault==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"路线偏离报警");
+          }
+          if(p.VSSFault==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"车辆VSS故障");
+          }
+          if(p.vehicleOilException==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"车辆油量异常");
+          }
+          if(p.vehicleTheft==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"车辆被盗");
+          }
+          if(p.vehicleIllegalIgnition==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"车辆非法点火");
+          }
+          if(p.vehicleIllegalShift==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"车辆非法位移");
+          }
+          if(p.collisionWarning==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"碰撞预警");
+          }
+          if(p.rolloverWarning==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"侧翻预警");
+          }
+          if(p.illegalOpenDoor==true){
+            ref.$toast("["+ref.socketPlateNum+"]"+"非法开门报警");
+          }
+          /*
+          speeding
+          tired
+          throughArea
+          throughRoad
+          ACC
+          isLocation
+          isRunning
+          encrypt
+          vehicleOil
+          vehicleCircut
+          doorLock
+          frontDoorOpen
+          middleDoorOpen
+          endDoorOpen
+          driverDoorOpen
+          otherDoorOpen
+          GPS
+          beidou
+          GLONASS
+          Galileo*/
+        })
+        client.subscribe('JT808Server_DriverIdentity_Queue', function(message) {
+          const p = JSON.parse(message.body)
+          //console.log(p)
+        })
+        client.subscribe('JT808Server_DigitWaybill_Queue', function(message) {
+          const p = JSON.parse(message.body)
+          //console.log(p)
+        })
+      }
+      const on_error = function() {
+        console.log('error')
+      }
+      client.connect('admin', '123', on_connect, on_error, 'jt808')
+    },
     infoWindowClose() {
       this.infoWindow.show = false
     },
