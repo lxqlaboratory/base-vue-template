@@ -104,6 +104,7 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
 export default {
   name: 'ControlBottom',
   data() {
@@ -138,7 +139,7 @@ export default {
 
       value1: [1, 4],
 
-      tableData: [{
+      /* tableData: [{
         vehicle_name: '鲁N89689',
         sim_num: '15153139702',
         is_online: '在线',
@@ -157,18 +158,21 @@ export default {
         gbRecSpeed: 0,
         longitude: 116.404,
         latitude: 39.915
-      }
-      ]
+      }] */
+      tableData: [{}]
     }
   },
   computed: {
+    ...mapGetters([
+      'carList'
+    ]),
     'vehicle_num': function() {
       return this.tableData.length
     },
     'online_num': function() {
       var num = 0
       this.tableData.forEach(item => {
-        if (item.is_online == '在线') { num++ }
+        if (item.is_online === '在线') { num++ }
       }
       )
       return num
@@ -176,7 +180,7 @@ export default {
     'offline_num': function() {
       var num = 0
       this.tableData.forEach(item => {
-        if (item.is_online == '离线') { num++ }
+        if (item.is_online === '离线') { num++ }
       }
       )
       return num
@@ -184,6 +188,9 @@ export default {
     'online_rate': function() {
       return this.vehicle_num <= 0 ? '0%' : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00) + '%'
     }
+  },
+  mounted() {
+    this.tableData = this.carList
   },
   methods: {
     // 展开车辆列表

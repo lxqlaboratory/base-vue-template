@@ -104,7 +104,7 @@
             </baidu-map>
           </div>
         </el-dialog>
-        <controlbottom />
+        <control-bottom />
       </el-main>
     </el-container>
   </div>
@@ -123,7 +123,7 @@ export default {
   name: 'Dashboard',
   components: {
     BmLushu,
-    Controlbottom: ControlBottom
+    controlBottom: ControlBottom
   },
   data() {
     return {
@@ -190,7 +190,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'name'
+      'name',
+      'carList'
     ])
   },
   watch: {
@@ -278,7 +279,7 @@ export default {
     fetchData() {
       getTreeVehicleFormList().then(response => {
         this.vehicleList = response.data
-        console.log('this.vehicleList=' + this.vehicleList)
+        this.$store.dispatch('ChangeCarList', this.vehicleList).then((res) => {})
       })
     },
     handler({ BMap, map }) {
