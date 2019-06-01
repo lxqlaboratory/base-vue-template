@@ -47,6 +47,7 @@
 <script>
   import { getViolationInfoByParameterAndMonth } from '@/api/active-safety'
   import { getViolationInfoByMonth } from '@/api/active-safety'
+  import { getViolationInfoByEveryParameter } from '@/api/active-safety'
 export default {
 
   created() {
@@ -57,9 +58,8 @@ export default {
       monthvalue:null,
       tableData: [],
       list:[],
+      listPara:[],
       treelist:[],
-      treelista:['08-07', '08-08', '08-09', '08-10', '08-11', '08-12', '08-13'],
-      treelistb:[10, 52, 200, 334, 390, 330, 220],
       option1:{
       color: ['#3398DB'],
         tooltip : {
@@ -274,6 +274,12 @@ export default {
            this.treelist = response.data;
            console.log("getViolationInfoByMonth()")
            console.log(this.treelist)
+
+      }),
+      getViolationInfoByEveryParameter().then(response => {
+        this.listPara = response.data;
+        console.log("getViolationInfoByEveryParameter()")
+        console.log(this.listPara)
 
       })
     },
