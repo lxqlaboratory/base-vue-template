@@ -70,8 +70,8 @@
     <div v-show="isShow" class="mapBottomTable">
       <el-table :data="tableData" height="35.5vh" border style="width: 100%" @row-contextmenu="row_contextmenu">
         <el-table-column type="selection" min-width="50" />
-        <el-table-column prop="vehicle_name" label="车牌号" sortable min-width="100" />
-        <el-table-column prop="sim_num" label="SIM卡号" sortable min-width="120" />
+        <el-table-column prop="plateNum" label="车牌号" sortable min-width="100" />
+        <el-table-column prop="phoneNum" label="SIM卡号" sortable min-width="120" />
         <el-table-column
           prop="is_online"
           label="是否在线"
@@ -86,14 +86,14 @@
         <el-table-column prop="longitude" label="经度" sortable min-width="80" />
         <el-table-column prop="latitude" label="纬度" sortable min-width="80" />
         <el-table-column prop="last_time" label="最后上线时间" min-width="140" sortable />
+        <el-table-column prop="driver_name" label="驾驶员" sortable min-width="120" />
+        <el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />
+        <el-table-column prop="team_name" label="车队名称" sortable min-width="200" />
         <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />
         <el-table-column prop="direction" label="方向" sortable min-width="80" />
         <el-table-column prop="oil_volume" label="油量(L)" sortable min-width="100" />
         <el-table-column prop="sim_flow" label="已用流量(M)" sortable min-width="130" />
         <el-table-column prop="stopTime" label="停车时长(分钟)" sortable min-width="140" />
-        <el-table-column prop="driver_name" label="驾驶员" sortable min-width="120" />
-        <el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />
-        <el-table-column prop="team_name" label="车队名称" sortable min-width="200" />
         <el-table-column prop="note" label="备注" sortable min-width="400" />
       </el-table>
     </div>
@@ -138,9 +138,9 @@ export default {
 
       value1: [1, 4],
 
-      tableData: [{
-        vehicle_name: '鲁N89689',
-        sim_num: '15153139702',
+      /* tableData: [{
+        plateNum: '鲁N89689',
+        phoneNum: '15153139702',
         is_online: '在线',
         acc: '开',
         speed: 80,
@@ -149,16 +149,16 @@ export default {
         latitude: 39.915
       },
       {
-        vehicle_name: '鲁NB3551',
-        sim_num: '15153139702',
+        plateNum: '鲁NB3551',
+        phoneNum: '15153139702',
         is_online: '离线',
         acc: '开',
         speed: 80,
         gbRecSpeed: 0,
         longitude: 116.404,
         latitude: 39.915
-      }
-      ]
+      }] */
+      tableData: []
     }
   },
   computed: {
@@ -185,8 +185,23 @@ export default {
       return this.vehicle_num <= 0 ? '0%' : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00) + '%'
     }
   },
+  mounted() {
+    this.fillTable()
+  },
   methods: {
-    // 展开车辆列表
+    fillTable() {
+      const arr = this.carList[0]['children']
+      const dataList = []
+      let n = 0
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i]['children'].length !== 0) {
+          for (let j = 0; j < arr[i]['children'].length; j++) {
+            dataList[n++] = arr[i]['children'][j]
+          }
+        }
+      }
+      this.tableData = dataList
+    },
     showTable() {
       this.isShow = !this.isShow
     },
