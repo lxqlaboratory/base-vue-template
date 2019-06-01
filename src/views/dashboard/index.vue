@@ -24,20 +24,21 @@
           <!--<bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_LEFT" />-->
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
-
-          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" title="杨培林" @click="infoWindowOpen">
-            <bm-info-window title="车辆信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
-              <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
-              <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
-              <el-button @click="toVideoMonitoring">视频监控</el-button>
-              <el-button @click="doTempLocationTrack">定位跟踪</el-button>
-              <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
-              <el-button @click="isTalkBackVisible">语音对讲</el-button>
-              <el-button @click="isPhotoShotVisible">图像监管</el-button>
-              <el-button @click="isDigitBillVisible">电子运单</el-button>
-              <el-button @click="isTextMsgVisible">文本下发</el-button>
+          <div v-for="marker of markers">
+            <bm-marker  :position="{lng: marker.lng, lat: marker.lat}" :title="marker.name" @click="infoWindowOpen(marker)">
+              <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}"   :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
+               <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
+                <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
+                <el-button @click="toVideoMonitoring">视频监控</el-button>
+                <el-button @click="doTempLocationTrack">定位跟踪</el-button>
+                <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
+                <el-button @click="isTalkBackVisible">语音对讲</el-button>
+                <el-button @click="isPhotoShotVisible">图像监管</el-button>
+                <el-button @click="isDigitBillVisible">电子运单</el-button>
+                <el-button @click="isTextMsgVisible">文本下发</el-button>
             </bm-info-window>
           </bm-marker>
+          </div>
 
         </baidu-map>
         <!-- dialog -->
@@ -145,7 +146,9 @@ export default {
       markers: [
         {
           lng: 116.404,
-          lat: 39.900
+          lat: 39.900,
+          name:'杨培林',
+          showFlag:false
         }
       ],
       center: { lng: 0, lat: 0 },
@@ -311,11 +314,12 @@ export default {
       this.center.lat = e.point.lat
     },
 
-    infoWindowClose() {
-      this.infoWindow.show = false
+    infoWindowClose(marker) {
+      //this.infoWindow.show = false
+      marker.showFlag = false
     },
-    infoWindowOpen() {
-      this.infoWindow.show = true
+    infoWindowOpen(marker) {
+      marker.showFlag = true
     },
     filterNode(value, data) {
       if (!value) return true
@@ -337,7 +341,9 @@ export default {
           if (response.data != null) {
             this.markers.push({
               lng: response.data.longitude,
-              lat: response.data.latitude
+              lat: response.data.latitude,
+              name:"杨培林",
+              showFlag:false
             })
             this.center.lng = response.data.longitude
             this.center.lat = response.data.latitude
