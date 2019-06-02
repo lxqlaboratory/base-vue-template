@@ -83,7 +83,7 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: '/home'
     }
   },
   watch: {
@@ -107,9 +107,10 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
+
         if (valid) {
           this.loading = true
-          this.$router.push({ path: this.redirect || '/' })
+          this.$router.push({ path: this.redirect || '/home' })
           this.loading = false
         } else {
           console.log('error submit!!')
