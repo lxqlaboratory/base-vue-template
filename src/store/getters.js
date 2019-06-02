@@ -7,6 +7,7 @@ const getters = {
   name: state => state.user.name,
   visitedViews: state => state.tagsView.visitedViews,
   cachedViews: state => state.tagsView.cachedViews,
+  carTree: state => state.vehicleList.carTree,
   carList: state => state.vehicleList.carList
 }
 export default getters

@@ -96,7 +96,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'carList'
+      'carTree'
     ])
   },
   watch: {
@@ -105,7 +105,7 @@ export default {
     }
   },
   mounted: function() {
-    this.data = this.carList
+    this.data = this.carTree
   },
   methods: {
     filterNode(value, data) {

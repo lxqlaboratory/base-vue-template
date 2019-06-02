@@ -25,7 +25,7 @@
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
 
-          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" title="杨培林" @click="infoWindowOpen">
+          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" title="杨培林" :icon="direction" @click="infoWindowOpen">
             <bm-info-window title="车辆信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
               <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
               <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
@@ -126,13 +126,17 @@ export default {
   },
   data() {
     return {
+      direction: {
+        url: 'http://developer.baidu.com/map/jsdemo/img/fox.gif',
+        size: { width: 300, height: 157 }
+      },
       radio: 1,
       photoShotTime: '',
       textMsg: '',
       trackPlaybackStartTime: '',
       trackPlaybackEndTime: '',
       filterText: '',
-      vehicleList: [{}],
+      vehicleList: [],
       carList: [],
       socketPlateNum: '',
       defaultProps: {
@@ -258,10 +262,19 @@ export default {
     fetchData() {
       getTreeVehicleFormList().then(response => {
         this.vehicleList = response.data
-        this.$store.dispatch('ChangeCarList', this.vehicleList).then()
-      })
-      getCarList().then(response => {
-        this.carList = response.data
+        this.$store.dispatch('ChangeCarTree', this.vehicleList).then()
+        const arr = this.vehicleList[0]['children']
+        const dataList = []
+        let n = 0
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i]['children'].length !== 0) {
+            for (let j = 0; j < arr[i]['children'].length; j++) {
+              dataList[n++] = arr[i]['children'][j]
+            }
+          }
+        }
+        this.$store.dispatch('ChangeCarList', dataList).then()
+        this.carList = dataList
       })
     },
     handler({ BMap, map }) {
@@ -307,7 +320,7 @@ export default {
             console.log('filter')
             console.log(item.simNum)
             console.log(terminalPhone)
-            if (item.simNum == terminalPhone) {
+            if (item.simNum === terminalPhone) {
               ref.socketPlateNum = item.plateNum
               console.log('terminalPhone')
             }

@@ -104,6 +104,7 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
 export default {
   name: 'ControlBottom',
   data() {
@@ -162,13 +163,16 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'carList'
+    ]),
     'vehicle_num': function() {
       return this.tableData.length
     },
     'online_num': function() {
       var num = 0
       this.tableData.forEach(item => {
-        if (item.is_online == '在线') { num++ }
+        if (item.is_online === '在线') { num++ }
       }
       )
       return num
@@ -176,7 +180,7 @@ export default {
     'offline_num': function() {
       var num = 0
       this.tableData.forEach(item => {
-        if (item.is_online == '离线') { num++ }
+        if (item.is_online === '离线') { num++ }
       }
       )
       return num
@@ -186,23 +190,13 @@ export default {
     }
   },
   mounted() {
-    this.fillTable()
+    setTimeout(() => {
+      this.tableData = this.carList
+    }, 1000)
   },
   methods: {
-    fillTable() {
-      const arr = this.carList[0]['children']
-      const dataList = []
-      let n = 0
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i]['children'].length !== 0) {
-          for (let j = 0; j < arr[i]['children'].length; j++) {
-            dataList[n++] = arr[i]['children'][j]
-          }
-        }
-      }
-      this.tableData = dataList
-    },
     showTable() {
+      // this.fillTable()
       this.isShow = !this.isShow
     },
     showTableMax() {
