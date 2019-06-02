@@ -85,7 +85,7 @@
         <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />
         <el-table-column prop="longitude" label="经度" sortable min-width="80" />
         <el-table-column prop="latitude" label="纬度" sortable min-width="80" />
-        <el-table-column prop="last_time" label="最后上线时间" min-width="140" sortable />
+        <el-table-column prop="last_time" label="最后上线时间" sortable min-width="140" />
         <el-table-column prop="driver_name" label="驾驶员" sortable min-width="120" />
         <el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />
         <el-table-column prop="team_name" label="车队名称" sortable min-width="200" />
@@ -178,12 +178,7 @@ export default {
       return num
     },
     'offline_num': function() {
-      var num = 0
-      this.tableData.forEach(item => {
-        if (item.is_online === '离线') { num++ }
-      }
-      )
-      return num
+      return this.vehicle_num - this.online_num
     },
     'online_rate': function() {
       return this.vehicle_num <= 0 ? '0%' : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00) + '%'

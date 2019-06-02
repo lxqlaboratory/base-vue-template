@@ -25,10 +25,10 @@
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
 
-          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" title="杨培林" :icon="direction" @click="infoWindowOpen">
+          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.longitude}" title="杨培林" @click="infoWindowOpen">
             <bm-info-window title="车辆信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
-              <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
-              <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
+              <div>{{ marker.plateNum }} {{ marker.driverName }}</div>
+              <div>{{ marker.speed }}{{ marker.time }}</div>
               <el-button @click="toVideoMonitoring">视频监控</el-button>
               <el-button @click="doTempLocationTrack">定位跟踪</el-button>
               <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
@@ -103,7 +103,7 @@
             </baidu-map>
           </div>
         </el-dialog>
-        <control-bottom />
+        <control-bottom ref="controlBottom" />
       </el-main>
     </el-container>
   </div>
@@ -126,10 +126,10 @@ export default {
   },
   data() {
     return {
-      direction: {
+      /* direction: {
         url: 'http://developer.baidu.com/map/jsdemo/img/fox.gif',
         size: { width: 300, height: 157 }
-      },
+      }, */
       radio: 1,
       photoShotTime: '',
       textMsg: '',
@@ -149,10 +149,10 @@ export default {
         contents: '视频监控'
       },
       markers: [
-        {
+        /* {
           lng: 116.404,
           lat: 39.900
-        }
+        } */
       ],
       center: { lng: 0, lat: 0 },
       zoom: 13,
@@ -279,8 +279,8 @@ export default {
     },
     handler({ BMap, map }) {
       console.log(BMap, map)
-      this.center.lng = 116.404
-      this.center.lat = 39.915
+      this.center.lng = 0 // 116.404
+      this.center.lat = 0 // 39.915
     },
     toVideoMonitoring() {
       this.$router.push({ path: '/videoMonitor/videoMonitor' })
@@ -322,6 +322,9 @@ export default {
             console.log(terminalPhone)
             if (item.simNum === terminalPhone) {
               ref.socketPlateNum = item.plateNum
+              // 设置 carList 的值
+              item.longitude = p.longitude
+              item.latitude = p.latitude
               console.log('terminalPhone')
             }
           })
@@ -433,6 +436,16 @@ export default {
         console.log('error')
       }
       client.connect('admin', '123', on_connect, on_error, 'jt808')
+
+      setInterval(this.changeControlBottom, 15000)
+    },
+    changeControlBottom() {
+      this.carList[0].longitude = (Math.random() * 10).toFixed(3)
+      this.carList[0].latitude = (Math.random() * 10).toFixed(3)
+      this.carList[1].longitude = (Math.random() * 10).toFixed(3)
+      this.carList[1].latitude = (Math.random() * 10).toFixed(3)
+      this.carList[2].longitude = (Math.random() * 10).toFixed(3)
+      this.carList[2].latitude = (Math.random() * 10).toFixed(3)
     },
     infoWindowClose() {
       this.infoWindow.show = false
@@ -446,15 +459,15 @@ export default {
     },
     getChecked() {
       this.checkedNodes = this.$refs.tree2.getCheckedNodes()
-      console.log(this.checkedNodes)
+      // console.log(this.checkedNodes)
       this.checkedNodes.forEach(item => {
-        if (item.plateNum) { this.plateNumList.push(item.plateNum) }
+        if (item.plateNum !== null) { this.plateNumList.push(item.plateNum) }
       })
       this.plateNumList2 = new Set(this.plateNumList)
       console.log(this.plateNumList)
-      this.doLocation()
+      // this.doLocation()
     },
-    doLocation() {
+    /* doLocation() {
       this.plateNumList.forEach(item => {
         getSelectedVehiclePosition(item).then(response => {
           if (response.data != null) {
@@ -470,7 +483,7 @@ export default {
         console.log(this.markers)
       }
       )
-    },
+    }, */
     // 轨迹回放用到的方法
     trackPlaybackDraw() {
       getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
