@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'carList'
+      'carTree'
     ])
   },
   watch: {
@@ -87,7 +87,7 @@ export default {
     }
   },
   mounted: function() {
-    this.data = this.carList
+    this.data = this.carTree
     if (FlvJs.isSupported()) {
       const flvPlayer1 = FlvJs.createPlayer({
         cors: true,

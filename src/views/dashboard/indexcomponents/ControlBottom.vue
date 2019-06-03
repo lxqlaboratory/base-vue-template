@@ -85,7 +85,7 @@
         <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />
         <el-table-column prop="longitude" label="经度" sortable min-width="80" />
         <el-table-column prop="latitude" label="纬度" sortable min-width="80" />
-        <el-table-column prop="last_time" label="最后上线时间" min-width="140" sortable />
+        <el-table-column prop="last_time" label="最后上线时间" sortable min-width="140" />
         <el-table-column prop="driver_name" label="驾驶员" sortable min-width="120" />
         <el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />
         <el-table-column prop="team_name" label="车队名称" sortable min-width="200" />
@@ -104,6 +104,7 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
 export default {
   name: 'ControlBottom',
   data() {
@@ -162,47 +163,35 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'carList'
+    ]),
     'vehicle_num': function() {
       return this.tableData.length
     },
     'online_num': function() {
       var num = 0
       this.tableData.forEach(item => {
-        if (item.is_online == '在线') { num++ }
+        if (item.is_online === '在线') { num++ }
       }
       )
       return num
     },
     'offline_num': function() {
-      var num = 0
-      this.tableData.forEach(item => {
-        if (item.is_online == '离线') { num++ }
-      }
-      )
-      return num
+      return this.vehicle_num - this.online_num
     },
     'online_rate': function() {
       return this.vehicle_num <= 0 ? '0%' : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00) + '%'
     }
   },
   mounted() {
-    this.fillTable()
+    setTimeout(() => {
+      this.tableData = this.carList
+    }, 1000)
   },
   methods: {
-    fillTable() {
-      const arr = this.carList[0]['children']
-      const dataList = []
-      let n = 0
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i]['children'].length !== 0) {
-          for (let j = 0; j < arr[i]['children'].length; j++) {
-            dataList[n++] = arr[i]['children'][j]
-          }
-        }
-      }
-      this.tableData = dataList
-    },
     showTable() {
+      // this.fillTable()
       this.isShow = !this.isShow
     },
     showTableMax() {

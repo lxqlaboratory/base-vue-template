@@ -25,10 +25,10 @@
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
 
-          <bm-marker v-for="marker of markers" :position="{lng: marker.lng, lat: marker.lat}" title="杨培林" @click="infoWindowOpen">
-            <bm-info-window title="车辆信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
-              <div>{{ vehicleInfo.plateNum }} {{ vehicleInfo.driverName }}</div>
-              <div>{{ vehicleInfo.speed }}{{ vehicleInfo.time }}</div>
+          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.longitude}" title="杨培林" @click="infoWindowOpen(marker)">
+            <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}"   :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
+              <div>{{ marker.plateNum }} {{ marker.driverName }}</div>
+              <div>{{ marker.speed }}{{ marker.time }}</div>
               <el-button @click="toVideoMonitoring">视频监控</el-button>
               <el-button @click="doTempLocationTrack">定位跟踪</el-button>
               <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
@@ -103,7 +103,7 @@
             </baidu-map>
           </div>
         </el-dialog>
-        <control-bottom />
+        <control-bottom ref="controlBottom" />
       </el-main>
     </el-container>
   </div>
@@ -126,13 +126,17 @@ export default {
   },
   data() {
     return {
+      /* direction: {
+        url: 'http://developer.baidu.com/map/jsdemo/img/fox.gif',
+        size: { width: 300, height: 157 }
+      }, */
       radio: 1,
       photoShotTime: '',
       textMsg: '',
       trackPlaybackStartTime: '',
       trackPlaybackEndTime: '',
       filterText: '',
-      vehicleList: [{}],
+      vehicleList: [],
       carList: [],
       socketPlateNum: '',
       defaultProps: {
@@ -144,12 +148,6 @@ export default {
         show: false,
         contents: '视频监控'
       },
-      markers: [
-        {
-          lng: 116.404,
-          lat: 39.900
-        }
-      ],
       center: { lng: 0, lat: 0 },
       zoom: 13,
       videoMonitoringVisible: false,
@@ -258,10 +256,22 @@ export default {
     fetchData() {
       getTreeVehicleFormList().then(response => {
         this.vehicleList = response.data
-        this.$store.dispatch('ChangeCarList', this.vehicleList).then()
-      })
-      getCarList().then(response => {
-        this.carList = response.data
+        this.$store.dispatch('ChangeCarTree', this.vehicleList).then()
+        const arr = this.vehicleList[0]['children']
+        const dataList = []
+        let n = 0
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i]['children'].length !== 0) {
+            for (let j = 0; j < arr[i]['children'].length; j++) {
+              dataList[n++] = arr[i]['children'][j]
+            }
+          }
+        }
+        this.$store.dispatch('ChangeCarList', dataList).then()
+        this.carList = dataList
+        this.carList.forEach(item =>{
+          this.$set(item,"showFlag",false)
+        })
       })
     },
     handler({ BMap, map }) {
@@ -307,8 +317,11 @@ export default {
             console.log('filter')
             console.log(item.simNum)
             console.log(terminalPhone)
-            if (item.simNum == terminalPhone) {
+            if (item.simNum === terminalPhone) {
               ref.socketPlateNum = item.plateNum
+              // 设置 carList 的值
+              item.longitude = p.longitude
+              item.latitude = p.latitude
               console.log('terminalPhone')
             }
           })
@@ -420,12 +433,22 @@ export default {
         console.log('error')
       }
       client.connect('admin', '123', on_connect, on_error, 'jt808')
+
+      setInterval(this.changeControlBottom, 15000)
     },
-    infoWindowClose() {
-      this.infoWindow.show = false
+    changeControlBottom() {
+      this.carList[0].longitude = (116.404 + Math.random() / 20).toFixed(3)
+      this.carList[0].latitude = (39.915 + Math.random() / 20).toFixed(3)
+      this.carList[1].longitude = (116.404 + Math.random() / 20).toFixed(3)
+      this.carList[1].latitude = (39.915 + Math.random() / 20).toFixed(3)
+      this.carList[2].longitude = (116.404 + Math.random() / 20).toFixed(3)
+      this.carList[2].latitude = (39.915 + Math.random() / 20).toFixed(3)
     },
-    infoWindowOpen() {
-      this.infoWindow.show = true
+    infoWindowClose(marker) {
+      marker.showFlag = false
+    },
+    infoWindowOpen(marker) {
+      marker.showFlag = true
     },
     filterNode(value, data) {
       if (!value) return true
@@ -433,15 +456,15 @@ export default {
     },
     getChecked() {
       this.checkedNodes = this.$refs.tree2.getCheckedNodes()
-      console.log(this.checkedNodes)
+      // console.log(this.checkedNodes)
       this.checkedNodes.forEach(item => {
-        if (item.plateNum) { this.plateNumList.push(item.plateNum) }
+        if (item.plateNum !== null) { this.plateNumList2.push(item.plateNum) }
       })
-      this.plateNumList2 = new Set(this.plateNumList)
+      this.plateNumList = new Set(this.plateNumList2)
       console.log(this.plateNumList)
-      this.doLocation()
+      // this.doLocation()
     },
-    doLocation() {
+    /* doLocation() {
       this.plateNumList.forEach(item => {
         getSelectedVehiclePosition(item).then(response => {
           if (response.data != null) {
@@ -457,7 +480,7 @@ export default {
         console.log(this.markers)
       }
       )
-    },
+    }, */
     // 轨迹回放用到的方法
     trackPlaybackDraw() {
       getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
