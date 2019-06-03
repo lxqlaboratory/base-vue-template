@@ -25,8 +25,8 @@
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
 
-          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.longitude}" title="杨培林" @click="infoWindowOpen">
-            <bm-info-window title="车辆信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">
+          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.longitude}" title="杨培林" @click="infoWindowOpen(marker)">
+            <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}"   :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
               <div>{{ marker.plateNum }} {{ marker.driverName }}</div>
               <div>{{ marker.speed }}{{ marker.time }}</div>
               <el-button @click="toVideoMonitoring">视频监控</el-button>
@@ -275,6 +275,9 @@ export default {
         }
         this.$store.dispatch('ChangeCarList', dataList).then()
         this.carList = dataList
+        this.carList.forEach(item =>{
+          this.$set(item,"showFlag",false)
+        })
       })
     },
     handler({ BMap, map }) {
@@ -447,11 +450,11 @@ export default {
       this.carList[2].longitude = (Math.random() * 10).toFixed(3)
       this.carList[2].latitude = (Math.random() * 10).toFixed(3)
     },
-    infoWindowClose() {
-      this.infoWindow.show = false
+    infoWindowClose(marker) {
+      marker.showFlag = false
     },
-    infoWindowOpen() {
-      this.infoWindow.show = true
+    infoWindowOpen(marker) {
+      marker.showFlag = true
     },
     filterNode(value, data) {
       if (!value) return true
@@ -461,9 +464,9 @@ export default {
       this.checkedNodes = this.$refs.tree2.getCheckedNodes()
       // console.log(this.checkedNodes)
       this.checkedNodes.forEach(item => {
-        if (item.plateNum !== null) { this.plateNumList.push(item.plateNum) }
+        if (item.plateNum !== null) { this.plateNumList2.push(item.plateNum) }
       })
-      this.plateNumList2 = new Set(this.plateNumList)
+      this.plateNumList = new Set(this.plateNumList2)
       console.log(this.plateNumList)
       // this.doLocation()
     },
