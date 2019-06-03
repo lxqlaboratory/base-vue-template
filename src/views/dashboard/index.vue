@@ -148,12 +148,6 @@ export default {
         show: false,
         contents: '视频监控'
       },
-      markers: [
-        /* {
-          lng: 116.404,
-          lat: 39.900
-        } */
-      ],
       center: { lng: 0, lat: 0 },
       zoom: 13,
       videoMonitoringVisible: false,
@@ -282,8 +276,8 @@ export default {
     },
     handler({ BMap, map }) {
       console.log(BMap, map)
-      this.center.lng = 0 // 116.404
-      this.center.lat = 0 // 39.915
+      this.center.lng = 116.404
+      this.center.lat = 39.915
     },
     toVideoMonitoring() {
       this.$router.push({ path: '/videoMonitor/videoMonitor' })
@@ -443,12 +437,12 @@ export default {
       setInterval(this.changeControlBottom, 15000)
     },
     changeControlBottom() {
-      this.carList[0].longitude = (Math.random() * 10).toFixed(3)
-      this.carList[0].latitude = (Math.random() * 10).toFixed(3)
-      this.carList[1].longitude = (Math.random() * 10).toFixed(3)
-      this.carList[1].latitude = (Math.random() * 10).toFixed(3)
-      this.carList[2].longitude = (Math.random() * 10).toFixed(3)
-      this.carList[2].latitude = (Math.random() * 10).toFixed(3)
+      this.carList[0].longitude = (116.404 + Math.random() / 20).toFixed(3)
+      this.carList[0].latitude = (39.915 + Math.random() / 20).toFixed(3)
+      this.carList[1].longitude = (116.404 + Math.random() / 20).toFixed(3)
+      this.carList[1].latitude = (39.915 + Math.random() / 20).toFixed(3)
+      this.carList[2].longitude = (116.404 + Math.random() / 20).toFixed(3)
+      this.carList[2].latitude = (39.915 + Math.random() / 20).toFixed(3)
     },
     infoWindowClose(marker) {
       marker.showFlag = false
