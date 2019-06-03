@@ -322,11 +322,12 @@ export default {
               // 设置 carList 的值
               item.longitude = p.longitude
               item.latitude = p.latitude
+              item.ACC = p.ACC
               console.log('terminalPhone')
             }
           })
           if (p.overSpeeding == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆超速了')
+            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆超速')
             console.log('超速了')
           }
           if (p.overTired == true) {
@@ -398,27 +399,63 @@ export default {
           if (p.illegalOpenDoor == true) {
             ref.$toast('[' + ref.socketPlateNum + ']' + '非法开门报警')
           }
-          /*
-          speeding
-          tired
-          throughArea
-          throughRoad
-          ACC
-          isLocation
-          isRunning
-          encrypt
-          vehicleOil
-          vehicleCircut
-          doorLock
-          frontDoorOpen
-          middleDoorOpen
-          endDoorOpen
-          driverDoorOpen
-          otherDoorOpen
-          GPS
-          beidou
-          GLONASS
-          Galileo*/
+          if (p.isLocation == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '未定位')
+          }
+          if (p.isRunning == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '未定位')
+          }
+          if (p.speeding == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '超速预警')
+          }
+          if (p.tired == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '疲劳预警')
+          }
+          if (p.throughArea == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '经过某区域')
+          }
+          if (p.throughRoad == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '经过某道路')
+          }
+          if (p.encrypt == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '经纬度未经保密插件加密')
+          }
+          if (p.vehicleOil == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆油路断开')
+          }
+          if (p.vehicleCircut == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆电路断开')
+          }
+          if (p.doorLock == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '车门解锁')
+          }
+          if (p.frontDoorOpen == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '门开(前门)')
+          }
+          if (p.middleDoorOpen == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '门开(中门)')
+          }
+          if (p.endDoorOpen == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '门开(后门)')
+          }
+          if (p.driverDoorOpen == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '门开(驾驶席门)')
+          }
+          if (p.otherDoorOpen == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '门开(自定义)')
+          }
+          if (p.GPS == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '未使用 GPS 卫星进行定位')
+          }
+          if (p.beidou == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '未使用北斗卫星进行定位')
+          }
+          if (p.GLONASS == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '未使用 GLONASS 卫星进行定位')
+          }
+          if (p.Galileo == true) {
+            ref.$toast('[' + ref.socketPlateNum + ']' + '未使用 Galileo 卫星进行定位')
+          }
         })
         client.subscribe('JT808Server_DriverIdentity_Queue', function(message) {
           const p = JSON.parse(message.body)
