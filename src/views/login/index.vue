@@ -54,6 +54,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { login } from "../../api/user";
 
 export default {
   name: 'Login',
@@ -66,7 +67,7 @@ export default {
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
+      if (value.length < 1) {
         callback(new Error('The password can not be less than 6 digits'))
       } else {
         callback()
@@ -74,8 +75,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: 'chy',
+        password: '2'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -107,11 +108,17 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
-
         if (valid) {
-          this.loading = true
-          this.$router.push({ path: this.redirect || '/home' })
-          this.loading = false
+          this.loading = true;
+           login({
+              loginName: this.loginForm.username,
+              password: this.loginForm.password
+            }).then(resp=> {
+              if (resp && resp.reCode == 0) {
+                this.loading = false
+                this.$router.push({ path: this.redirect || '/home' })
+              }
+            });
         } else {
           console.log('error submit!!')
           return false

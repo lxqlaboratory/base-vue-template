@@ -31,14 +31,14 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/login',
+    path: '/',
     component: () => import('@/views/login/index'),
     hidden: true
   },
   {
-    path: '/',
+    path: '/home',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/home/dashboard',
     name: 'dashboard',
     meta: { title: '车辆列表', icon: 'dashboard' },
     children: [{
