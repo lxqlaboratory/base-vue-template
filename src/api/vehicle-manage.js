@@ -6,3 +6,15 @@ export function getCarList() {
     method: 'POST'
   })
 }
+export function insertViolation(terminalPhone, violationContent,longitude, latitude) {
+  return request({
+    url: '/func/web/saveVehicleViolationProcessInfo',
+    method: 'POST',
+    data: {
+      terminalPhone,
+      violationContent,
+      longitude,
+      latitude
+    }
+  })
+}

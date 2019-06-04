@@ -117,7 +117,7 @@ import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg, tempLocatio
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
-import { getCarList } from '@/api/vehicle-manage'
+import { insertViolation } from '@/api/vehicle-manage'
 export default {
   name: 'Dashboard',
   components: {
@@ -334,6 +334,11 @@ export default {
               type: 'error',
               duration:8000
             })
+            insertViolation(terminalPhone, '超速',p.longitude, p.latitude).then(res => {
+
+            }).catch(e => {
+
+            })
           }
           if (p.overTired == true) {
             ref.$message({
@@ -341,6 +346,11 @@ export default {
               message: '[' + ref.socketPlateNum + ']' + '疲劳驾驶',
               type: 'error',
               duration:8000
+            })
+            insertViolation(terminalPhone, '疲劳驾驶',p.longitude, p.latitude).then(res => {
+
+            }).catch(e => {
+
             })
           }
           if (p.dangeous == true) {
