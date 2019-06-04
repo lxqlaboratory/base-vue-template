@@ -25,11 +25,11 @@
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
 
-          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.longitude}" title="杨培林" @click="infoWindowOpen(marker)">
-            <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}"   :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
+          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" title="杨培林" @click="infoWindowOpen(marker)">
+            <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}" :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
               <div>{{ marker.plateNum }} {{ marker.driverName }}</div>
               <div>{{ marker.speed }}{{ marker.time }}</div>
-              <el-button @click="toVideoMonitoring">视频监控</el-button>
+              <el-button @click="toVideoMonitoring(marker.phoneNum)">视频监控</el-button>
               <el-button @click="doTempLocationTrack">定位跟踪</el-button>
               <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
               <el-button @click="isTalkBackVisible">语音对讲</el-button>
@@ -279,7 +279,8 @@ export default {
       this.center.lng = 116.404
       this.center.lat = 39.915
     },
-    toVideoMonitoring() {
+    toVideoMonitoring(phoneNum) {
+      mediaTransform(phoneNum, 1, 0).then()
       this.$router.push({ path: '/videoMonitor/videoMonitor' })
     },
     isTrackPlaybackVisible() {
@@ -315,9 +316,9 @@ export default {
           const terminalPhone = p.terminalPhone
           ref.carList.filter(item => {
             console.log('filter')
-            console.log(item.simNum)
+            console.log(item.phoneNum)
             console.log(terminalPhone)
-            if (item.simNum === terminalPhone) {
+            if (item.phoneNum === terminalPhone) {
               ref.socketPlateNum = item.plateNum
               // 设置 carList 的值
               item.longitude = p.longitude
