@@ -116,6 +116,8 @@ export default {
             }).then(resp=> {
               if (resp && resp.reCode == 0) {
                 this.loading = false
+                this.$store.commit('user/SET_NAME')
+                this.$store.commit('user/SET_TOKEN')
                 this.$router.push({ path: this.redirect || '/home' })
               }
             });
