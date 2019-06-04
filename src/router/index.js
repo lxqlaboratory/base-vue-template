@@ -36,6 +36,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/register',
+    component: () => import('@/views/register/register'),
+    hidden: true
+  },
+  {
     path: '/home',
     component: Layout,
     redirect: '/home/dashboard',

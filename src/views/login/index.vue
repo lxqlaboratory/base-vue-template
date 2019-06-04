@@ -40,13 +40,29 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-
+      <div style="margin-top: -3%;margin-bottom: 3%;text-align: right">
+        <span class="find_Pwd" @click="findPwd">忘记登录密码?</span>
+      </div>
+      <div type="flex">
+      <div>
+        <span>验证码：</span>
+        <input type="text" id="code" v-model="code" class="code"  placeholder="请输入您的验证码" />
+      </div>
+      <div class="login-code" @click="refreshCode">
+        <!--验证码组件-->
+        <s-identify :identifyCode="identifyCode"></s-identify>
+      </div>
+      </div>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
+      <el-row type="flex">
+        <el-col>
+          <el-checkbox class="login_remember " v-model="checked">记住密码</el-checkbox>
+        </el-col>
+        <el-col align="right">
+          <span class="register" @click="doRegister">免费注册</span>
+        </el-col>
+      </el-row>
 
     </el-form>
   </div>
@@ -55,9 +71,11 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import { login } from "../../api/user";
+import SIdentify from '../../components/Sidentify/index'
 
 export default {
   name: 'Login',
+  components : { SIdentify },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -82,6 +100,9 @@ export default {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
+      identifyCodes: '1234567890',
+      identifyCode: '',
+      code: '',
       loading: false,
       passwordType: 'password',
       redirect: '/home'
@@ -94,6 +115,13 @@ export default {
       },
       immediate: true
     }
+  },
+  created(){
+    this.refreshCode();
+  },
+  mounted(){
+    this.identifyCode = ''
+    this.makeCode(this.identifyCodes, 4)
   },
   methods: {
     showPwd() {
@@ -108,6 +136,16 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
+        if(this.code == ""){
+          alert("请输入验证码!")
+          return;
+        }
+        if(this.identifyCode !== this.code){
+          this.code = '';
+          this.refreshCode();
+          alert("请输入正确的验证码");
+          return;
+        }
         if (valid) {
           this.loading = true;
            login({
@@ -126,7 +164,33 @@ export default {
           return false
         }
       })
-    }
+    },
+    doRegister(){
+      console.log("success")
+      this.$router.push({
+        path:"/register"
+      });
+    },
+    findPwd(){
+
+    },
+    //验证码
+    randomNum(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    },
+
+    refreshCode() {
+      this.identifyCode = "";
+      this.makeCode(this.identifyCodes, 4);
+    },
+    makeCode(o, l) {
+      for (let i = 0; i < l; i++) {
+        this.identifyCode += this.identifyCodes[
+          this.randomNum(0, this.identifyCodes.length)
+          ];
+      }
+      console.log(this.identifyCode);
+    },
   }
 }
 </script>
@@ -186,7 +250,6 @@ $light_gray:#eee;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
-
   .login-form {
     position: relative;
     width: 520px;
@@ -195,7 +258,6 @@ $light_gray:#eee;
     margin: 0 auto;
     overflow: hidden;
   }
-
   .tips {
     font-size: 14px;
     color: #fff;
@@ -207,7 +269,6 @@ $light_gray:#eee;
       }
     }
   }
-
   .svg-container {
     padding: 6px 5px 6px 15px;
     color: $dark_gray;
@@ -215,7 +276,6 @@ $light_gray:#eee;
     width: 30px;
     display: inline-block;
   }
-
   .title-container {
     position: relative;
 
@@ -227,7 +287,6 @@ $light_gray:#eee;
       font-weight: bold;
     }
   }
-
   .show-pwd {
     position: absolute;
     right: 10px;
@@ -236,6 +295,36 @@ $light_gray:#eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+  .register {
+    font-size: 14px;
+    line-height: 22px;
+    color: #1ab2ff;
+    cursor: pointer;
+    text-align: right;
+    text-indent: 8px;
+  }
+  .register:hover {
+    color: #2c2fd6;
+  }
+  .find_Pwd{
+    font-size: 14px;
+    line-height: 22px;
+    color: whitesmoke;
+    cursor: pointer;
+    text-align: right;
+    text-indent: 8px;
+  }
+  .find_Pwd:hover{
+    color: #20a0ff;
+  }
+  .code{
+    width:124px;
+    height:31px;
+    border:1px solid rgba(186,186,186,1);
+  }
+  .login-code{
+    cursor: pointer;
   }
 }
 </style>
