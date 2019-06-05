@@ -347,11 +347,12 @@ export default {
                   type: 'error',
                   duration:8000
                 })
-                insertViolation(terminalPhone, '超速',p.longitude, p.latitude).then(res => {
+                console.log("车辆超速")
+                /*insertViolation(terminalPhone, '超速',p.longitude, p.latitude).then(res => {
 
                 }).catch(e => {
 
-                })
+                })*/
                 ref.$refs.audio.play()
               }
               if (p.overTired == true) {
@@ -361,17 +362,18 @@ export default {
                   type: 'error',
                   duration:8000
                 })
-                insertViolation(terminalPhone, '疲劳驾驶',p.longitude, p.latitude).then(res => {
+               /* insertViolation(terminalPhone, '疲劳驾驶',p.longitude, p.latitude).then(res => {
 
                 }).catch(e => {
 
-                })
+                })*/
+                ref.$refs.audio.play()
               }
               if (p.dangeous == true) {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '危险预警',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -379,7 +381,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + 'GNSS模块发生故障',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -387,7 +389,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + 'GNSS天线未接或被剪断',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -395,7 +397,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + 'GNSS天线短路',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -403,7 +405,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '终端主电源欠压',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -411,7 +413,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '终端主电源掉电',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -419,7 +421,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '终端LED或显示屏故障',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -427,7 +429,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + 'TTS模块故障',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -435,7 +437,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '摄像头故障',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -443,7 +445,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '道路运输证IC卡模块故障',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -459,7 +461,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '超时停车',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -467,7 +469,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '路段行驶时间/不足',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -475,7 +477,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '路线偏离报警',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -515,7 +517,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '车辆非法位移',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -563,23 +565,23 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '疲劳预警',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
               if (p.throughArea == true) {
                 ref.$message({
                   showClose: true,
-                  message: '[' + ref.socketPlateNum + ']' + '经过某区域',
-                  type: 'error',
+                  message: '[' + ref.socketPlateNum + ']' + '进出区域',
+                  type: 'warning',
                   duration:8000
                 })
               }
               if (p.throughRoad == true) {
                 ref.$message({
                   showClose: true,
-                  message: '[' + ref.socketPlateNum + ']' + '经过某道路',
-                  type: 'error',
+                  message: '[' + ref.socketPlateNum + ']' + '进出路线',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -587,7 +589,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '经纬度未经保密插件加密',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -611,7 +613,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '车门解锁',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -619,7 +621,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '门开(前门)',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -627,7 +629,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '门开(中门)',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -635,7 +637,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '门开(后门)',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -643,7 +645,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '门开(驾驶席门)',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -651,7 +653,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '门开(自定义)',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -659,7 +661,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '未使用 GPS 卫星进行定位',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -667,7 +669,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '未使用北斗卫星进行定位',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -675,7 +677,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '未使用 GLONASS 卫星进行定位',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
@@ -683,7 +685,7 @@ export default {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '未使用 Galileo 卫星进行定位',
-                  type: 'error',
+                  type: 'warning',
                   duration:8000
                 })
               }
