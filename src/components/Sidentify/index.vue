@@ -13,11 +13,11 @@
       },
       fontSizeMin: {
         type: Number,
-        default: 25
+        default: 40
       },
       fontSizeMax: {
         type: Number,
-        default: 30
+        default: 45
       },
       backgroundColorMin: {
         type: Number,
@@ -53,11 +53,11 @@
       },
       contentWidth: {
         type: Number,
-        default: 112
+        default: 124
       },
       contentHeight: {
         type: Number,
-        default: 31
+        default: 50
       }
     },
     methods: {
@@ -132,7 +132,7 @@
 </script>
 <style scoped>
   .s-canvas {
-    height: 38px;
+    height: 47px;
 
   }
   .s-canvas canvas{

@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">用户登录</h3>
       </div>
 
       <el-form-item prop="username">
@@ -13,7 +13,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -30,7 +30,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -43,21 +43,27 @@
       <div style="margin-top: -3%;margin-bottom: 3%;text-align: right">
         <span class="find_Pwd" @click="findPwd">忘记登录密码?</span>
       </div>
-      <div type="flex">
-      <div>
-        <span>验证码：</span>
-        <input type="text" id="code" v-model="code" class="code"  placeholder="请输入您的验证码" />
-      </div>
-      <div class="login-code" @click="refreshCode">
-        <!--验证码组件-->
-        <s-identify :identifyCode="identifyCode"></s-identify>
-      </div>
-      </div>
+      <el-row type="flex" style="margin-bottom: 3%" >
+        <el-col style="width: 120%">
+          <el-form-item>
+            <span class="svg-container">
+                <svg-icon icon-class="code" />
+              </span>
+            <el-input type="text" id="code" v-model="code" class="code"  placeholder="验证码" />
+          </el-form-item>
+        </el-col>
+        <el-col align="right" class="el-col-12">
+          <div class="login-code" @click="refreshCode">
+            <!--验证码组件-->
+            <s-identify :identifyCode="identifyCode"></s-identify>
+          </div>
+        </el-col>
+      </el-row>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
       <el-row type="flex">
         <el-col>
-          <el-checkbox class="login_remember " v-model="checked">记住密码</el-checkbox>
+          <el-checkbox class="login_remember" v-model="checked">记住密码</el-checkbox>
         </el-col>
         <el-col align="right">
           <span class="register" @click="doRegister">免费注册</span>
@@ -305,7 +311,7 @@ $light_gray:#eee;
     text-indent: 8px;
   }
   .register:hover {
-    color: #2c2fd6;
+    color: #7ed6c2;
   }
   .find_Pwd{
     font-size: 14px;
@@ -317,11 +323,6 @@ $light_gray:#eee;
   }
   .find_Pwd:hover{
     color: #20a0ff;
-  }
-  .code{
-    width:124px;
-    height:31px;
-    border:1px solid rgba(186,186,186,1);
   }
   .login-code{
     cursor: pointer;
