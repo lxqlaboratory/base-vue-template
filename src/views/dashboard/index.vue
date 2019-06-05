@@ -15,6 +15,7 @@
           :props="defaultProps"
           default-expand-all
           :filter-node-method="filterNode"
+          @node-click="getCurryClick"
           @check-change="getChecked"
         />
       </el-aside>
@@ -164,6 +165,7 @@ export default {
         speed: '666km/h',
         time: '2018-12-25 10:49:48'
       }],
+      checkedNode:{},
       checkedNodes: [],
       plateNumList: [],
       plateNumList2: [],
@@ -729,6 +731,12 @@ export default {
       this.plateNumList = new Set(this.plateNumList2)
       console.log(this.plateNumList)
       // this.doLocation()
+    },
+    getCurryClick(event){
+      //this.checkedNode = this.$refs.tree2.getCurrentNode
+      console.log(event)
+      this.center.lng = event.longitude
+      this.center.lat = event.latitude
     },
     /* doLocation() {
       this.plateNumList.forEach(item => {
