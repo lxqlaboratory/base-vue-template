@@ -138,6 +138,7 @@ export default {
       filterText: '',
       vehicleList: [],
       carList: [],
+      currentCarInfo:{},
       socketPlateNum: '',
       defaultProps: {
         children: 'children',
@@ -194,9 +195,8 @@ export default {
         this.plateNumList.forEach(item2 => {
           if(item2==item.plateNum)
             return true
-          else
-            return false
         })
+        return false
       })
     },
   },
@@ -713,6 +713,8 @@ export default {
     },
     infoWindowOpen(marker) {
       marker.showFlag = true
+      this.currentCarInfo=marker
+      console.log(this.currentCarInfo)
     },
     filterNode(value, data) {
       if (!value) return true
