@@ -36,6 +36,7 @@
               <el-button @click="isPhotoShotVisible">图像监管</el-button>
               <el-button @click="isDigitBillVisible">电子运单</el-button>
               <el-button @click="isTextMsgVisible">文本下发</el-button>
+              <el-button @click="toTerminalParamManage(marker.phoneNum)">终端参数管理</el-button>
             </bm-info-window>
           </bm-marker>
 
@@ -112,8 +113,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
-import { getTreeVehicleFormList, getVehiclePositionFromList, getSelectedVehiclePosition } from '@/api/vehicle-list-index'
-import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg, tempLocationTrack } from '@/api/terminal'
+import { getTreeVehicleFormList, getVehiclePositionFromList } from '@/api/vehicle-list-index'
+import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg, tempLocationTrack, getTerminalParam} from '@/api/terminal'
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
@@ -269,8 +270,8 @@ export default {
         }
         this.$store.dispatch('ChangeCarList', dataList).then()
         this.carList = dataList
-        this.carList.forEach(item =>{
-          this.$set(item,"showFlag",false)
+        this.carList.forEach(item => {
+          this.$set(item, 'showFlag', false)
         })
       })
     },
@@ -282,6 +283,12 @@ export default {
     toVideoMonitoring(phoneNum) {
       mediaTransform(phoneNum, 1, 0).then()
       this.$router.push({ path: '/videoMonitor/videoMonitor' })
+    },
+    toTerminalParamManage(phoneNum) {
+      getTerminalParam(phoneNum).then(response => {
+        console.log(response.data.result)
+      })
+      this.$router.push({ path: '/terminalControl/terminalParam' })
     },
     isTrackPlaybackVisible() {
       this.trackPlaybackVisible = !this.trackPlaybackVisible
@@ -310,7 +317,7 @@ export default {
       const client = Stomp.over(ws)
       const on_connect = function() {
         console.log('connected')
-        client.subscribe('JT808Server_LocationData_Queue', function(message) {
+        client.subscribe('/exchange/jt808/location', function(message) {
           const p = JSON.parse(message.body)
           // console.log(p)
           const terminalPhone = p.terminalPhone
@@ -332,7 +339,7 @@ export default {
               showClose: true,
               message: '[' + ref.socketPlateNum + ']' + '车辆超速',
               type: 'error',
-              duration:8000
+              duration: 8000
             })
             insertViolation(terminalPhone, '超速',p.longitude, p.latitude).then(res => {
 
@@ -674,11 +681,11 @@ export default {
             })
           }
         })
-        client.subscribe('JT808Server_DriverIdentity_Queue', function(message) {
+        client.subscribe('/exchange/jt808/driverIdentity', function(message) {
           const p = JSON.parse(message.body)
           // console.log(p)
         })
-        client.subscribe('JT808Server_DigitWaybill_Queue', function(message) {
+        client.subscribe('/exchange/jt808/digitWaybill', function(message) {
           const p = JSON.parse(message.body)
           // console.log(p)
         })
@@ -776,15 +783,7 @@ export default {
       })
       cameraPhoto('15153139702', this.radio).then(response => {
         console.log(response.data.result)
-        loading.close()
-        if (response.data.result === -1) {
-          this.$message.error('消息发送失败')
-        } else {
-          this.$message({
-            message: '消息发送成功',
-            type: 'success'
-          })
-        }
+        this.messageHandler(response)
       }).catch(() => {
         loading.close()
       })
@@ -799,14 +798,7 @@ export default {
       textMsg('15153139702', 0, this.textMsg).then(response => {
         // console.log(response.data)
         loading.close()
-        if (response.data.result === -1) {
-          this.$message.error('消息发送失败')
-        } else {
-          this.$message({
-            message: '消息发送成功',
-            type: 'success'
-          })
-        }
+        this.messageHandler(response)
       }).catch(() => {
         loading.close()
       })
@@ -821,17 +813,27 @@ export default {
       tempLocationTrack('15153139702', 0, this.textMsg).then(response => {
         // console.log(response.data)
         loading.close()
-        if (response.data.result === -1) {
-          this.$message.error('消息发送失败')
-        } else {
-          this.$message({
-            message: '消息发送成功',
-            type: 'success'
-          })
-        }
+        this.messageHandler(response)
       }).catch(() => {
         loading.close()
       })
+    },
+
+    messageHandler(response) {
+      if (response.data.result === -1) {
+        this.$message.error('消息发送失败, 终端不在线')
+      } else if (response.data.result === 0) {
+        this.$message({
+          message: '消息发送成功',
+          type: 'success'
+        })
+      } else if (response.data.result === 1) {
+        this.$message.error('消息发送失败, 未知原因')
+      } else if (response.data.result === 2) {
+        this.$message.error('消息发送失败, 消息有误')
+      } else if (response.data.result === 2) {
+        this.$message.error('消息发送失败, 不支持')
+      }
     }
   }
 }
