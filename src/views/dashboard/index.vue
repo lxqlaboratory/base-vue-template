@@ -328,7 +328,7 @@ export default {
       const client = Stomp.over(ws)
       const on_connect = function() {
         console.log('connected')
-        client.subscribe('JT808Server_LocationData_Queue', function(message) {
+        client.subscribe('/exchange/jt808/location', function(message) {
           const p = JSON.parse(message.body)
           // console.log(p)
           const terminalPhone = p.terminalPhone
@@ -695,11 +695,11 @@ export default {
             }
           })
         })
-        client.subscribe('JT808Server_DriverIdentity_Queue', function(message) {
+        client.subscribe('/exchange/jt808/digitWaybill', function(message) {
           const p = JSON.parse(message.body)
           // console.log(p)
         })
-        client.subscribe('JT808Server_DigitWaybill_Queue', function(message) {
+        client.subscribe('/exchange/jt808/driverIdentity', function(message) {
           const p = JSON.parse(message.body)
           // console.log(p)
         })
