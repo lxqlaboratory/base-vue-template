@@ -188,7 +188,17 @@ export default {
   computed: {
     ...mapGetters([
       'name'
-    ])
+    ]),
+    'carListShow': function() {
+      return this.carList.filter(item => {
+        this.plateNumList.forEach(item2 => {
+          if(item2==item.plateNum)
+            return true
+          else
+            return false
+        })
+      })
+    },
   },
   watch: {
     filterText(val) {
