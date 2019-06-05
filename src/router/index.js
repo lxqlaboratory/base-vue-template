@@ -31,28 +31,26 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/login',
+    path: '/',
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
   {
-    path: '/404',
-    component: () => import('@/views/404'),
+    path: '/register',
+    component: () => import('@/views/register/register'),
     hidden: true
   },
-
   {
-    path: '/',
+    path: '/home',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/home/dashboard',
     name: 'dashboard',
-    meta: { title: '车辆列表', icon: 'dashboard' },
+    meta: { title: '车辆列表', icon: 'home' },
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '车辆列表', icon: 'dashboard' }
+      meta: { title: '车辆列表', icon: 'home' }
     }]
   },
 
@@ -61,31 +59,31 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/base-manage',
     name: 'base-manage',
-    meta: { title: '基础信息管理', icon: 'example' },
+    meta: { title: '基础信息管理', icon: 'manage' },
     children: [
       {
         path: 'vehiclemanage',
         name: 'vehiclemanage',
         component: () => import('@/views/base-manage/vehicle-manage'),
-        meta: { title: '车辆管理', icon: 'table' }
+        meta: { title: '车辆管理', icon: 'manage' }
       },
       {
         path: 'drivermanage',
         name: 'drivermanage',
         component: () => import('@/views/base-manage/driver-manage'),
-        meta: { title: '驾驶员管理', icon: 'table' }
+        meta: { title: '驾驶员管理', icon: 'manage' }
       },
       {
         path: 'fleetmanage',
         name: 'fleetmanage',
         component: () => import('@/views/base-manage/fleet-manage'),
-        meta: { title: '车队管理', icon: 'table' }
+        meta: { title: '车队管理', icon: 'manage' }
       },
       {
         path: 'templatemanage',
         name: 'templatemanage',
         component: () => import('@/views/base-manage/template-manage'),
-        meta: { title: '短信模板管理', icon: 'table' }
+        meta: { title: '短信模板管理', icon: 'manage' }
       }
     ]
   },
@@ -94,25 +92,25 @@ export const constantRoutes = [
     path: '/statistics',
     component: Layout,
     name: 'Statistics',
-    meta: { title: '统计分析', icon: 'example' },
+    meta: { title: '统计分析', icon: 'statistics' },
     children: [
       {
         path: 'mileage',
         name: 'Mileage',
         component: () => import('@/views/table/index'),
-        meta: { title: '里程统计', icon: 'table' }
+        meta: { title: '里程统计', icon: 'statistics' }
       },
       {
         path: 'Speeding',
         name: 'speeding',
         component: () => import('@/views/tree/index'),
-        meta: { title: '超速统计', icon: 'tree' }
+        meta: { title: '超速统计', icon: 'statistics' }
       },
       {
         path: 'tired',
         name: 'Tired',
         component: () => import('@/views/tree/index'),
-        meta: { title: '疲劳统计', icon: 'tree' }
+        meta: { title: '疲劳统计', icon: 'statistics' }
       }
     ]
   },
@@ -120,43 +118,43 @@ export const constantRoutes = [
     path: '/history',
     component: Layout,
     name: 'History',
-    meta: { title: '历史信息查询', icon: 'tool' },
+    meta: { title: '历史信息查询', icon: 'history' },
     children: [
       {
         path: 'violationHistory',
         name: 'violationHistory',
         component: () => import('@/views/history-search/violation-history'),
-        meta: { title: '违章历史查询', icon: 'table' }
+        meta: { title: '违章历史查询', icon: 'history' }
       },
       {
         path: 'offlineWarning',
         name: 'offlineWarning',
         component: () => import('@/views/history-search/offline-warning'),
-        meta: { title: '离线预警历史', icon: 'tree' }
+        meta: { title: '离线预警历史', icon: 'history' }
       },
       {
         path: 'userMessage',
         name: 'userMessage',
         component: () => import('@/views/history-search/user-message'),
-        meta: { title: '用戶消息历史', icon: 'tree' }
+        meta: { title: '用戶消息历史', icon: 'history' }
       },
       {
         path: 'terminalState',
         name: 'terminalState',
         component: () => import('@/views/history-search/terminal-state'),
-        meta: { title: '終端状态历史', icon: 'tree' }
+        meta: { title: '終端状态历史', icon: 'history' }
       },
       {
         path: 'terminalAlarm',
         name: 'terminalAlarm',
         component: () => import('@/views/history-search/terminal-alarm'),
-        meta: { title: '終端报警历史', icon: 'tree' }
+        meta: { title: '終端报警历史', icon: 'history' }
       },
       {
         path: 'checkHistory',
         name: 'checkHistory',
         component: () => import('@/views/history-search/check-history'),
-        meta: { title: '查岗历史查询', icon: 'tree' }
+        meta: { title: '查岗历史查询', icon: 'history' }
       }
     ]
   },
@@ -164,19 +162,19 @@ export const constantRoutes = [
     path: '/networkMonitor ',
     component: Layout,
     name: 'networkMonitor',
-    meta: { title: '联网监控', icon: 'tool' },
+    meta: { title: '联网监控', icon: 'eye-open' },
     children: [
       {
         path: 'violationDriverStatistic',
         name: 'violationDriverStatistic',
         component: () => import('@/views/network-control/violation-driver-statistic'),
-        meta: { title: '驾驶员违章统计', icon: 'tree' }
+        meta: { title: '驾驶员违章统计', icon: 'eye-open' }
       },
       {
         path: 'violationStatistic',
         name: 'violationStatistic',
         component: () => import('@/views/network-control/violation-statistic'),
-        meta: { title: '违章统计', icon: 'tree' }
+        meta: { title: '违章统计', icon: 'eye-open' }
       }
     ]
   },
@@ -184,19 +182,19 @@ export const constantRoutes = [
     path: '/activeSafety ',
     component: Layout,
     name: 'ActiveSafety',
-    meta: { title: '主动安全防御', icon: 'tool' },
+    meta: { title: '主动安全防御', icon: 'safety' },
     children: [
       {
         path: 'companyPortrait',
         name: 'companyPortrait',
         component: () => import('@/views/active-safety/company-portrait'),
-        meta: { title: '企业画像', icon: 'tree' }
+        meta: { title: '企业画像', icon: 'safety' }
       },
       {
         path: 'driverPortrait',
         name: 'driverPortrait',
         component: () => import('@/views/active-safety/driver-portrait'),
-        meta: { title: '驾驶员画像', icon: 'tree' }
+        meta: { title: '驾驶员画像', icon: 'safety' }
       }
     ]
   },
@@ -204,35 +202,40 @@ export const constantRoutes = [
     path: '/videoMonitor',
     component: Layout,
     name: 'VideoMonitor',
-    meta: { title: '视频监控', icon: 'tool' },
+    meta: { title: '视频监控', icon: 'conversation' },
     children: [{
       path: 'videoMonitor',
       name: 'videoMonitor',
       component: () => import('@/views/video-monitor/index'),
-      meta: { title: '视频监控', icon: 'dashboard' }
+      meta: { title: '视频监控', icon: 'conversation' }
     }]
   },
   {
     path: '/terminalControl',
     component: Layout,
     name: 'TerminalControl',
-    meta: { title: '终端管理', icon: 'tool' },
+    meta: { title: '终端管理', icon: 'terminal' },
     children: [
       {
         path: 'terminalParam',
         name: 'TerminalParam',
         component: () => import('@/views/terminal-control/terminal-param'),
-        meta: { title: '终端参数管理', icon: 'dashboard' }
+        meta: { title: '终端参数管理', icon: 'terminal' }
       },
       {
         path: 'terminalAttribute',
         name: 'TerminalAttribute',
         component: () => import('@/views/terminal-control/terminal-attribute'),
-        meta: { title: '终端属性管理', icon: 'dashboard' }
+        meta: { title: '终端属性管理', icon: 'terminal' }
       }
     ]
   },
 
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

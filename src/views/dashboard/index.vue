@@ -25,11 +25,11 @@
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
 
-          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.longitude}" title="杨培林" @click="infoWindowOpen(marker)">
-            <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}"   :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
+          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" title="杨培林" @click="infoWindowOpen(marker)">
+            <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}" :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
               <div>{{ marker.plateNum }} {{ marker.driverName }}</div>
               <div>{{ marker.speed }}{{ marker.time }}</div>
-              <el-button @click="toVideoMonitoring">视频监控</el-button>
+              <el-button @click="toVideoMonitoring(marker.phoneNum)">视频监控</el-button>
               <el-button @click="doTempLocationTrack">定位跟踪</el-button>
               <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
               <el-button @click="isTalkBackVisible">语音对讲</el-button>
@@ -117,7 +117,7 @@ import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg, tempLocatio
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
-import { getCarList } from '@/api/vehicle-manage'
+import { insertViolation } from '@/api/vehicle-manage'
 export default {
   name: 'Dashboard',
   components: {
@@ -289,7 +289,8 @@ export default {
       this.center.lng = 116.404
       this.center.lat = 39.915
     },
-    toVideoMonitoring() {
+    toVideoMonitoring(phoneNum) {
+      mediaTransform(phoneNum, 1, 0).then()
       this.$router.push({ path: '/videoMonitor/videoMonitor' })
     },
     isTrackPlaybackVisible() {
@@ -325,9 +326,9 @@ export default {
           const terminalPhone = p.terminalPhone
           ref.carList.filter(item => {
             console.log('filter')
-            console.log(item.simNum)
+            console.log(item.phoneNum)
             console.log(terminalPhone)
-            if (item.simNum === terminalPhone) {
+            if (item.phoneNum === terminalPhone) {
               ref.socketPlateNum = item.plateNum
               // 设置 carList 的值
               item.longitude = p.longitude
@@ -337,134 +338,350 @@ export default {
             }
           })
           if (p.overSpeeding == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆超速')
-            console.log('超速了')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '车辆超速',
+              type: 'error',
+              duration:8000
+            })
+            insertViolation(terminalPhone, '超速',p.longitude, p.latitude).then(res => {
+
+            }).catch(e => {
+
+            })
           }
           if (p.overTired == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '疲劳驾驶')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '疲劳驾驶',
+              type: 'error',
+              duration:8000
+            })
+            insertViolation(terminalPhone, '疲劳驾驶',p.longitude, p.latitude).then(res => {
+
+            }).catch(e => {
+
+            })
           }
           if (p.dangeous == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '危险预警')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '危险预警',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.GNSSFault == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + 'GNSS模块发生故障')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + 'GNSS模块发生故障',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.GNSSAntennaFault == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + 'GNSS天线未接或被剪断')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + 'GNSS天线未接或被剪断',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.GNSSAntennaShortCircuit == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + 'GNSS天线短路')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + 'GNSS天线短路',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.terminalMainPowerUndervoltage == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '终端主电源欠压')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '终端主电源欠压',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.terminalMainPowerFailure == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '终端主电源掉电')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '终端主电源掉电',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.TerminalLCDFault == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '终端LED或显示屏故障')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '终端LED或显示屏故障',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.TTSFault == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + 'TTS模块故障')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + 'TTS模块故障',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.cameraFault == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '摄像头故障')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '摄像头故障',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.ICCardFault == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '道路运输证IC卡模块故障')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '道路运输证IC卡模块故障',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.driveTimeout == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '当天累积驾驶超时')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '当天累积驾驶超时',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.parkingOvertime == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '超时停车')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '超时停车',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.roadTimeout == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '路段行驶时间/不足')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '路段行驶时间/不足',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.roadFault == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '路线偏离报警')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '路线偏离报警',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.VSSFault == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆VSS故障')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '车辆VSS故障',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.vehicleOilException == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆油量异常')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '车辆油量异常',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.vehicleTheft == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆被盗')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '车辆被盗',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.vehicleIllegalIgnition == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆非法点火')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '车辆非法点火',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.vehicleIllegalShift == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆非法位移')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '车辆非法位移',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.collisionWarning == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '碰撞预警')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '碰撞预警',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.rolloverWarning == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '侧翻预警')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '侧翻预警',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.illegalOpenDoor == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '非法开门报警')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '非法开门报警',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.isLocation == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '未定位')
-          }
-          if (p.isRunning == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '未定位')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '未定位',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.speeding == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '超速预警')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '超速预警',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.tired == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '疲劳预警')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '疲劳预警',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.throughArea == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '经过某区域')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '经过某区域',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.throughRoad == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '经过某道路')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '经过某道路',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.encrypt == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '经纬度未经保密插件加密')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '经纬度未经保密插件加密',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.vehicleOil == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆油路断开')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '车辆油路断开',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.vehicleCircut == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '车辆电路断开')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '车辆电路断开',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.doorLock == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '车门解锁')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '车门解锁',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.frontDoorOpen == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '门开(前门)')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '门开(前门)',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.middleDoorOpen == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '门开(中门)')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '门开(中门)',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.endDoorOpen == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '门开(后门)')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '门开(后门)',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.driverDoorOpen == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '门开(驾驶席门)')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '门开(驾驶席门)',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.otherDoorOpen == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '门开(自定义)')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '门开(自定义)',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.GPS == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '未使用 GPS 卫星进行定位')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '未使用 GPS 卫星进行定位',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.beidou == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '未使用北斗卫星进行定位')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '未使用北斗卫星进行定位',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.GLONASS == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '未使用 GLONASS 卫星进行定位')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '未使用 GLONASS 卫星进行定位',
+              type: 'error',
+              duration:8000
+            })
           }
           if (p.Galileo == true) {
-            ref.$toast('[' + ref.socketPlateNum + ']' + '未使用 Galileo 卫星进行定位')
+            ref.$message({
+              showClose: true,
+              message: '[' + ref.socketPlateNum + ']' + '未使用 Galileo 卫星进行定位',
+              type: 'error',
+              duration:8000
+            })
           }
         })
         client.subscribe('JT808Server_DriverIdentity_Queue', function(message) {
