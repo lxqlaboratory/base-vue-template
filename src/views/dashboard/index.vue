@@ -137,8 +137,8 @@ export default {
       trackPlaybackEndTime: '',
       filterText: '',
       vehicleList: [],
-      carList: [],
-      currentCarInfo:{},
+      carList: [],//车辆列表
+      currentCarInfo:{},//当前infoWindow对应的车辆信息
       socketPlateNum: '',
       defaultProps: {
         children: 'children',
