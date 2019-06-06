@@ -32,8 +32,8 @@
             :value="item.value" style="font-size: 12px;">
           </el-option>
         </el-select>
-        <span class="font-span">车牌号：</span>
-        <el-input  class="dialog-input-text" style="width: 24%;" v-model="plateInput" placeholder="请输入内容"></el-input>
+        <span class="font-span">车牌尾号：</span>
+        <el-input  class="dialog-input-text" style="width: 16%;" v-model="plateInput" placeholder=""></el-input>
       </div>
       <div style="margin-top: 2px">
      </div>
@@ -66,7 +66,7 @@
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="all" />
-        <el-button type="text" style="color:green" @click="clearFilter">全部</el-button>&nbsp;&nbsp;&nbsp;{{ vehicle_num }}
+        <el-button type="text" style="color:green" @click="showAll">全部</el-button>&nbsp;&nbsp;&nbsp;{{ vehicle_num }}
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
@@ -224,11 +224,11 @@ export default {
       'carList',
     ]),
     'vehicle_num': function() {
-      return this.tableData.length
+      return this.carList.length
     },
     'running': function() {
       var num = 0
-      this.tableData.forEach(item => {
+      this.carList.forEach(item => {
           if (item.is_online === '在线') { num++ }
         }
       )
@@ -236,7 +236,7 @@ export default {
     },
     'parking': function() {
       var num = 0
-      this.tableData.forEach(item => {
+      this.carList.forEach(item => {
           if (item.is_online === '熄火') { num++ }
         }
       )
@@ -244,7 +244,7 @@ export default {
     },
     'online_num': function() {
       var num = 0
-      this.tableData.forEach(item => {
+      this.carList.forEach(item => {
         if (item.is_online === '在线') { num++ }
       }
       )
@@ -252,7 +252,7 @@ export default {
     },
     'offline_num': function() {
       var num = 0
-      this.tableData.forEach(item => {
+      this.carList.forEach(item => {
           if (item.is_online === '离线') { num++ }
         }
       )
@@ -261,11 +261,13 @@ export default {
     'online_rate': function() {
       return this.vehicle_num <= 0 ? '0%' : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00) + '%'
     }
+
   },
   mounted() {
+    let that=this
     setTimeout(() => {
-      this.tableData = this.carList
-    }, 1000)
+      that.tableData = that.carList
+    }, 5000)
   },
   methods: {
     showTable() {
@@ -274,6 +276,23 @@ export default {
     },
     seachBottomTable(){
 
+      var list=[]
+      this.tableData.filter(item => {
+         if(this.simInput==null||item.phoneNum==this.simInput){
+           if(this.plateInput==null||item.plateNum.indexOf(this.plateInput) >= 0) {
+             if(this.driverInput==null||item.driverName==this.driverInput){
+               if(this.fleetValue==null||item.fleetName.indexOf(this.fleetValue) >= 0) {
+                 if(this.startSpeed==null||this.endSpeed==null||(item.speed>this.startSpeed&&item.speed<this.endSpeed)) {
+                   if(!this.onlineChecked||item.is_online === '在线')
+                   list.push(item)
+                 }
+               }
+             }
+           }
+         }
+
+      })
+      this.tableData=list
     },
     showTableMax() {
       this.isShow = !this.isShow
@@ -295,7 +314,10 @@ export default {
       menu.style.left = e.clientX + 'px'
       menu.style.top = e.clientY + 'px'
       menu.style.width = '130px'
-    }
+    },
+    showAll(){
+      this.tableData=this.carList
+    },
   }
 }
 </script>
