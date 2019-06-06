@@ -282,6 +282,8 @@ export default {
       getTreeVehicleFormList().then(response => {
         this.vehicleList = response.data
         this.$store.dispatch('ChangeCarTree', this.vehicleList).then()
+        console.log('treeList has alrady enter AAA')
+        console.log(this.vehicleList)
         const arr = this.vehicleList[0]['children']
         const dataList = []
         let n = 0
@@ -293,6 +295,8 @@ export default {
           }
         }
         this.$store.dispatch('ChangeCarList', dataList).then()
+        console.log('treeList has alrady enter')
+        console.log(dataList)
         this.carList = dataList
         this.carList.forEach(item => {
           this.$set(item, 'showFlag', false)
@@ -343,6 +347,7 @@ export default {
           const p = JSON.parse(message.body)
           console.log('ref.carList.filter进入')
           const terminalPhone = p.terminalPhone
+          console.log(ref.carList)
           ref.carList.filter(item => {
             if (item.phoneNum == terminalPhone) {
               ref.socketPlateNum = item.plateNum
@@ -350,7 +355,7 @@ export default {
               item.longitude = p.longitude/1000000.0
               item.latitude = p.latitude/1000000.0
               item.ACC = p.ACC
-              item.receiveData='1'//代表了已经接收到了信息
+              item.receiveData=1//代表了已经接收到了信息
               console.log(item.longitude+"--->"+item.latitude)
               console.log('terminalPhone')
               if (p.overSpeeding === true) {
@@ -722,15 +727,21 @@ export default {
       setInterval(this.changeControlBottom, 15000)
     },
     changeControlBottom() {
-      if(this.carList[0].receiveData=='0'){
+      console.log('console.log(this.carList[0].receiveData)')
+      console.log(this.carList[0].receiveData)
+      if(this.carList[0].receiveData==0||this.carList[0].receiveData===0){
+        console.log('receiveData_Enter A')
         this.carList[0].longitude = (116.404 + Math.random() / 20).toFixed(3)
         this.carList[0].latitude = (39.915 + Math.random() / 20).toFixed(3)
       }
-      if(this.carList[1].receiveData=='0'){
+      if(this.carList[1].receiveData==0||this.carList[1].receiveData===0){
+        console.log('receiveData_Enter B')
         this.carList[1].longitude = (116.404 + Math.random() / 20).toFixed(3)
         this.carList[1].latitude = (39.915 + Math.random() / 20).toFixed(3)
       }
-      if(this.carList[0].receiveData=='0'){
+      console.log(this.carList[2].receiveData)
+      if(this.carList[2].receiveData==0||this.carList[2].receiveData===0){
+        console.log('receiveData_Enter C')
         this.carList[2].longitude = (116.404 + Math.random() / 20).toFixed(3)
         this.carList[2].latitude = (39.915 + Math.random() / 20).toFixed(3)
       }
