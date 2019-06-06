@@ -106,7 +106,7 @@
 
     <div v-show="isShow" class="mapBottomTable">
       <el-table :data="tableData"  border style="width: 100%" @row-click="throwEmit"  @row-contextmenu="row_contextmenu">
-        <el-table-column type="selection" min-width="50" />
+      <!--  <el-table-column type="selection" min-width="50" />-->
         <el-table-column prop="plateNum" label="车牌号" sortable min-width="100" />
         <el-table-column prop="phoneNum" label="SIM卡号" sortable min-width="120" />
         <el-table-column
