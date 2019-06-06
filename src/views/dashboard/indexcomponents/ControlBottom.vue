@@ -10,11 +10,15 @@
     </div>
 
     <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 60%" >
-      <div style="font-size: 12px">
-        <span>起点：</span>
-        <el-input style="width: 35%;height: 30px;line-height:30px;font-size: 12px" v-model="input" placeholder="请输入内容"></el-input>
-        <span style="padding-left: 5%">终点：</span>
-        <el-input style="width: 35%;height: 30px" v-model="input" placeholder="请输入内容"></el-input>
+      <div >
+        <span class="font-span">起点：</span>
+        <el-input   class="dialog-input-text" style="width: 35%"   v-model="startInput" placeholder="请输入内容"></el-input>
+        <span class="font-span">终点：</span>
+        <el-input  class="dialog-input-text"   style="width: 35%"  v-model="endInput" placeholder="请输入内容"></el-input>
+      </div>
+      <div>
+        <span class="font-span">sim卡：</span>
+        <el-input  class="dialog-input-text" style="width: 35%;" v-model="simInput" placeholder="请输入内容"></el-input>
       </div>
     </el-dialog>
 
@@ -156,7 +160,10 @@ export default {
         longitude: 116.404,
         latitude: 39.915
       }] */
-      tableData: []
+      tableData: [],
+      startInput:null,
+      endInput:null,
+      simInput:null
     }
   },
   computed: {
@@ -345,5 +352,14 @@ export default {
     margin-right: 15px !important;
     height: 1.2em !important;
     width: 1.2em !important;
+  }
+  .dialog-input-text >>> .el-input__inner {
+
+    height: 2.7em;
+    font-size: 12px;
+  }
+  .font-span{
+    font-size: 12px;
+    padding-left: 2%;
   }
 </style>
