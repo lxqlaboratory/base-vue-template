@@ -9,13 +9,51 @@
       <div class="menu">功能5</div>
     </div>
 
-    <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 60%" >
-      <div style="font-size: 12px">
-        <span>起点：</span>
-        <el-input style="width: 35%;height: 30px;line-height:30px;font-size: 12px" v-model="input" placeholder="请输入内容"></el-input>
-        <span style="padding-left: 5%">终点：</span>
-        <el-input style="width: 35%;height: 30px" v-model="input" placeholder="请输入内容"></el-input>
+    <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 74%" >
+      <div>
+        <span class="font-span">起点：</span>
+        <el-input   class="dialog-input-text" style="width: 35%"   v-model="startInput" placeholder="请输入内容"></el-input>
+        <span class="font-span">终点：</span>
+        <el-input  class="dialog-input-text"   style="width: 35%"  v-model="endInput" placeholder="请输入内容"></el-input>
       </div>
+      <div style="margin-top: 2px">
+        <span class="font-span">sim卡：</span>
+        <el-input  class="dialog-input-text" style="width: 35%;" v-model="simInput" placeholder="请输入内容"></el-input>
+        <span class="font-span">驾驶员：</span>
+        <el-input  class="dialog-input-text"   style="width: 35%"  v-model="driverInput" placeholder="请输入内容"></el-input>
+      </div>
+      <div style="margin-top: 2px">
+        <span class="font-span">车队名称：</span>
+        <el-select v-model="fleetValue" style="font-size: 12px;" class="dialog-input-text" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value" style="font-size: 12px;">
+          </el-option>
+        </el-select>
+        <span class="font-span">车牌号：</span>
+        <el-input  class="dialog-input-text" style="width: 24%;" v-model="plateInput" placeholder="请输入内容"></el-input>
+      </div>
+      <div style="margin-top: 2px">
+     </div>
+      <div style="margin-top: 2px">
+      <el-checkbox class="el-dialog--center" v-model="onlineChecked" style=" padding-left: 3px;">选择在线车辆</el-checkbox>
+      <el-checkbox class="el-dialog--center"v-model="videoChecked" style=" padding-left: 3px;">选择视频车辆</el-checkbox>
+      <el-checkbox class="el-dialog--center" v-model="defenceChecked" style=" padding-left: 3px;">主动防御车辆</el-checkbox>
+
+      </div>
+      <div style="margin-top: 2px">
+        <span class="font-span">请填写车速范围：</span>
+        <el-input  class="dialog-input-text" style="width: 15%;" v-model="startSpeed" placeholder=""></el-input>
+        <span class="font-span">至</span>
+        <el-input  class="dialog-input-text" style="width: 15%;" v-model="endSpeed" placeholder=""></el-input>
+        <span class="font-span">km/h</span>
+      </div>
+      <span slot="footer" class="dialog-footer">
+      <el-button size="small" @click="carSelectionVisible = false">取 消</el-button>
+      <el-button size="small" type="primary" @click="seachBottomTable">查 询</el-button>
+      </span>
     </el-dialog>
 
     <div class="mapbottom">
@@ -156,7 +194,29 @@ export default {
         longitude: 116.404,
         latitude: 39.915
       }] */
-      tableData: []
+      tableData: [],
+      startInput:null,
+      endInput:null,
+      simInput:null,
+      onlineChecked: false,
+      videoChecked:false,
+      defenceChecked:false,
+      options: [{
+        value: '1',
+        label: '鑫华汽车运输有限公司车队'
+      }, {
+        value: '2',
+        label: '鑫华汽车运输有限公司顺通车队'
+      }, {
+        value: '3',
+        label: '鑫华汽车运输有限公司龙业车队'
+      }],
+      fleetValue: null,
+      dialogVisible: false,
+      startSpeed: null,
+      endSpeed: null,
+      plateInput: null,
+      driverInput: null,
     }
   },
   computed: {
@@ -211,6 +271,9 @@ export default {
     showTable() {
       // this.fillTable()
       this.isShow = !this.isShow
+    },
+    seachBottomTable(){
+
     },
     showTableMax() {
       this.isShow = !this.isShow
@@ -345,5 +408,17 @@ export default {
     margin-right: 15px !important;
     height: 1.2em !important;
     width: 1.2em !important;
+  }
+  .dialog-input-text >>> .el-input__inner {
+
+    height: 2.7em;
+    font-size: 12px;
+  }
+  .el-dialog--center >>> .el-checkbox__label{
+    font-size: 12px;
+  }
+  .font-span{
+    font-size: 12px;
+    padding-left: 3px;
   }
 </style>
