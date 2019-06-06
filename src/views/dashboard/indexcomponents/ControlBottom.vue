@@ -76,7 +76,7 @@
           label="是否在线"
           sortable
           :filter-method="filterHandler"
-          :filters="[{ text: '在线', value: '在线' }, { text: '离线', value: '离线' }]"
+          :filters="[{ text: '离线', value: '离线' }, { text: '在线', value: '在线' }, { text: '熄火', value: '熄火' }]"
           min-width="120"
         />
         <el-table-column prop="acc" label="ACC" sortable min-width="80" />
@@ -84,16 +84,16 @@
         <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />
         <el-table-column prop="longitude" label="经度" sortable min-width="80" />
         <el-table-column prop="latitude" label="纬度" sortable min-width="80" />
-        <el-table-column prop="last_time" label="最后上线时间" sortable min-width="140" />
-        <el-table-column prop="driver_name" label="驾驶员" sortable min-width="120" />
-        <el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />
-        <el-table-column prop="team_name" label="车队名称" sortable min-width="200" />
-        <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />
+        <el-table-column prop="time" label="最后上线时间" sortable min-width="160" />
+        <el-table-column prop="driverName" label="驾驶员" sortable min-width="120" />
+        <!--<el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />-->
+        <el-table-column prop="driverCompany" label="车队名称" sortable min-width="220" />
+       <!-- <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />
         <el-table-column prop="direction" label="方向" sortable min-width="80" />
         <el-table-column prop="oil_volume" label="油量(L)" sortable min-width="100" />
         <el-table-column prop="sim_flow" label="已用流量(M)" sortable min-width="130" />
         <el-table-column prop="stopTime" label="停车时长(分钟)" sortable min-width="140" />
-        <el-table-column prop="note" label="备注" sortable min-width="400" />
+        <el-table-column prop="note" label="备注" sortable min-width="400" />-->
       </el-table>
     </div>
 
@@ -123,8 +123,6 @@ export default {
     return {
 
       isShow: false,
-      running: 0,
-      parking: 0,
       alarm: 0,
       warning: 0,
 
@@ -168,6 +166,22 @@ export default {
     'vehicle_num': function() {
       return this.tableData.length
     },
+    'running': function() {
+      var num = 0
+      this.tableData.forEach(item => {
+          if (item.is_online === '在线') { num++ }
+        }
+      )
+      return num
+    },
+    'parking': function() {
+      var num = 0
+      this.tableData.forEach(item => {
+          if (item.is_online === '熄火') { num++ }
+        }
+      )
+      return num
+    },
     'online_num': function() {
       var num = 0
       this.tableData.forEach(item => {
@@ -177,7 +191,12 @@ export default {
       return num
     },
     'offline_num': function() {
-      return this.vehicle_num - this.online_num
+      var num = 0
+      this.tableData.forEach(item => {
+          if (item.is_online === '离线') { num++ }
+        }
+      )
+      return num
     },
     'online_rate': function() {
       return this.vehicle_num <= 0 ? '0%' : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00) + '%'

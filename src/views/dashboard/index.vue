@@ -30,7 +30,7 @@
             <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}" :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
               <div><i class="el-icon-s-opportunity">{{ marker.plateNum?marker.plateNum:"数据为空" }} </i></div>
               <div><i class="el-icon-s-custom">{{ marker.driverName?marker.driverName:"数据为空" }}</i></div>
-              <div><i class="el-icon-s-flag">{{ marker.speed?marker.speed:"速度为空" }}</i></div>
+              <div><i class="el-icon-s-flag">{{ marker.speed?marker.speed+"km/h":"速度为空" }}</i></div>
               <div><i class="el-icon-time">{{ marker.time?marker.time:"时间为空"}}</i></div>
               <el-row>
                 <el-button @click="toVideoMonitoring(marker.phoneNum)"><i class="el-icon-video-camera">视频监控</i></el-button>
