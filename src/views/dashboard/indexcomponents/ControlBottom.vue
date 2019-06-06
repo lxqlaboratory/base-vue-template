@@ -9,14 +9,51 @@
       <div class="menu">功能5</div>
     </div>
 
-    <el-dialog title="智能选车" :visible.sync="carSelectionVisible">
-      <el-transfer
-        v-model="value2"
-        filterable
-        :filter-method="filterMethod"
-        filter-placeholder="请输入城市拼音"
-        :data="data2"
-      />
+    <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 74%" >
+      <div>
+        <span class="font-span">起点：</span>
+        <el-input   class="dialog-input-text" style="width: 35%"   v-model="startInput" placeholder="请输入内容"></el-input>
+        <span class="font-span">终点：</span>
+        <el-input  class="dialog-input-text"   style="width: 35%"  v-model="endInput" placeholder="请输入内容"></el-input>
+      </div>
+      <div style="margin-top: 2px">
+        <span class="font-span">sim卡：</span>
+        <el-input  class="dialog-input-text" style="width: 35%;" v-model="simInput" placeholder="请输入内容"></el-input>
+        <span class="font-span">驾驶员：</span>
+        <el-input  class="dialog-input-text"   style="width: 35%"  v-model="driverInput" placeholder="请输入内容"></el-input>
+      </div>
+      <div style="margin-top: 2px">
+        <span class="font-span">车队名称：</span>
+        <el-select v-model="fleetValue" style="font-size: 12px;" class="dialog-input-text" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value" style="font-size: 12px;">
+          </el-option>
+        </el-select>
+        <span class="font-span">车牌尾号：</span>
+        <el-input  class="dialog-input-text" style="width: 16%;" v-model="plateInput" placeholder=""></el-input>
+      </div>
+      <div style="margin-top: 2px">
+     </div>
+      <div style="margin-top: 2px">
+      <el-checkbox class="el-dialog--center" v-model="onlineChecked" style=" padding-left: 3px;">选择在线车辆</el-checkbox>
+      <el-checkbox class="el-dialog--center"v-model="videoChecked" style=" padding-left: 3px;">选择视频车辆</el-checkbox>
+      <el-checkbox class="el-dialog--center" v-model="defenceChecked" style=" padding-left: 3px;">主动防御车辆</el-checkbox>
+
+      </div>
+      <div style="margin-top: 2px">
+        <span class="font-span">请填写车速范围：</span>
+        <el-input  class="dialog-input-text" style="width: 15%;" v-model="startSpeed" placeholder=""></el-input>
+        <span class="font-span">至</span>
+        <el-input  class="dialog-input-text" style="width: 15%;" v-model="endSpeed" placeholder=""></el-input>
+        <span class="font-span">km/h</span>
+      </div>
+      <span slot="footer" class="dialog-footer">
+      <el-button size="small" @click="carSelectionVisible = false">取 消</el-button>
+      <el-button size="small" type="primary" @click="seachBottomTable">查 询</el-button>
+      </span>
     </el-dialog>
 
     <div class="mapbottom">
@@ -29,7 +66,7 @@
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="all" />
-        <el-button type="text" style="color:green" @click="clearFilter">全部</el-button>&nbsp;&nbsp;&nbsp;{{ vehicle_num }}
+        <el-button type="text" style="color:green" @click="showAll">全部</el-button>&nbsp;&nbsp;&nbsp;{{ vehicle_num }}
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
@@ -68,8 +105,8 @@
     </div>
 
     <div v-show="isShow" class="mapBottomTable">
-      <el-table :data="tableData" height="35.5vh" border style="width: 100%" @row-contextmenu="row_contextmenu">
-        <el-table-column type="selection" min-width="50" />
+      <el-table :data="tableData"  border style="width: 100%" @row-click="throwEmit"  @row-contextmenu="row_contextmenu">
+      <!--  <el-table-column type="selection" min-width="50" />-->
         <el-table-column prop="plateNum" label="车牌号" sortable min-width="100" />
         <el-table-column prop="phoneNum" label="SIM卡号" sortable min-width="120" />
         <el-table-column
@@ -77,7 +114,7 @@
           label="是否在线"
           sortable
           :filter-method="filterHandler"
-          :filters="[{ text: '在线', value: '在线' }, { text: '离线', value: '离线' }]"
+          :filters="[{ text: '离线', value: '离线' }, { text: '在线', value: '在线' }, { text: '熄火', value: '熄火' }]"
           min-width="120"
         />
         <el-table-column prop="acc" label="ACC" sortable min-width="80" />
@@ -85,16 +122,16 @@
         <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />
         <el-table-column prop="longitude" label="经度" sortable min-width="80" />
         <el-table-column prop="latitude" label="纬度" sortable min-width="80" />
-        <el-table-column prop="last_time" label="最后上线时间" sortable min-width="140" />
-        <el-table-column prop="driver_name" label="驾驶员" sortable min-width="120" />
-        <el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />
-        <el-table-column prop="team_name" label="车队名称" sortable min-width="200" />
-        <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />
+        <el-table-column prop="time" label="最后上线时间" sortable min-width="160" />
+        <el-table-column prop="driverName" label="驾驶员" sortable min-width="120" />
+        <!--<el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />-->
+        <el-table-column prop="driverCompany" label="车队名称" sortable min-width="220" />
+       <!-- <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />
         <el-table-column prop="direction" label="方向" sortable min-width="80" />
         <el-table-column prop="oil_volume" label="油量(L)" sortable min-width="100" />
         <el-table-column prop="sim_flow" label="已用流量(M)" sortable min-width="130" />
         <el-table-column prop="stopTime" label="停车时长(分钟)" sortable min-width="140" />
-        <el-table-column prop="note" label="备注" sortable min-width="400" />
+        <el-table-column prop="note" label="备注" sortable min-width="400" />-->
       </el-table>
     </div>
 
@@ -124,8 +161,6 @@ export default {
     return {
 
       isShow: false,
-      running: 0,
-      parking: 0,
       alarm: 0,
       warning: 0,
 
@@ -159,40 +194,111 @@ export default {
         longitude: 116.404,
         latitude: 39.915
       }] */
-      tableData: []
+      tableData: [],
+      startInput:null,
+      endInput:null,
+      simInput:null,
+      onlineChecked: false,
+      videoChecked:false,
+      defenceChecked:false,
+      options: [{
+        value: '1',
+        label: '鑫华汽车运输有限公司车队'
+      }, {
+        value: '2',
+        label: '鑫华汽车运输有限公司顺通车队'
+      }, {
+        value: '3',
+        label: '鑫华汽车运输有限公司龙业车队'
+      }],
+      fleetValue: null,
+      dialogVisible: false,
+      startSpeed: null,
+      endSpeed: null,
+      plateInput: null,
+      driverInput: null,
     }
   },
   computed: {
     ...mapGetters([
-      'carList'
+      'carList',
     ]),
     'vehicle_num': function() {
-      return this.tableData.length
+      return this.carList.length
+    },
+    'running': function() {
+      var num = 0
+      this.carList.forEach(item => {
+          if (item.is_online === '在线') { num++ }
+        }
+      )
+      return num
+    },
+    'parking': function() {
+      var num = 0
+      this.carList.forEach(item => {
+          if (item.is_online === '熄火') { num++ }
+        }
+      )
+      return num
     },
     'online_num': function() {
       var num = 0
-      this.tableData.forEach(item => {
+      this.carList.forEach(item => {
         if (item.is_online === '在线') { num++ }
       }
       )
       return num
     },
     'offline_num': function() {
-      return this.vehicle_num - this.online_num
+      var num = 0
+      this.carList.forEach(item => {
+          if (item.is_online === '离线') { num++ }
+        }
+      )
+      return num
     },
     'online_rate': function() {
       return this.vehicle_num <= 0 ? '0%' : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00) + '%'
     }
+
   },
   mounted() {
+    let that=this
     setTimeout(() => {
-      this.tableData = this.carList
-    }, 1000)
+      that.tableData = that.carList
+    }, 5000)
   },
   methods: {
+    throwEmit(val){
+
+      this.$emit('selectrow',val.plateNum)
+    },
     showTable() {
       // this.fillTable()
       this.isShow = !this.isShow
+    },
+    seachBottomTable(){
+
+      var list=[]
+      //6个if
+      //author：杨培林
+      this.tableData.filter(item => {
+         if(this.simInput==null||item.phoneNum==this.simInput){
+           if(this.plateInput==null||item.plateNum.indexOf(this.plateInput) >= 0) {
+             if(this.driverInput==null||item.driverName==this.driverInput){
+               if(this.fleetValue==null||item.fleetName.indexOf(this.fleetValue) >= 0) {
+                 if(this.startSpeed==null||this.endSpeed==null||(item.speed>this.startSpeed&&item.speed<this.endSpeed)) {
+                   if(!this.onlineChecked||item.is_online === '在线')
+                   list.push(item)
+                 }
+               }
+             }
+           }
+         }
+
+      })
+      this.tableData=list
     },
     showTableMax() {
       this.isShow = !this.isShow
@@ -214,7 +320,10 @@ export default {
       menu.style.left = e.clientX + 'px'
       menu.style.top = e.clientY + 'px'
       menu.style.width = '130px'
-    }
+    },
+    showAll(){
+      this.tableData=this.carList
+    },
   }
 }
 </script>
@@ -327,5 +436,17 @@ export default {
     margin-right: 15px !important;
     height: 1.2em !important;
     width: 1.2em !important;
+  }
+  .dialog-input-text >>> .el-input__inner {
+
+    height: 2.7em;
+    font-size: 12px;
+  }
+  .el-dialog--center >>> .el-checkbox__label{
+    font-size: 12px;
+  }
+  .font-span{
+    font-size: 12px;
+    padding-left: 3px;
   }
 </style>
