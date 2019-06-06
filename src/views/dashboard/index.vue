@@ -36,7 +36,7 @@
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
           <bm-circle :center="center" :radius="radius" stroke-color="blue" :stroke-opacity="0.5" :stroke-weight="2"></bm-circle>
-          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" @click="infoWindowOpen(marker)">
+          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" :icon="{url: imageUrl, size: {width: 30, height: 30}}"@click="infoWindowOpen(marker)">
             <bm-info-window :position="{lng: marker.lng, lat: marker.lat}" :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
               <div class="BMap_bubble_content" style="width: 480px;">
                 <div class="popup-basic">
@@ -59,7 +59,7 @@
                       <span class="svg-container">
                         <svg-icon icon-class="speed1" />
                       </span>
-                      <span class="popup-span">{{marker.speed}}</span>
+                      <span class="popup-span">{{marker.speed}}km/h</span>
                     </div>
                     <div style="float: left; width: 200px">
                       <span class="svg-container">
@@ -278,6 +278,7 @@ export default {
         dushu: '',
         wind: ''
       }],
+      imageUrl: require("@/icons/svg/icon-car/"+this.getImgPath(135)),
       locationDetailInfo: '',
       checkedNode: {},
       checkedNodes: [],
@@ -382,6 +383,13 @@ export default {
   mounted(){
   },
   methods: {
+    getImgPath(direction){ //获取markerImg的路径
+      let pic = (direction+22.5)/45+1;
+      if(pic > 8){
+        pic = 8;
+      }
+      return parseInt(pic)+".png";
+    },
     tableselectrow(rowplateNum){
       this.carList.forEach(item=>{
         if(rowplateNum==item.plateNum){
@@ -395,7 +403,6 @@ export default {
           }, 2000);
         }
       })
-
     },
     _getLocationDetailInfo({lng,lat}){
       getLocationDetailInfo({lng,lat}).then(response => {
@@ -455,6 +462,7 @@ export default {
         this.carList = dataList
         this.carList.forEach(item => {
           this.$set(item, 'showFlag', false)
+
         })
       })
     },
@@ -977,7 +985,7 @@ export default {
     infoWindowOpen(marker) {
       marker.showFlag = true
       this.currentCarInfo = marker
-      console.log(this.currentCarInfo)
+      console.log("车辆信息:"+this.currentCarInfo)
     },
     filterNode(value, data) {
       if (!value) return true
