@@ -32,8 +32,8 @@
             :value="item.value" style="font-size: 12px;">
           </el-option>
         </el-select>
-        <span class="font-span">车牌号：</span>
-        <el-input  class="dialog-input-text" style="width: 24%;" v-model="plateInput" placeholder="请输入内容"></el-input>
+        <span class="font-span">车牌尾号：</span>
+        <el-input  class="dialog-input-text" style="width: 16%;" v-model="plateInput" placeholder=""></el-input>
       </div>
       <div style="margin-top: 2px">
      </div>
@@ -278,7 +278,16 @@ export default {
       var list=[]
       this.carList.filter(item => {
          if(this.simInput==null||item.phoneNum==this.simInput){
-           list.push(item)
+           if(this.plateInput==null||item.plateNum.indexOf(this.plateInput) >= 0) {
+             if(this.driverInput==null||item.driverName==this.driverInput){
+               if(this.fleetValue==null||item.fleetName.indexOf(this.fleetValue) >= 0) {
+                 if(this.startSpeed==null||this.endSpeed==null||(item.speed>this.startSpeed&&item.speed<this.endSpeed)) {
+                   if(!this.onlineChecked||item.is_online === '在线')
+                   list.push(item)
+                 }
+               }
+             }
+           }
          }
 
       })
