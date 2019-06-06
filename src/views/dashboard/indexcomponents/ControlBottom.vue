@@ -20,11 +20,11 @@
         <span class="font-span">sim卡：</span>
         <el-input  class="dialog-input-text" style="width: 35%;" v-model="simInput" placeholder="请输入内容"></el-input>
         <span class="font-span">驾驶员：</span>
-        <el-input  class="dialog-input-text"   style="width: 35%"  v-model="endInput" placeholder="请输入内容"></el-input>
+        <el-input  class="dialog-input-text"   style="width: 35%"  v-model="driverInput" placeholder="请输入内容"></el-input>
       </div>
       <div style="margin-top: 2px">
         <span class="font-span">车队名称：</span>
-        <el-select v-model="fleetvalue" style="font-size: 12px;" class="dialog-input-text" placeholder="请选择">
+        <el-select v-model="fleetValue" style="font-size: 12px;" class="dialog-input-text" placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -33,7 +33,7 @@
           </el-option>
         </el-select>
         <span class="font-span">车牌号：</span>
-        <el-input  class="dialog-input-text" style="width: 24%;" v-model="simInput" placeholder="请输入内容"></el-input>
+        <el-input  class="dialog-input-text" style="width: 24%;" v-model="plateInput" placeholder="请输入内容"></el-input>
       </div>
       <div style="margin-top: 2px">
      </div>
@@ -45,15 +45,15 @@
       </div>
       <div style="margin-top: 2px">
         <span class="font-span">请填写车速范围：</span>
-        <el-input  class="dialog-input-text" style="width: 15%;" v-model="simInput" placeholder=""></el-input>
+        <el-input  class="dialog-input-text" style="width: 15%;" v-model="startSpeed" placeholder=""></el-input>
         <span class="font-span">至</span>
-        <el-input  class="dialog-input-text" style="width: 15%;" v-model="simInput" placeholder=""></el-input>
+        <el-input  class="dialog-input-text" style="width: 15%;" v-model="endSpeed" placeholder=""></el-input>
         <span class="font-span">km/h</span>
       </div>
       <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">查 询</el-button>
-  </span>
+      <el-button size="small" @click="carSelectionVisible = false">取 消</el-button>
+      <el-button size="small" type="primary" @click="seachBottomTable">查 询</el-button>
+      </span>
     </el-dialog>
 
     <div class="mapbottom">
@@ -211,8 +211,12 @@ export default {
         value: '3',
         label: '鑫华汽车运输有限公司龙业车队'
       }],
-      fleetvalue: '',
-      dialogVisible: false
+      fleetValue: null,
+      dialogVisible: false,
+      startSpeed: null,
+      endSpeed: null,
+      plateInput: null,
+      driverInput: null,
     }
   },
   computed: {
@@ -267,6 +271,9 @@ export default {
     showTable() {
       // this.fillTable()
       this.isShow = !this.isShow
+    },
+    seachBottomTable(){
+
     },
     showTableMax() {
       this.isShow = !this.isShow
