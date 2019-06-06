@@ -28,16 +28,24 @@
 
           <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" title="杨培林" @click="infoWindowOpen(marker)">
             <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}" :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
-              <div>{{ marker.plateNum }} {{ marker.driverName }}</div>
-              <div>{{ marker.speed }}{{ marker.time }}</div>
-              <el-button @click="toVideoMonitoring(marker.phoneNum)">视频监控</el-button>
-              <el-button @click="doTempLocationTrack">定位跟踪</el-button>
-              <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
-              <el-button @click="isTalkBackVisible">语音对讲</el-button>
-              <el-button @click="isPhotoShotVisible">图像监管</el-button>
-              <el-button @click="isDigitBillVisible">电子运单</el-button>
-              <el-button @click="isTextMsgVisible">文本下发</el-button>
-              <el-button @click="toTerminalParam(marker.phoneNum)">文本下发</el-button>
+              <div><i class="el-icon-s-opportunity">{{ marker.plateNum?marker.plateNum:"数据为空" }} </i></div>
+              <div><i class="el-icon-s-custom">{{ marker.driverName?marker.driverName:"数据为空" }}</i></div>
+              <div><i class="el-icon-s-flag">{{ marker.speed?marker.speed:"速度为空" }}</i></div>
+              <div><i class="el-icon-time">{{ marker.time?marker.time:"时间为空"}}</i></div>
+              <el-row>
+                <el-button @click="toVideoMonitoring(marker.phoneNum)"><i class="el-icon-video-camera">视频监控</i></el-button>
+              <el-button @click="doTempLocationTrack"><i class="el-icon-s-promotion">定位跟踪</i></el-button>
+              <el-button @click="isTrackPlaybackVisible"><i class="el-icon-s-marketing">轨迹回放</i></el-button>
+              </el-row>
+              <el-row>
+              <el-button @click="isTalkBackVisible"><i class="el-icon-phone">语音对讲</i></el-button>
+              <el-button @click="isPhotoShotVisible"><i class="el-icon-picture">图像监管</i></el-button>
+              <el-button @click="isDigitBillVisible"><i class="el-icon-s-ticket">电子运单</i></el-button>
+              </el-row>
+              <el-row>
+              <el-button @click="isTextMsgVisible"><i class="el-icon-s-order">文本下发</i></el-button>
+              <el-button @click="toTerminalParam(marker.phoneNum)"><i class="el-icon-menu">终端参数</i></el-button>
+              </el-row>
             </bm-info-window>
           </bm-marker>
 
