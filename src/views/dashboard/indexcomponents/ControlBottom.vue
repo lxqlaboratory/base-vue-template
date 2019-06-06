@@ -105,7 +105,7 @@
     </div>
 
     <div v-show="isShow" class="mapBottomTable">
-      <el-table :data="tableData"  border style="width: 100%" @row-contextmenu="row_contextmenu">
+      <el-table :data="tableData"  border style="width: 100%" @row-click="throwEmit"  @row-contextmenu="row_contextmenu">
         <el-table-column type="selection" min-width="50" />
         <el-table-column prop="plateNum" label="车牌号" sortable min-width="100" />
         <el-table-column prop="phoneNum" label="SIM卡号" sortable min-width="120" />
@@ -270,6 +270,10 @@ export default {
     }, 5000)
   },
   methods: {
+    throwEmit(val){
+
+      this.$emit('selectrow',val.phoneNum)
+    },
     showTable() {
       // this.fillTable()
       this.isShow = !this.isShow
@@ -277,6 +281,8 @@ export default {
     seachBottomTable(){
 
       var list=[]
+      //6个if
+      //author：杨培林
       this.tableData.filter(item => {
          if(this.simInput==null||item.phoneNum==this.simInput){
            if(this.plateInput==null||item.plateNum.indexOf(this.plateInput) >= 0) {

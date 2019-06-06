@@ -117,7 +117,7 @@
             </baidu-map>
           </div>
         </el-dialog>
-        <control-bottom ref="controlBottom" />
+        <control-bottom ref="controlBottom" @selectrow="tableselectrow"/>
       </el-main>
     </el-container>
   </div>
@@ -278,6 +278,21 @@ export default {
     }
   },
   methods: {
+    tableselectrow(rowPhoneNum){
+      this.carList.forEach(item=>{
+        if(rowPhoneNum==item.phoneNum){
+          this.center.lng = item.longitude
+          this.center.lat = item.latitude
+          this.radius=500
+          let that=this;
+          var t = setTimeout(function (){
+            that.radius=0 //半径设置成0圈就没啦
+            console.log(that.radius)
+          }, 2000);
+        }
+      })
+
+    },
     fetchData() {
       getTreeVehicleFormList().then(response => {
         this.vehicleList = response.data
