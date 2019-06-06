@@ -49,7 +49,7 @@
             <span class="svg-container">
                 <svg-icon icon-class="code" />
               </span>
-            <el-input type="text" id="code" v-model="code" class="code"  placeholder="验证码" />
+            <el-input maxlength="4" type="text" id="code"  v-model="code" class="code"  placeholder="验证码" @keyup.enter.native="handleLogin" />
           </el-form-item>
         </el-col>
         <el-col align="right" class="el-col-12">
@@ -191,9 +191,7 @@ export default {
     },
     makeCode(o, l) {
       for (let i = 0; i < l; i++) {
-        this.identifyCode += this.identifyCodes[
-          this.randomNum(0, this.identifyCodes.length)
-          ];
+        this.identifyCode += this.identifyCodes[this.randomNum(0, this.identifyCodes.length)]
       }
       console.log(this.identifyCode);
     },
@@ -327,5 +325,6 @@ $light_gray:#eee;
   .login-code{
     cursor: pointer;
   }
+
 }
 </style>

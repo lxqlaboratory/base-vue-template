@@ -12,8 +12,9 @@
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
   "dependencies": {
-    "@videojs/http-streaming": "^1.10.3",
-    "axios": "0.18.0",
+    "@videojs/http-streaming": "^1.10.2",
+    "axios": "^0.19.0",
+    "bmaplib.distancetool": "^1.0.2",
     "echarts": "^4.2.1",
     "element-ui": "2.9.1",
     "flv.js": "^1.5.0",
@@ -40,7 +41,7 @@
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.0.1",
-    "babel-jest": "23.6.0",
+    "babel-jest": "^24.8.0",
     "chalk": "2.4.2",
     "connect": "3.6.6",
     "eslint": "5.15.3",

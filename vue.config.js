@@ -40,6 +40,20 @@ module.exports = {
         pathRewrite: {
           '^/api': '/'
         }
+      },
+      '/v3': {
+        target: 'http://api.map.baidu.com/telematics',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/v3': '/v3'
+        }
+      },
+      '/v2': {
+        target: 'http://api.map.baidu.com/geocoder',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/v2': '/v2'
+        }
       }
     }
 

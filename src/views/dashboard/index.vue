@@ -20,35 +20,124 @@
         />
       </el-aside>
       <el-main style="height: calc(100vh - 34px);padding:0px;">
-        <baidu-map :center="center" :zoom="zoom" style="height: 100%;width: 100%;" @ready="handler" @click="getClickInfo">
-          <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" />
+        <baidu-map
+          class="map"
+          :center="center"
+          :scroll-wheel-zoom="true"
+          :zoom="zoom"
+          @moving="syncCenterAndZoom"
+          @moveend=""
+          @zoomend=""
+          style="height: 100%;width: 100%;"
+          @ready="handler"
+          @click="getClickInfo">
+          <bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-map-type>
           <!--<bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_LEFT" />-->
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
           <bm-circle :center="center" :radius="radius" stroke-color="blue" :stroke-opacity="0.5" :stroke-weight="2"></bm-circle>
-          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" title="杨培林" @click="infoWindowOpen(marker)">
-            <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}" :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
-              <div style="padding-top: 4px"><i class="el-icon-s-opportunity">{{ marker.plateNum?marker.plateNum:"数据为空" }} </i></div>
-              <div><i class="el-icon-s-custom">{{ marker.driverName?marker.driverName:"数据为空" }}</i></div>
-              <div><i class="el-icon-s-flag">{{ marker.speed?marker.speed+"km/h":"速度为空" }}</i></div>
-              <div style="padding-bottom: 8px" ><i class="el-icon-time">{{ marker.time?marker.time:"时间为空"}}</i></div>
-              <el-row>
-                <el-button @click="toVideoMonitoring(marker.phoneNum)"><i class="el-icon-video-camera">视频监控</i></el-button>
-              <el-button @click="doTempLocationTrack"><i class="el-icon-s-promotion">定位跟踪</i></el-button>
-              <el-button @click="isTrackPlaybackVisible"><i class="el-icon-s-marketing">轨迹回放</i></el-button>
-              </el-row>
-              <el-row>
-              <el-button @click="isTalkBackVisible"><i class="el-icon-phone">语音对讲</i></el-button>
-              <el-button @click="isPhotoShotVisible"><i class="el-icon-picture">图像监管</i></el-button>
-              <el-button @click="isDigitBillVisible"><i class="el-icon-s-ticket">电子运单</i></el-button>
-              </el-row>
-              <el-row>
-              <el-button @click="isTextMsgVisible"><i class="el-icon-s-order">文本下发</i></el-button>
-              <el-button @click="toTerminalParam(marker.phoneNum)"><i class="el-icon-menu">终端参数</i></el-button>
-              </el-row>
+          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" @click="infoWindowOpen(marker)">
+            <bm-info-window :position="{lng: marker.lng, lat: marker.lat}" :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
+              <div class="BMap_bubble_content" style="width: 480px;">
+                <div class="popup-basic">
+                  <div class="popup-basic-line">
+                  <div style="float: left; width: 200px;">
+                      <span class="svg-container">
+                        <svg-icon icon-class="carNum" />
+                      </span>
+                    <span class="popup-span">{{marker.plateNum}}</span>
+                  </div>
+                  <div style="float: left; width: 200px">
+                      <span class="svg-container">
+                        <svg-icon icon-class="driver" />
+                      </span>
+                    <span class="popup-span">{{marker.driverName}}</span>
+                  </div>
+                </div>
+                  <div class="popup-basic-line">
+                    <div style="float: left; width: 200px;">
+                      <span class="svg-container">
+                        <svg-icon icon-class="speed1" />
+                      </span>
+                      <span class="popup-span">{{marker.speed}}</span>
+                    </div>
+                    <div style="float: left; width: 200px">
+                      <span class="svg-container">
+                        <svg-icon icon-class="time1" />
+                      </span>
+                      <span class="popup-span">{{marker.time}}</span>
+                    </div>
+                  </div>
+                  <div class="popup-basic-line" style="border-bottom: none; height:auto">
+                      <span class="svg-container">
+                        <svg-icon icon-class="direct" />
+                      </span>
+                  <span class="popup-span" style="width:90%;font-weight:normal">{{locationDetailInfo}}</span>
+                  </div>
+                  <div class="popup-basic-line" style="border-bottom: none; float: left; height: 10%; margin-top:3px">
+                    <div v-for="item in weatherInfo" style="float: left;">
+                      <img v-bind:src="weatherInfo.dayPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
+                      <img v-bind:src="weatherInfo.nightPictureUrl"class="popup-img" style="height: 20px; width: 28px;">
+                      <span class="popup-span" style="font-weight:normal">{{weatherInfo.weather}}</span>
+                      <span class="popup-span" style="font-weight:normal">{{weatherInfo.dushu}}</span>
+                      <span class="popup-span" style="font-weight:normal">{{weatherInfo.wind}}</span>
+                      </div>
+                  </div>
+                </div>
+                <div style="width: 100%; height: 28%; float: left; padding-top: 8px; margin-top:5px">
+                  <div class="popup-btn">
+                      <span class="svg-container">
+                        <svg-icon icon-class="videoMonitor" />
+                      </span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="toVideoMonitoring(marker.phoneNum)">视频监控</span>
+                  </div>
+                  <div class="popup-btn">
+                      <span class="svg-container">
+                        <svg-icon icon-class="direct" />
+                      </span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="doTempLocationTrack">定位跟踪</span>
+                    </div>
+                  <div class="popup-btn">
+                      <span class="svg-container">
+                        <svg-icon icon-class="trackplay" />
+                      </span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTrackPlaybackVisible">轨迹回放</span>
+                    </div>
+                  <div class="popup-btn">
+                      <span class="svg-container">
+                        <svg-icon icon-class="voice" />
+                      </span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTalkBackVisible">语音对讲</span>
+                  </div>
+                  <div class="popup-btn">
+                      <span class="svg-container">
+                        <svg-icon icon-class="picture" />
+                      </span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isPhotoShotVisible">图像监管</span>
+                  </div>
+                  <div class="popup-btn">
+                      <span class="svg-container">
+                        <svg-icon icon-class="bill" />
+                      </span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isDigitBillVisible">电子运单</span>
+                  </div>
+                  <div class="popup-btn">
+                      <span class="svg-container">
+                        <svg-icon icon-class="text" />
+                      </span>
+                  <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTextMsgVisible">文本下发</span>
+                </div>
+                </div>
+              </div>
+              <!--<el-button @click="toVideoMonitoring(marker.phoneNum)">视频监控</el-button>
+              <el-button @click="doTempLocationTrack">定位跟踪</el-button>
+              <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
+              <el-button @click="isTalkBackVisible">语音对讲</el-button>
+              <el-button @click="isPhotoShotVisible">图像监管</el-button>
+              <el-button @click="isDigitBillVisible">电子运单</el-button>
+              <el-button @click="isTextMsgVisible">文本下发</el-button>-->
             </bm-info-window>
           </bm-marker>
-
 
         </baidu-map>
         <audio ref="audio" style="display:none" controls="controls">
@@ -131,6 +220,10 @@ import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg, tempLocatio
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
+import { insertViolation } from '@/api/vehicle-manage'
+import { getWeatherInfo } from "../../api/weather";
+import { getLocationDetailInfo } from "../../api/location";
+
 export default {
   name: 'Dashboard',
   components: {
@@ -178,6 +271,14 @@ export default {
         speed: '666km/h',
         time: '2018-12-25 10:49:48'
       }],
+      weatherInfo: [{
+        dayPictureUrl: '',
+        nightPictureUrl: '',
+        weather: '',
+        dushu: '',
+        wind: ''
+      }],
+      locationDetailInfo: '',
       checkedNode: {},
       checkedNodes: [],
       plateNumList: [],
@@ -276,6 +377,9 @@ export default {
         realTimeMediaControl('15153139702', 6, 4, 0, 0)
       }
     }
+
+  },
+  mounted(){
   },
   methods: {
     tableselectrow(rowplateNum){
@@ -292,6 +396,46 @@ export default {
         }
       })
 
+    },
+    _getLocationDetailInfo({lng,lat}){
+      getLocationDetailInfo({lng,lat}).then(response => {
+        let addressComponent = response.result.addressComponent;
+        let info = addressComponent.province+","+addressComponent.city+","+addressComponent.district+","+
+          addressComponent.street+""+addressComponent.street_number+""+addressComponent.direction;
+        let pois = response.result.pois.reverse();
+        let seInfo="",neInfo="",swInfo="",nwInfo="";
+        pois.forEach(item => {
+          if(item.direction == "东南"){
+            seInfo = ","+item.name+""+item.direction+"约"+item.distance+"米";
+          }else if(item.direction == "东北"){
+            neInfo = ","+item.name+""+item.direction+"约"+item.distance+"米";
+          }else if(item.direction == "西南"){
+            swInfo = ","+item.name+""+item.direction+"约"+item.distance+"米";
+          }else if(item.direction == "西北"){
+            nwInfo += ","+item.name+""+item.direction+"约"+item.distance+"米";
+          }
+        })
+        this.locationDetailInfo = info+seInfo+neInfo+swInfo+nwInfo+".";
+        console.log(response);
+      })
+    },
+    _getWeatherInfo({lng,lat}){
+      getWeatherInfo({lng,lat}).then( response =>{
+        this.weatherInfo.dayPictureUrl = response.results[0].weather_data[0].dayPictureUrl;
+        this.weatherInfo.nightPictureUrl = response.results[0].weather_data[0].nightPictureUrl;
+        this.weatherInfo.weather = response.results[0].weather_data[0].weather;
+        this.weatherInfo.dushu = response.results[0].weather_data[0].date.substring(14, response.results[0].weather_data[0].date.length - 1);
+        this.weatherInfo.wind = response.results[0].weather_data[0].wind;
+        console.log()
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    syncCenterAndZoom (e) {
+      const {lng, lat} = e.target.getCenter()
+      this.center.lng = lng
+      this.center.lat = lat
+      this.zoom = e.target.getZoom()
     },
     fetchData() {
       getTreeVehicleFormList().then(response => {
@@ -347,6 +491,8 @@ export default {
       console.log(e.point.lat)
       this.center.lng = e.point.lng
       this.center.lat = e.point.lat
+      this._getWeatherInfo({lng: e.point.lng,lat:e.point.lat})
+      this._getLocationDetailInfo({lng:e.point.lng,lat:e.point.lat})
     },
     GpsToBaiduPoint(lat,lng){
       var _t = this.wgs2bd(lat,lng);
@@ -997,6 +1143,60 @@ export default {
   .el-tree {
     background-color:#304156;
     color:#9b9b83
+  }
+  .popup-basic{
+    border: 1px solid #f7f7f7;
+    width: 100%;
+    height: auto;
+    background-color: #FBFBFD;
+    font-size: 20px;
+  }
+  .popup-basic-line{
+    width: 100%;
+    line-height: 40px;
+    border-bottom: 1px solid #eee
+  }
+  .popup-basic-line:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+  .popup-img{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    margin-left: 3px;
+  }
+  .small-img{
+    width: 30px; height: 30px;
+  }
+  .popup-span{
+    font-weight: bold;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+    font-size: 16px;
+  }
+  .popup-span:hover {
+     color: #2878d6;
+   }
+
+  .popup-btn{
+    width: 100px; float: left; margin-top: 5px;margin-bottom: 5px;margin-left: 10px;
+  }
+  #sele-map .l-btn-icon-left .l-btn-text{
+    margin:0;
+    margin-right: 20px;
+  }
+  .progress-bar i{
+    position: absolute;
+    top: 40%;
+    left: 45%;
+    color:#004d8d;
+    font-size:80px;
+    z-index:100
+
   }
 
 </style>
