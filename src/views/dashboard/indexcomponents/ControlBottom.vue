@@ -261,11 +261,12 @@ export default {
     'online_rate': function() {
       return this.vehicle_num <= 0 ? '0%' : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00) + '%'
     }
+
   },
   mounted() {
     setTimeout(() => {
       this.tableData = this.carList
-    }, 1000)
+    }, 5000)
   },
   methods: {
     showTable() {
@@ -274,6 +275,14 @@ export default {
     },
     seachBottomTable(){
 
+      var list=[]
+      this.carList.filter(item => {
+         if(this.simInput==null||item.phoneNum==this.simInput){
+           list.push(item)
+         }
+
+      })
+      this.tableData=list;
     },
     showTableMax() {
       this.isShow = !this.isShow
