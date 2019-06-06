@@ -66,7 +66,7 @@
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="all" />
-        <el-button type="text" style="color:green" @click="clearFilter">全部</el-button>&nbsp;&nbsp;&nbsp;{{ vehicle_num }}
+        <el-button type="text" style="color:green" @click="showAll">全部</el-button>&nbsp;&nbsp;&nbsp;{{ vehicle_num }}
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
@@ -224,11 +224,11 @@ export default {
       'carList'
     ]),
     'vehicle_num': function() {
-      return this.tableData.length
+      return this.carList.length
     },
     'running': function() {
       var num = 0
-      this.tableData.forEach(item => {
+      this.carList.forEach(item => {
           if (item.is_online === '在线') { num++ }
         }
       )
@@ -236,7 +236,7 @@ export default {
     },
     'parking': function() {
       var num = 0
-      this.tableData.forEach(item => {
+      this.carList.forEach(item => {
           if (item.is_online === '熄火') { num++ }
         }
       )
@@ -244,7 +244,7 @@ export default {
     },
     'online_num': function() {
       var num = 0
-      this.tableData.forEach(item => {
+      this.carList.forEach(item => {
         if (item.is_online === '在线') { num++ }
       }
       )
@@ -252,7 +252,7 @@ export default {
     },
     'offline_num': function() {
       var num = 0
-      this.tableData.forEach(item => {
+      this.carList.forEach(item => {
           if (item.is_online === '离线') { num++ }
         }
       )
@@ -264,8 +264,9 @@ export default {
 
   },
   mounted() {
+    let that=this
     setTimeout(() => {
-      this.tableData = this.carList
+      that.tableData = that.carList
     }, 5000)
   },
   methods: {
@@ -276,7 +277,7 @@ export default {
     seachBottomTable(){
 
       var list=[]
-      this.carList.filter(item => {
+      this.tableData.filter(item => {
          if(this.simInput==null||item.phoneNum==this.simInput){
            if(this.plateInput==null||item.plateNum.indexOf(this.plateInput) >= 0) {
              if(this.driverInput==null||item.driverName==this.driverInput){
@@ -291,7 +292,7 @@ export default {
          }
 
       })
-      this.tableData=list;
+      this.tableData=list
     },
     showTableMax() {
       this.isShow = !this.isShow
@@ -313,7 +314,10 @@ export default {
       menu.style.left = e.clientX + 'px'
       menu.style.top = e.clientY + 'px'
       menu.style.width = '130px'
-    }
+    },
+    showAll(){
+      this.tableData=this.carList
+    },
   }
 }
 </script>
