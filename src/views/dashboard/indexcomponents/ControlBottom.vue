@@ -9,14 +9,13 @@
       <div class="menu">功能5</div>
     </div>
 
-    <el-dialog title="智能选车" :visible.sync="carSelectionVisible">
-      <el-transfer
-        v-model="value2"
-        filterable
-        :filter-method="filterMethod"
-        filter-placeholder="请输入城市拼音"
-        :data="data2"
-      />
+    <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 60%" >
+      <div style="font-size: 12px">
+        <span>起点：</span>
+        <el-input style="width: 35%;height: 30px;line-height:30px;font-size: 12px" v-model="input" placeholder="请输入内容"></el-input>
+        <span style="padding-left: 5%">终点：</span>
+        <el-input style="width: 35%;height: 30px" v-model="input" placeholder="请输入内容"></el-input>
+      </div>
     </el-dialog>
 
     <div class="mapbottom">
@@ -68,7 +67,7 @@
     </div>
 
     <div v-show="isShow" class="mapBottomTable">
-      <el-table :data="tableData" height="35.5vh" border style="width: 100%" @row-contextmenu="row_contextmenu">
+      <el-table :data="tableData"  border style="width: 100%" @row-contextmenu="row_contextmenu">
         <el-table-column type="selection" min-width="50" />
         <el-table-column prop="plateNum" label="车牌号" sortable min-width="100" />
         <el-table-column prop="phoneNum" label="SIM卡号" sortable min-width="120" />
