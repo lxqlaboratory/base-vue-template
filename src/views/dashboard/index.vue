@@ -25,7 +25,7 @@
           <!--<bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_LEFT" />-->
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
-
+          <bm-circle :center="center" :radius="radius" stroke-color="blue" :stroke-opacity="0.5" :stroke-weight="2"></bm-circle>
           <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" title="杨培林" @click="infoWindowOpen(marker)">
             <bm-info-window title="车辆信息" :position="{lng: marker.lng, lat: marker.lat}" :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
               <div><i class="el-icon-s-opportunity">{{ marker.plateNum?marker.plateNum:"数据为空" }} </i></div>
@@ -48,6 +48,7 @@
               </el-row>
             </bm-info-window>
           </bm-marker>
+
 
         </baidu-map>
         <audio ref="audio" style="display:none" controls="controls">
@@ -162,6 +163,7 @@ export default {
         contents: '视频监控'
       },
       center: { lng: 0, lat: 0 },
+      radius:0,//画圈的半径
       zoom: 13,
       videoMonitoringVisible: false,
       trackPlaybackVisible: false,
@@ -195,8 +197,9 @@ export default {
       trackPlaybackWayPointList: [
         /* { lng: 116.404844, lat: 39.911836 },
         { lng: 116.308102, lat: 40.056057 }*/
-      ]
+      ],
       //* *****************************************//
+
     }
   },
   computed: {
@@ -754,7 +757,14 @@ export default {
       console.log(event)
       this.center.lng = event.longitude
       this.center.lat = event.latitude
+      this.radius=500
+      let that=this;
+      var t = setTimeout(function (){
+        that.radius=0 //半径设置成0圈就没啦
+        console.log(that.radius)
+      }, 2000);
     },
+
     /* doLocation() {
       this.plateNumList.forEach(item => {
         getSelectedVehiclePosition(item).then(response => {
