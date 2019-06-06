@@ -278,9 +278,9 @@ export default {
     }
   },
   methods: {
-    tableselectrow(rowPhoneNum){
+    tableselectrow(rowplateNum){
       this.carList.forEach(item=>{
-        if(rowPhoneNum==item.phoneNum){
+        if(rowplateNum==item.plateNum){
           this.center.lng = item.longitude
           this.center.lat = item.latitude
           this.radius=500

@@ -272,7 +272,7 @@ export default {
   methods: {
     throwEmit(val){
 
-      this.$emit('selectrow',val.phoneNum)
+      this.$emit('selectrow',val.plateNum)
     },
     showTable() {
       // this.fillTable()
