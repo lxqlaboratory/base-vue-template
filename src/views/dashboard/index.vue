@@ -341,18 +341,17 @@ export default {
         console.log('connected')
         client.subscribe('/exchange/jt808/location', function(message) {
           const p = JSON.parse(message.body)
-          // console.log(p)
+          console.log('ref.carList.filter进入')
           const terminalPhone = p.terminalPhone
           ref.carList.filter(item => {
-            console.log('filter')
-            console.log(item.phoneNum)
-            console.log(terminalPhone)
-            if (item.phoneNum === terminalPhone) {
+            if (item.phoneNum == terminalPhone) {
               ref.socketPlateNum = item.plateNum
-              // 设置 carList 的值
-              item.longitude = p.longitude
-              item.latitude = p.latitude
+              // 设置 carList 的值   "latitude" : 36665736, "longitude" : 117132753
+              item.longitude = p.longitude/1000000.0
+              item.latitude = p.latitude/1000000.0
               item.ACC = p.ACC
+              item.receiveData='1'//代表了已经接收到了信息
+              console.log(item.longitude+"--->"+item.latitude)
               console.log('terminalPhone')
               if (p.overSpeeding === true) {
                 ref.$message({
@@ -723,13 +722,19 @@ export default {
       setInterval(this.changeControlBottom, 15000)
     },
     changeControlBottom() {
-      this.carList[0].longitude = (116.404 + Math.random() / 20).toFixed(3)
-      this.carList[0].latitude = (39.915 + Math.random() / 20).toFixed(3)
-      this.carList[1].longitude = (116.404 + Math.random() / 20).toFixed(3)
-      this.carList[1].latitude = (39.915 + Math.random() / 20).toFixed(3)
-      this.carList[2].longitude = (116.404 + Math.random() / 20).toFixed(3)
-      this.carList[2].latitude = (39.915 + Math.random() / 20).toFixed(3)
-    },
+      if(this.carList[0].receiveData=='0'){
+        this.carList[0].longitude = (116.404 + Math.random() / 20).toFixed(3)
+        this.carList[0].latitude = (39.915 + Math.random() / 20).toFixed(3)
+      }
+      if(this.carList[1].receiveData=='0'){
+        this.carList[1].longitude = (116.404 + Math.random() / 20).toFixed(3)
+        this.carList[1].latitude = (39.915 + Math.random() / 20).toFixed(3)
+      }
+      if(this.carList[0].receiveData=='0'){
+        this.carList[2].longitude = (116.404 + Math.random() / 20).toFixed(3)
+        this.carList[2].latitude = (39.915 + Math.random() / 20).toFixed(3)
+      }
+      },
     infoWindowClose(marker) {
       marker.showFlag = false
     },
