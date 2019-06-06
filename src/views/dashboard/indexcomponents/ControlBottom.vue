@@ -221,7 +221,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'carList'
+      'carList',
     ]),
     'vehicle_num': function() {
       return this.tableData.length
