@@ -60,25 +60,25 @@
     </el-table>
 
     <div>
-      <el-dialog title="编辑" :visible.sync="dialogFormVisible" width="35%">
-        <el-form :model="insertRow" label-position="left" label-width="200px" style="width: 430px; margin-left:50px;">
+      <el-dialog title="编辑" :visible.sync="dialogFormVisible" width="500px">
+        <el-form :model="insertRow" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
           <el-form-item label="驾驶员姓名:">
-            <el-input v-model="insertRow.driverName"  autocomplete="off" />
+            <el-input v-model="insertRow.driverName"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="联系电话:">
-            <el-input  v-model="insertRow.driverPhoneNum" autocomplete="off" />
+            <el-input  v-model="insertRow.driverPhoneNum" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="身份证号:">
-            <el-input  v-model="insertRow.identificationCardNum" autocomplete="off" />
+            <el-input  v-model="insertRow.identificationCardNum" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="出生日期:">
-            <el-input v-model="insertRow.driverBirth" autocomplete="off" />
+            <el-input v-model="insertRow.driverBirth" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="驾驶证号:">
-            <el-input v-model="insertRow.drivingLicenseNum" autocomplete="off" />
+            <el-input v-model="insertRow.drivingLicenseNum" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="家庭住址:">
-            <el-input v-model="insertRow.driverAddress" autocomplete="off" />
+            <el-input v-model="insertRow.driverAddress" style="width: 80%" autocomplete="off" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -88,28 +88,28 @@
       </el-dialog>
     </div>
     <div>
-      <el-dialog title="保存" :visible.sync="dialogSaveFormVisible" width="35%">
-        <el-form :model="save" label-position="left" label-width="200px" style="width: 430px; margin-left:50px;">
+      <el-dialog title="保存" :visible.sync="dialogSaveFormVisible" width="500px">
+        <el-form :model="save" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
           <el-form-item label="驾驶员姓名:">
-            <el-input v-model="save.driverName"  autocomplete="off" />
+            <el-input v-model="save.driverName"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="联系电话:">
-            <el-input  v-model="save.driverPhoneNum" autocomplete="off" />
+            <el-input  v-model="save.driverPhoneNum" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="身份证号:">
-            <el-input  v-model="save.identificationCardNum" autocomplete="off" />
+            <el-input  v-model="save.identificationCardNum" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="出生日期:">
-            <el-input v-model="save.driverBirth" autocomplete="off" />
+            <el-input v-model="save.driverBirth" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="驾驶证号:">
-            <el-input v-model="save.drivingLicenseNum" autocomplete="off" />
+            <el-input v-model="save.drivingLicenseNum" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="家庭住址:">
-            <el-input v-model="save.driverAddress" autocomplete="off" />
+            <el-input v-model="save.driverAddress" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="选择车牌号码:">
-            <el-select v-model="plateValue" filterable placeholder="请选择车牌号码">
+            <el-select v-model="plateValue"  style="width: 80%" filterable placeholder="请选择车牌号码">
               <el-option
                 v-for="item in plateList"
                 :key="item.vehicleId"
