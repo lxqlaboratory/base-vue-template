@@ -25,8 +25,8 @@
       </el-table-column>
       <el-table-column label="操作" width="135" align="center">
         <template slot-scope="scope">
-          <el-button @click="show(scope.row)" type="text" size="small">查看</el-button>
           <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
+          <el-button @click="delete(scope.row)" type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -57,7 +57,7 @@ export default {
       })
       this.listLoading = false
     },
-    show(row) {
+    delete(row) {
       console.log(row);
     },
     edit(row) {

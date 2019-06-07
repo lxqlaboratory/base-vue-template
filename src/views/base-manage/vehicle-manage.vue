@@ -24,7 +24,7 @@
       fit
       highlight-current-row
     >
-      <el-table-column align="center" label="ID" width="50">
+      <el-table-column align="center" label="ID" fixed width="50">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
@@ -85,6 +85,12 @@
       </el-table-column>
       <el-table-column label="状态" width="110" align="center">
         <template slot-scope="scope" />
+      </el-table-column>
+      <el-table-column label="操作" width="175"  fixed="right" align="center">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="edit(scope.row)"  >编辑</el-button>
+          <el-button size="mini" @click="edit(scope.row)"  >删除</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
