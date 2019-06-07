@@ -71,17 +71,17 @@
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="location" />
-        <el-button type="text" style="color:red" @click="clearFilter">运行</el-button>&nbsp;&nbsp;&nbsp;{{ running }}
+        <el-button type="text" style="color:red" @click="showRunning">运行</el-button>&nbsp;&nbsp;&nbsp;{{ running }}
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="car_park" />
-        <el-button type="text" style="color:blueviolet" @click="clearFilter">停车</el-button>&nbsp;&nbsp;&nbsp;{{ parking }}
+        <el-button type="text" style="color:blueviolet" @click="showParking">停车</el-button>&nbsp;&nbsp;&nbsp;{{ parking }}
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="offline" />
-        <el-button type="text" style="color:gray" @click="clearFilter">离线</el-button>&nbsp;&nbsp;&nbsp;{{ offline_num }}
+        <el-button type="text" style="color:gray" @click="showOffline">离线</el-button>&nbsp;&nbsp;&nbsp;{{ offline_num }}
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
@@ -323,6 +323,27 @@ export default {
     },
     showAll(){
       this.tableData=this.carList
+    },
+    showRunning(){
+      this.tableData=[]
+        this.carList.forEach(item=>{
+        if(item.is_online=="在线")
+          this.tableData.push(item)
+      })
+    },
+    showParking(){
+      this.tableData=[]
+      this.carList.forEach(item=>{
+        if(item.is_online=="熄火")
+          this.tableData.push(item)
+      })
+    },
+    showOffline(){
+      this.tableData=[]
+      this.carList.forEach(item=>{
+        if(item.is_online=="离线")
+          this.tableData.push(item)
+      })
     },
   }
 }
