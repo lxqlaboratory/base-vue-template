@@ -36,7 +36,7 @@
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
           <bm-circle :center="center" :radius="radius" stroke-color="blue" :stroke-opacity="0.5" :stroke-weight="2"></bm-circle>
-          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" :icon="{url: imageUrl, size: {width: 30, height: 30}}"@click="infoWindowOpen(marker)">
+          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" :icon="{url: marker.imageUrl, size: {width: 30, height: 30}}"@click="infoWindowOpen(marker)">
             <bm-label :content= "marker.plateNum" :position="{lng: marker.longitude, lat: marker.latitude}" :offset="{width: -20, height: 25}" :labelStyle="{color : 'black',
                 borderColor: '#CDBA96',
                 backgroundColor: null,
@@ -286,7 +286,7 @@ export default {
         wind: ''
       }],
       direction: 0,
-      imageUrl: require("@/icons/svg/icon-car/"+this.getImgPath(0)),
+      //imageUrl: require("@/icons/svg/icon-car/"+this.getImgPath(0)),
       locationDetailInfo: '',
       checkedNode: {},
       checkedNodes: [],
@@ -471,7 +471,7 @@ export default {
         this.carList = dataList
         this.carList.forEach(item => {
           this.$set(item, 'showFlag', false)
-
+          this.$set(item, 'imageUrl', require("@/icons/svg/icon-car/"+this.getImgPath((item.direction))))
         })
       })
     },
