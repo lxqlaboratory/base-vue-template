@@ -15,37 +15,37 @@
       fit
       highlight-current-row
     >
-      <el-table-column align="center" label="ID" width="50">
+      <el-table-column align="center" label="ID" min-width="10">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="驾驶员姓名" width ="150" align="center">
+      <el-table-column label="驾驶员姓名" min-width="20" align="center">
         <template slot-scope="scope">
           {{ scope.row.driverName }}
         </template>
       </el-table-column>
-      <el-table-column label="联系电话" width="150" align="center">
+      <el-table-column label="联系电话" min-width="20" align="center">
         <template slot-scope="scope">
           {{ scope.row.driverPhoneNum }}
         </template>
       </el-table-column>
-      <el-table-column label="从业资格证类型" width="150" align="center">
+      <el-table-column label="从业资格证类型" min-width="20" align="center">
         <template slot-scope="scope">
           {{ scope.row.driverPhoneNum }}
         </template>
       </el-table-column>
-      <el-table-column label="是否兼职押运员" width="150" align="center">
+      <el-table-column label="是否兼职押运员" min-width="20" align="center">
         <template slot-scope="scope">
           {{ scope.row.driverPhoneNum }}
         </template>
       </el-table-column>
-      <el-table-column label="驾驶证号" width="250" align="center">
+      <el-table-column label="驾驶证号" min-width="40" align="center">
         <template slot-scope="scope">
           {{ scope.row.drivingLicenseNum }}
         </template>
       </el-table-column>
-      <el-table-column label="从业资格证号" width="150" align="center">
+      <el-table-column label="从业资格证号" min-width="30" align="center">
         <template slot-scope="scope">
           {{ scope.row.driverPhoneNum }}
         </template>
