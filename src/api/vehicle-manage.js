@@ -18,3 +18,33 @@ export function insertViolation(terminalPhone, violationContent,longitude, latit
     }
   })
 }
+export function editCarList(vehicleId,plateNum,simNum,fleetName,driverId,ownerName,ownerPhoneNum) {
+  return request({
+    url: '/func/web/editCarList',
+    method: 'POST',
+    data: {
+      vehicleId,
+      plateNum,
+      simNum,
+      fleetName,
+      driverId,
+      ownerName,
+      ownerPhoneNum
+    }
+  })
+}
+export function saveCarList() {
+  return request({
+    url: '/func/web/saveCarList',
+    method: 'POST'
+  })
+}
+export function deleteCarList(vehicleId) {
+  return request({
+    url: '/func/web/deleteCarList',
+    method: 'POST',
+    data: {
+      vehicleId
+    }
+  })
+}

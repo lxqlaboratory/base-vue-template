@@ -105,15 +105,98 @@
         </template>
       </el-table-column>
     </el-table>
-
-
+    <div>
+      <el-dialog title="编辑" :visible.sync="dialogFormVisible" width="500px">
+        <el-form :model="insertRow" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
+          <el-form-item label="驾驶证号:">
+            <el-input v-model="insertRow.plateNum"  style="width: 80%" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="SIM卡号:">
+            <el-input  v-model="insertRow.simNum" style="width: 80%" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="所属车队:">
+            <el-select v-model="fleetNameEdit" filterable placeholder="请选择">
+              <el-option
+                v-for="item in fleetList"
+                :key="item.companyName"
+                :label="item.companyName"
+                :value="item.companyName"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="所属司机:">
+            <el-select v-model="driverNameQuery" filterable   style="margin-bottom: 10px" placeholder="请选择">
+              <el-option
+                v-for="item in driverList"
+                :key="item.driverId"
+                :label="item.driverName"
+                :value="item.driverId"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="车主:">
+            <el-input v-model="insertRow.ownerName" style="width: 80%" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="车主电话:">
+            <el-input v-model="insertRow.ownerPhoneNum" style="width: 80%" autocomplete="off" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="update()">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
+    <div>
+      <el-dialog title="保存" :visible.sync="dialogSaveFormVisible" width="500px">
+        <el-form :model="save" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
+          <el-form-item label="驾驶证号:">
+            <el-input v-model="insertRow.plateNum"  style="width: 80%" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="SIM卡号:">
+            <el-input  v-model="insertRow.simNum" style="width: 80%" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="所属车队:">
+            <el-select v-model="fleetNameEdit" filterable placeholder="请选择">
+              <el-option
+                v-for="item in fleetList"
+                :key="item.companyName"
+                :label="item.companyName"
+                :value="item.companyName"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="所属司机:">
+            <el-select v-model="driverNameQuery" filterable   style="margin-bottom: 10px" placeholder="请选择">
+              <el-option
+                v-for="item in driverList"
+                :key="item.driverId"
+                :label="item.driverName"
+                :value="item.driverId"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="车主:">
+            <el-input v-model="insertRow.ownerName" style="width: 80%" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="车主电话:">
+            <el-input v-model="insertRow.ownerPhoneNum" style="width: 80%" autocomplete="off" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogSaveFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="saveDriver()">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
-import { getCarList } from '@/api/vehicle-manage'
+import { getCarList,deleteCarList,editCarList,saveCarList} from '@/api/vehicle-manage'
 import ElInput from '../../../node_modules/element-ui/packages/input/src/input.vue'
-
+import { getFleetList } from '@/api/fleet-manage'
+import { getDriverList} from '@/api/driver-manage'
 export default {
   components: { ElInput },
   filters: {
@@ -127,9 +210,66 @@ export default {
         //
         //        }
       ],
+      driverList: [
+        //        {
+        //
+        //
+        //        }
+      ],
+      fleetList: [
+        //        {
+        //
+        //
+        //        }
+      ],
       plateNumQuery: '',
-      fleetNameQuery: ''
-
+      fleetNameQuery: '',
+      fleetNameEdit:'',
+      driverNameQuery:'',
+      dialogFormVisible: false,
+      dialogSaveFormVisible: false,
+      insertRow:{
+        vehicleId: '',
+        plateNum: '',
+        simNum: '',
+        fleetName:'',
+        driverId:'',
+        vehicleType:'',
+        operationPermitNum: '',
+        vehicleLicenceNum: '',
+        bridge:'',
+        ownerName:'',
+        ownerPhoneNum:'',
+        nameplateType1:'',
+        vehicleType1:'',
+        fuelType1:'',
+        plateColor1:'',
+        nameplateBrand1:'',
+        busRank1:'',
+        transportCertificateWord1:'',
+        operationStatus1:'',
+      },
+      save:{
+        vehicleId: '',
+        plateNum: '',
+        simNum: '',
+        fleetName:'',
+        driverId:'',
+        vehicleType:'',
+        operationPermitNum: '',
+        vehicleLicenceNum: '',
+        bridge:'',
+        ownerName:'',
+        ownerPhoneNum:'',
+        nameplateType1:'',
+        vehicleType1:'',
+        fuelType1:'',
+        plateColor1:'',
+        nameplateBrand1:'',
+        busRank1:'',
+        transportCertificateWord1:'',
+        operationStatus1:'',
+      },
     }
   },
   computed: {
@@ -148,8 +288,83 @@ export default {
       getCarList().then(response => {
         console.log(response)
         this.list = response.data
+      }),
+      getDriverList().then(response => {
+        this.driverList = response.data
+      }),
+      getFleetList().then(response => {
+        this.fleetList = response.data
       })
-    }
+    },
+    update(){
+      this.dialogFormVisible = false
+      editCarList(this.insertRow.vehicleId,this.insertRow.plateNum, this.insertRow.simNum,
+        this.fleetNameEdit, this.driverNameQuery , this.insertRow.ownerName, this.insertRow.ownerPhoneNum).then(res => {
+        if(res.re==1){
+          this.$message({
+            message: '更新成功',
+            type: 'success'
+          });
+        }else{
+          this.$message.error('更新失败');
+        }
+      }).catch(e => {
+
+      })
+    },
+    saveTemplate() {
+      this.dialogSaveFormVisible = false
+      saveMessageTemplateList(this.save.messageContent).then(res => {
+        console.log(res)
+        if(res.re==1){
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          });
+        }else{
+          this.$message.error('保存失败');
+        }
+        this.fetchData()
+      }).catch(e => {
+
+      })
+    },
+    openSave(){
+      this.dialogSaveFormVisible = true
+    },
+    edit(item) {
+      this.insertRow = item
+      this.dialogFormVisible = true
+    },
+    deleteContent(item) {
+      this.insertRow = item
+      this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteCarList(this.insertRow.vehicleId).then(res => {
+          if(res.re==1){
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
+            this.fetchData()
+          }else{
+            this.$message.error('删除失败');
+          }
+        }).catch(e => {
+
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      })
+
+    },
+
   }
 }
 </script>
