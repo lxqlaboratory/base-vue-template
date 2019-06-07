@@ -37,6 +37,13 @@
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
           <bm-circle :center="center" :radius="radius" stroke-color="blue" :stroke-opacity="0.5" :stroke-weight="2"></bm-circle>
           <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" :icon="{url: imageUrl, size: {width: 30, height: 30}}"@click="infoWindowOpen(marker)">
+            <bm-label :content= "marker.plateNum" :position="{lng: marker.longitude, lat: marker.latitude}" :offset="{width: -20, height: 25}" :labelStyle="{color : 'black',
+                borderColor: '#CDBA96',
+                backgroundColor: null,
+                fontSize : '12px',
+                height : '20px',
+                lineHeight : '20px',
+                fontFamily:'微软雅黑'}"/>
             <bm-info-window :position="{lng: marker.lng, lat: marker.lat}" :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
               <div class="BMap_bubble_content" style="width: 480px;">
                 <div class="popup-basic">
@@ -278,7 +285,8 @@ export default {
         dushu: '',
         wind: ''
       }],
-      imageUrl: require("@/icons/svg/icon-car/"+this.getImgPath(135)),
+      direction: 0,
+      imageUrl: require("@/icons/svg/icon-car/"+this.getImgPath(0)),
       locationDetailInfo: '',
       checkedNode: {},
       checkedNodes: [],
@@ -329,6 +337,7 @@ export default {
     this.$store.commit('app/showNavbar')
   },
   created: function() {
+    this.direction = 0
     this.$store.commit('app/hideNavbar')
     this.fetchData()
     setTimeout(() => {
