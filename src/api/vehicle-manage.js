@@ -33,10 +33,18 @@ export function editCarList(vehicleId,plateNum,simNum,fleetName,driverId,ownerNa
     }
   })
 }
-export function saveCarList() {
+export function saveCarList(plateNum,simNum,fleetName,driverId,ownerName,ownerPhoneNum) {
   return request({
     url: '/func/web/saveCarList',
-    method: 'POST'
+    method: 'POST',
+    data: {
+      plateNum,
+      simNum,
+      fleetName,
+      driverId,
+      ownerName,
+      ownerPhoneNum
+    }
   })
 }
 export function deleteCarList(vehicleId) {

@@ -128,9 +128,9 @@
             <el-select v-model="driverNameQuery" filterable   style="margin-bottom: 10px" placeholder="请选择">
               <el-option
                 v-for="item in driverList"
-                :key="item.driverId"
+                :key="item.personId"
                 :label="item.driverName"
-                :value="item.driverId"
+                :value="item.personId"
               />
             </el-select>
           </el-form-item>
@@ -151,10 +151,10 @@
       <el-dialog title="保存" :visible.sync="dialogSaveFormVisible" width="500px">
         <el-form :model="save" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
           <el-form-item label="驾驶证号:">
-            <el-input v-model="insertRow.plateNum"  style="width: 80%" autocomplete="off" />
+            <el-input v-model="save.plateNum"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="SIM卡号:">
-            <el-input  v-model="insertRow.simNum" style="width: 80%" autocomplete="off" />
+            <el-input  v-model="save.simNum" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="所属车队:">
             <el-select v-model="fleetNameEdit" filterable placeholder="请选择">
@@ -170,22 +170,22 @@
             <el-select v-model="driverNameQuery" filterable   style="margin-bottom: 10px" placeholder="请选择">
               <el-option
                 v-for="item in driverList"
-                :key="item.driverId"
+                :key="item.personId"
                 :label="item.driverName"
-                :value="item.driverId"
+                :value="item.personId"
               />
             </el-select>
           </el-form-item>
           <el-form-item label="车主:">
-            <el-input v-model="insertRow.ownerName" style="width: 80%" autocomplete="off" />
+            <el-input v-model="save.ownerName" style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="车主电话:">
-            <el-input v-model="insertRow.ownerPhoneNum" style="width: 80%" autocomplete="off" />
+            <el-input v-model="save.ownerPhoneNum" style="width: 80%" autocomplete="off" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogSaveFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="saveDriver()">确 定</el-button>
+          <el-button type="primary" @click="saveTemplate()">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -314,7 +314,8 @@ export default {
     },
     saveTemplate() {
       this.dialogSaveFormVisible = false
-      saveMessageTemplateList(this.save.messageContent).then(res => {
+      saveCarList(this.insertRow.plateNum, this.insertRow.simNum,
+        this.fleetNameEdit, this.driverNameQuery , this.insertRow.ownerName, this.insertRow.ownerPhoneNum).then(res => {
         console.log(res)
         if(res.re==1){
           this.$message({
