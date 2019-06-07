@@ -294,8 +294,8 @@ export default {
         size: { width: 52, height: 26 },
         opts: { anchor: { width: 27, height: 13 }}
       },
-      trackPlaybackStartPoint: { lng: 116.404844, lat: 39.911836 },
-      trackPlaybackEndPoint: { lng: 116.308102, lat: 40.056057 },
+      trackPlaybackStartPoint: {  },
+      trackPlaybackEndPoint: { },
       trackPlaybackWayPointList: [
         /* { lng: 116.404844, lat: 39.911836 },
         { lng: 116.308102, lat: 40.056057 }*/
@@ -1033,7 +1033,9 @@ export default {
     }, */
     // 轨迹回放用到的方法
     trackPlaybackDraw() {
-      getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
+      this.trackPlaybackStartPoint={ lng: 116.404844, lat: 39.911836 }
+      this.trackPlaybackEndPoint={ lng: 116.308102, lat: 40.056057 }
+      /*getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
         this.vehiclePositionFromList = response.data
         if (this.vehiclePositionFromList.length() > 0) {
           console.log(this.vehiclePositionFromList)
@@ -1042,7 +1044,7 @@ export default {
           this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.length() - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.length() - 1].lat }
           console.log('this.trackPlaybackStartPoint=' + this.trackPlaybackStartPoint)
         }
-      })
+      })*/
     },
     reset() {
       this.play = false

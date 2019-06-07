@@ -79,3 +79,17 @@ export default {
   }
 }
 </script>
+<style>
+  colgroup {
+    position: absolute;
+    width: 100% !important;
+    display: flex;
+  }
+  col {
+    flex: 1;
+    text-align: center;
+  }
+  table,tbody,thead {
+    width: 100% !important;
+  }
+</style>
