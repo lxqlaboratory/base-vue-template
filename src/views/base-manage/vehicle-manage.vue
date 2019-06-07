@@ -18,81 +18,95 @@
         :value="item.fleetName"
       />
     </el-select>
+    <el-button type="primary" round @click="openSave()" style="margin-bottom: 10px">增加</el-button>
     <el-table
       :data="tableList"
-      border
-      fit
-      highlight-current-row
-    >
-      <el-table-column align="center" label="ID" fixed width="50">
+      style="width: 100%">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="车牌号">
+              <span>{{ props.row.plateNum }}</span>
+            </el-form-item>
+            <el-form-item label="所属车队">
+              <span>{{ props.row.fleetName }}</span>
+            </el-form-item>
+            <el-form-item label="司机姓名">
+              <span>{{ props.row.driverName }}</span>
+            </el-form-item>
+            <el-form-item label="车主">
+              <span>{{ props.row.ownerName }}</span>
+            </el-form-item>
+            <el-form-item label="车主电话">
+              <span>{{ props.row.ownerPhoneNum }}</span>
+            </el-form-item>
+            <el-form-item label="单/双桥">
+              <span>{{ props.row.bridge }}</span>
+            </el-form-item>
+            <el-form-item label="营运证号">
+              <span>{{ props.row.operationPermitNum }}</span>
+            </el-form-item>
+            <el-form-item label="行车证号">
+              <span>{{ props.row.vehicleLicenceNum }}</span>
+            </el-form-item>
+            <el-form-item label="[运政]铭牌型号">
+              <span>{{ props.row.nameplateType1 }}</span>
+            </el-form-item>
+            <el-form-item label="[运政]车辆类型">
+              <span>{{ props.row.vehicleType1 }}</span>
+            </el-form-item>
+            <el-form-item label="[运政]车牌颜色">
+              <span>{{ props.row.plateColor1 }}</span>
+            </el-form-item>
+            <el-form-item label="[运政]铭牌厂牌">
+              <span>{{ props.row.nameplateBrand1 }}</span>
+            </el-form-item>
+            <el-form-item label="[运政]道路运输证字">
+              <span>{{ props.row.transportCertificateWord1 }}</span>
+            </el-form-item>
+            <el-form-item label="[运政]车辆营运状态">
+              <span>{{ props.row.operationStatus1 }}</span>
+            </el-form-item>
+            <el-form-item label="[运政]经营范围类别">
+              <span>{{ props.row.businessScope1 }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="ID" min-width="10">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="车牌号"width="110" align="center">
+      <el-table-column
+        label="车牌号" min-width="10"
+        prop="plateNum">
+      </el-table-column>
+      <el-table-column
+        label="所属车队" min-width="30"
+        prop="fleetName">
+      </el-table-column>
+      <el-table-column
+        label="司机姓名" min-width="10"
+        prop="driverName">
+      </el-table-column>
+      <el-table-column
+        label="SIM卡号" min-width="20"
+        prop="simNum">
+      </el-table-column>
+      <el-table-column
+        label="车辆类型" min-width="20"
+        prop="vehicleType">
+      </el-table-column>
+      <el-table-column label="操作" min-width="20" align="center">
         <template slot-scope="scope">
-          {{ scope.row.plateNum }}
-        </template>
-      </el-table-column>
-      <el-table-column label="所属车队" width="250" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.fleetName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="司机姓名" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.driverName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="司机电话" width="110" align="center">
-        <template slot-scope="scope" />
-      </el-table-column>
-      <el-table-column label="随车电话" width="110" align="center">
-        <template slot-scope="scope" />
-      </el-table-column>
-      <el-table-column label="年审时间" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column label="距离年审天数" width="110" align="center">
-        <template slot-scope="scope" />
-      </el-table-column>
-      <el-table-column label="二级维护时间" width="110" align="center">
-        <template slot-scope="scope" />
-      </el-table-column>
-      <el-table-column label="距二级维护天数" width="150" align="center">
-        <template slot-scope="scope" />
-      </el-table-column>
-      <el-table-column label="业主电话" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column label="押运员电话" width="110" align="center">
-        <template slot-scope="scope" />
-      </el-table-column>
-      <el-table-column label="安全员电话" width="110" align="center">
-        <template slot-scope="scope" />
-      </el-table-column>
-      <el-table-column label="亲属电话" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column label="公司法人电话" width="110" align="center">
-        <template slot-scope="scope" />
-      </el-table-column>
-      <el-table-column label="状态" width="110" align="center">
-        <template slot-scope="scope" />
-      </el-table-column>
-      <el-table-column label="操作" width="175"  fixed="right" align="center">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="edit(scope.row)"  >编辑</el-button>
-          <el-button size="mini" @click="edit(scope.row)"  >删除</el-button>
+          <el-button @click="edit(scope.row)"  size="small">编辑</el-button>
+          <el-button @click="deleteContent(scope.row)"  size="small">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+
   </div>
 </template>
 
@@ -139,3 +153,17 @@ export default {
   }
 }
 </script>
+<style>
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+</style>
