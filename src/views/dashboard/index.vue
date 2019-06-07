@@ -35,8 +35,20 @@
           <!--<bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_LEFT" />-->
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
-          <bm-circle :center="center" :radius="radius" stroke-color="blue" :stroke-opacity="1" :stroke-weight="2"></bm-circle>
-          <bm-marker v-for="marker of carList" :position="{lng: marker.longitude, lat: marker.latitude}" :icon="{url: marker.imageUrl, size: {width: 30, height: 30}}"@click="infoWindowOpen(marker)">
+          <bm-circle
+            :center="center"
+            :radius="radius"
+            stroke-color="blue"
+            :stroke-opacity="1"
+            :stroke-weight="2">
+
+          </bm-circle>
+          <bm-marker
+            v-for="marker of carList"
+            :position="{lng: marker.longitude, lat: marker.latitude}"
+            :icon="{url: marker.imageUrl, size: {width: 30, height: 30}}"
+            :title="marker.plateNum"
+            @click="infoWindowOpen(marker)">
             <bm-label :content= "marker.plateNum" :position="{lng: marker.longitude, lat: marker.latitude}" :offset="{width: -20, height: 25}" :labelStyle="{color : 'black',
                 borderColor: '#CDBA96',
                 backgroundColor: null,
@@ -44,7 +56,11 @@
                 height : '20px',
                 lineHeight : '20px',
                 fontFamily:'微软雅黑'}"/>
-            <bm-info-window :position="{lng: marker.lng, lat: marker.lat}" :show="marker.showFlag" @close="infoWindowClose(marker)" @open="infoWindowOpen(marker)">
+            <bm-info-window
+              :position="{lng: marker.lng, lat: marker.lat}"
+              :show="marker.showFlag"
+              @close="infoWindowClose(marker)"
+              @open="infoWindowOpen(marker)">
               <div class="BMap_bubble_content" style="width: 480px;">
                 <div class="popup-basic">
                   <div class="popup-basic-line">
