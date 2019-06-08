@@ -66,7 +66,7 @@
             <el-input v-model="insertRow.driverName"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="联系电话:">
-            <el-input  v-model="insertRow.driverPhoneNum" style="width: 80%" autocomplete="off" />
+            <el-input  v-model="insertRow.driverPhoneNum" oninput ="value=value.replace(/[^\d]/g,'')"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="身份证号:">
             <el-input  v-model="insertRow.identificationCardNum" style="width: 80%" autocomplete="off" />
@@ -94,7 +94,7 @@
             <el-input v-model="save.driverName"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="联系电话:">
-            <el-input  v-model="save.driverPhoneNum" style="width: 80%" autocomplete="off" />
+            <el-input  v-model="save.driverPhoneNum" oninput ="value=value.replace(/[^\d]/g,'')"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="身份证号:">
             <el-input  v-model="save.identificationCardNum" style="width: 80%" autocomplete="off" />

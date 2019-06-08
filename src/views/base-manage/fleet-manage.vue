@@ -72,7 +72,7 @@
             <el-input  v-model="insertRow.address"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="电话:">
-            <el-input  v-model="insertRow.telephone" style="width: 80%" autocomplete="off" />
+            <el-input  v-model="insertRow.telephone" oninput ="value=value.replace(/[^\d]/g,'')"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="负责人:">
             <el-input  v-model="insertRow.manager" style="width: 80%" autocomplete="off" />
@@ -94,7 +94,7 @@
             <el-input  v-model="save.address"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="电话:">
-            <el-input  v-model="save.telephone" style="width: 80%" autocomplete="off" />
+            <el-input  v-model="save.telephone" oninput ="value=value.replace(/[^\d]/g,'')"  style="width: 80%" autocomplete="off" />
           </el-form-item>
           <el-form-item label="负责人:">
             <el-input  v-model="save.manager" style="width: 80%" autocomplete="off" />

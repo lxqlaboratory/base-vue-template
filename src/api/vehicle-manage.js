@@ -33,7 +33,9 @@ export function editCarList(vehicleId,plateNum,simNum,fleetName,driverId,ownerNa
     }
   })
 }
-export function saveCarList(plateNum,simNum,fleetName,driverId,ownerName,ownerPhoneNum) {
+export function saveCarList(plateNum,simNum,fleetName,driverId,ownerName,ownerPhoneNum,businessScope1, lineType1,transportCertificateNum1,nameplateType1
+  ,boolSleeper,vehicleType1,fuelType1,plateColor1 , nameplateBrand1 , busRank1 , transportCertificateWord1 , operationStatus1
+  ,vehicleLength , vehicleWidth, vehicleHeight,  vehicleTonnage,  availableRice,  availableVolume, availableWeight) {
   return request({
     url: '/func/web/saveCarList',
     method: 'POST',
@@ -43,7 +45,14 @@ export function saveCarList(plateNum,simNum,fleetName,driverId,ownerName,ownerPh
       fleetName,
       driverId,
       ownerName,
-      ownerPhoneNum
+      ownerPhoneNum,businessScope1, lineType1,
+      transportCertificateNum1,nameplateType1
+      ,boolSleeper,vehicleType1,fuelType1,plateColor1 ,
+      nameplateBrand1 , busRank1 ,
+      transportCertificateWord1 , operationStatus1
+      ,vehicleLength , vehicleWidth, vehicleHeight,
+      vehicleTonnage,  availableRice,
+      availableVolume, availableWeight
     }
   })
 }

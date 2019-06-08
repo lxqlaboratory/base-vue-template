@@ -149,41 +149,130 @@
     </div>
     <div>
       <el-dialog title="保存" :visible.sync="dialogSaveFormVisible" width="500px">
-        <el-form :model="save" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
-          <el-form-item label="驾驶证号:">
-            <el-input v-model="save.plateNum"  style="width: 80%" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="SIM卡号:">
-            <el-input  v-model="save.simNum" style="width: 80%" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="所属车队:">
-            <el-select v-model="fleetNameEdit" filterable placeholder="请选择">
-              <el-option
-                v-for="item in fleetList"
-                :key="item.companyName"
-                :label="item.companyName"
-                :value="item.companyName"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="所属司机:">
-            <el-select v-model="driverNameQuery" filterable   style="margin-bottom: 10px" placeholder="请选择">
-              <el-option
-                v-for="item in driverList"
-                :key="item.personId"
-                :label="item.driverName"
-                :value="item.personId"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="车主:">
-            <el-input v-model="save.ownerName" style="width: 80%" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="车主电话:">
-            <el-input v-model="save.ownerPhoneNum" style="width: 80%" autocomplete="off" />
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
+        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+          <el-tab-pane label="基本信息" name="first">
+            <el-form :model="save" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
+              <el-form-item label="驾驶证号:">
+                <el-input v-model="save.plateNum"  style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="SIM卡号:">
+                <el-input  v-model="save.simNum"  oninput ="value=value.replace(/[^\d]/g,'')"  style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="所属车队(必选):">
+                <el-select v-model="fleetNameEdit" filterable placeholder="请选择">
+                  <el-option
+                    v-for="item in fleetList"
+                    :key="item.companyName"
+                    :label="item.companyName"
+                    :value="item.companyName"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="所属司机(必选):">
+                <el-select v-model="driverNameQuery" filterable   style="margin-bottom: 10px" placeholder="请选择">
+                  <el-option
+                    v-for="item in driverList"
+                    :key="item.personId"
+                    :label="item.driverName"
+                    :value="item.personId"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="车主:">
+                <el-input v-model="save.ownerName" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="车主电话:">
+                <el-input v-model="save.ownerPhoneNum" oninput ="value=value.replace(/[^\d]/g,'')"  style="width: 80%" autocomplete="off" />
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="配置信息" name="second">
+            <el-form :model="save" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
+              <el-form-item label="[运政]铭牌型号:">
+                <el-input v-model="save.nameplateType1"  style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="是否卧铺车:">
+                <el-switch
+                  v-model="boolSleeper"
+                  active-text="是"
+                  inactive-text="不是">
+                </el-switch>
+              </el-form-item>
+              <el-form-item label="[运政]车辆类型:">
+                <el-input v-model="save.vehicleType1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="[运政]燃料类型:">
+                <el-input v-model="save.fuelType1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="[运政]车牌颜色:">
+                <el-input v-model="save.plateColor1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="[运政]铭牌厂牌:">
+                <el-input v-model="save.nameplateBrand1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="[运政]客运等级:">
+                <el-input v-model="save.busRank1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="[运政]道路运输证字:">
+                <el-input v-model="save.transportCertificateWord1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="[运政]车辆营运状态:">
+                <el-input v-model="save.operationStatus1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="车辆信息" name="third">
+            <el-form :model="save" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
+              <el-form-item label="车长:">
+                <el-input v-model="save.vehicleLength"  oninput ="value=value.replace(/[^0-9.]/g,'')"   style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="车宽:">
+                <el-input  v-model="save.vehicleWidth" oninput ="value=value.replace(/[^0-9.]/g,'')"   style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="车高:">
+                <el-input v-model="save.vehicleHeight" oninput ="value=value.replace(/[^0-9.]/g,'')"   style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="吨位:">
+                <el-input v-model="save.vehicleTonnage" oninput ="value=value.replace(/[^0-9.]/g,'')"   style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="可用米数:">
+                <el-input v-model="save.availableRice"  oninput ="value=value.replace(/[^0-9.]/g,'')"  style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="可用体积:">
+                <el-input v-model="save.availableVolume" oninput ="value=value.replace(/[^0-9.]/g,'')"  style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="可用重量:">
+                <el-input v-model="save.availableWeight" oninput ="value=value.replace(/[^0-9.]/g,'')"   style="width: 80%" autocomplete="off" />
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="牌照信息" name="fourth">
+            <el-form :model="save" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
+              <el-form-item label="车辆型号:">
+                <el-input v-model="save.vehicleModel"  style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="车辆类型:">
+                <el-input  v-model="save.vehicleType" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="营运证号:">
+                <el-input v-model="save.operationPermitNum" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="单/双桥:">
+                <el-input v-model="save.bridge" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="[运政]经营范围类别:">
+                <el-input v-model="save.businessScope1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="[运政]班线类型:">
+                <el-input v-model="save.lineType1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+              <el-form-item label="[运政]道路运输证号:">
+                <el-input v-model="save.transportCertificateNum1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogSaveFormVisible = false">取 消</el-button>
           <el-button type="primary" @click="saveTemplate()">确 定</el-button>
         </div>
@@ -223,11 +312,13 @@ export default {
         //        }
       ],
       plateNumQuery: '',
+      activeName: 'first',
       fleetNameQuery: '',
-      fleetNameEdit:'',
+      fleetNameEdit:'德州市鑫华汽车运输有限公司车队',
       driverNameQuery:'',
       dialogFormVisible: false,
       dialogSaveFormVisible: false,
+      boolSleeper: true,
       insertRow:{
         vehicleId: '',
         plateNum: '',
@@ -255,13 +346,18 @@ export default {
         simNum: '',
         fleetName:'',
         driverId:'',
+        vehicleModel:'',
         vehicleType:'',
         operationPermitNum: '',
         vehicleLicenceNum: '',
         bridge:'',
         ownerName:'',
         ownerPhoneNum:'',
+        businessScope1:'',
+        lineType1:'',
+        transportCertificateNum1:'',
         nameplateType1:'',
+        isSleeper:'',
         vehicleType1:'',
         fuelType1:'',
         plateColor1:'',
@@ -269,6 +365,13 @@ export default {
         busRank1:'',
         transportCertificateWord1:'',
         operationStatus1:'',
+        vehicleLength:'',
+        vehicleWidth:'',
+        vehicleHeight:'',
+        vehicleTonnage:'',
+        availableRice:'',
+        availableVolume:'',
+        availableWeight:'',
       },
     }
   },
@@ -291,10 +394,16 @@ export default {
       }),
       getDriverList().then(response => {
         this.driverList = response.data
+        if(this.driverList!=[]){
+          this.driverNameQuery=this.driverList[0].driverName
+        }
       }),
       getFleetList().then(response => {
         this.fleetList = response.data
       })
+    },
+    handleClick(tab, event) {
+
     },
     update(){
       this.dialogFormVisible = false
@@ -314,8 +423,15 @@ export default {
     },
     saveTemplate() {
       this.dialogSaveFormVisible = false
-      saveCarList(this.insertRow.plateNum, this.insertRow.simNum,
-        this.fleetNameEdit, this.driverNameQuery , this.insertRow.ownerName, this.insertRow.ownerPhoneNum).then(res => {
+      saveCarList(this.save.plateNum, this.save.simNum,
+        this.fleetNameEdit, this.driverNameQuery , this.save.ownerName, this.save.ownerPhoneNum,
+        this.save.businessScope1,  this.save.lineType1,  this.save.transportCertificateNum1,  this.save.nameplateType1
+        , this.boolSleeper,  this.save.vehicleType1,  this.save.fuelType1
+        , this.save.plateColor1 , this.save.nameplateBrand1 , this.save.busRank1 , this.save.transportCertificateWord1 ,
+        this.save.operationStatus1,  this.save.vehicleLength , this.save.vehicleWidth,
+        this.save.vehicleHeight,  this.save.vehicleTonnage,  this.save.availableRice,  this.save.availableVolume,
+        this.save.availableWeight
+      ).then(res => {
         console.log(res)
         if(res.re==1){
           this.$message({
