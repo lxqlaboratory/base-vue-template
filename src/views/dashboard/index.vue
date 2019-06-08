@@ -179,35 +179,35 @@
         <el-dialog title="电子运单" :visible.sync="digitBillVisible">
           暂时还没有电子运单
         </el-dialog>
-        <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
-          <el-button @click="talkBackAction">{{ talkBack }}</el-button>
+        <el-dialog title="语音对讲" width="20%" :visible.sync="talkBackVisible">
+          <el-button type="primary" round style="display:block;margin:0 auto" @click="talkBackAction">{{ talkBack }}</el-button>
         </el-dialog>
 
-        <el-dialog title="图像监管" :visible.sync="photoShotVisible">
+        <el-dialog title="图像监管" width="535px" :visible.sync="photoShotVisible">
           <el-date-picker
             v-model="photoShotTime"
             type="datetimerange"
-            align="right"
+            align="right" style="margin-bottom : 20px"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             :default-time="['12:00:00', '08:00:00']"
           />
-          <el-button>查询图片</el-button>
+          <el-button type="primary" round size="small"  min-width="10" style="margin-left: 10px ">查询图片</el-button>
           <el-radio-group v-model="radio">
             <el-radio :label="1">车前</el-radio>
             <el-radio :label="2">司机</el-radio>
             <el-radio :label="3">罐左侧</el-radio>
             <el-radio :label="4">罐右侧</el-radio>
           </el-radio-group>
-          <el-button @click="cameraShot">图片采集</el-button>
+          <el-button type="primary" round size="small" style="margin-left: 82px" @click="cameraShot">图片采集</el-button>
         </el-dialog>
 
         <el-dialog title="轨迹回放" width="80vw;" :visible.sync="trackPlaybackVisible">
-          <el-input v-model="trackPlaybackStartTime" type="date" size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
-          <el-input v-model="trackPlaybackEndTime" type="date" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
-          <el-button @click="trackPlaybackDraw">查询</el-button>
-          <el-button @click="trackPlaybackStart">开始</el-button>
-          <el-button @click="trackPlaybackStop">停止</el-button>
+          <el-input v-model="trackPlaybackStartTime" type="date" style="width: 40%;float: left;"size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
+          <el-input v-model="trackPlaybackEndTime" type="date" style="width: 40%;float: left;margin-left: 10px" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
+          <el-button @click="trackPlaybackDraw" style="margin-left: 10px;float: left; margin-bottom: 10px;margin-right: 20px" size="small">查询</el-button>
+          <el-button @click="trackPlaybackStart"  style="margin-left: 0px;"size="small">开始</el-button>
+          <el-button @click="trackPlaybackStop" size="small" style="margin-bottom: 10px">停止</el-button>
           <div style="width: 100%;height: 50vh;">
             <baidu-map class="map" :center="center" :zoom="11" style="height: 100%;width: 100%;">
               <bm-driving
@@ -619,6 +619,7 @@ export default {
               item.ACC = p.ACC
               item.direction=p.direction
               item.speed=p.speed
+              item.gbRecSpeed=p.speed
               item.elevation=p.elevation
               item.receiveData=1//代表了已经接收到了信息
               item.simulation = p.simulation
