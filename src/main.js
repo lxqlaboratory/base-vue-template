@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import echarts from 'echarts'
 import '@/styles/index.scss' // global css
-
+import moment from 'moment'
 import App from './App'
 import store from './store'
 import router from './router'
@@ -34,6 +34,8 @@ Vue.component('split-pane', splitPane)
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
 Vue.use(Toast)
+Vue.prototype.$moment = moment
+moment.locale('zh-cn')
 new Vue({
   el: '#app',
   router,

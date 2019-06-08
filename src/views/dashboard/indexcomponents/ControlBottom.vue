@@ -105,8 +105,35 @@
     </div>
 
     <div v-show="isShow" class="mapBottomTable">
-      <el-table :data="tableData"  border style="width: 100%" @row-click="throwEmit"  @row-contextmenu="row_contextmenu">
+      <el-table :data="tableData"  border style="width: 100%" @row-click="throwEmit"  height="250" @row-contextmenu="row_contextmenu">
       <!--  <el-table-column type="selection" min-width="50" />-->
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="驾驶证号">
+                <span>{{ props.row.driverLicense }}</span>
+              </el-form-item>
+              <el-form-item label="驾驶员号码">
+                <span>{{ props.row.driverPhoneNumber }}</span>
+              </el-form-item>
+              <el-form-item label="方向">
+                <span>{{ props.row.direction }}</span>
+              </el-form-item>
+              <el-form-item label="高程(海拔高度，单位为米)">
+                <span>{{ props.row.elevation }}</span>
+              </el-form-item>
+              <el-form-item label="模拟量">
+                <span>{{ props.row.simulation }}</span>
+              </el-form-item>
+              <el-form-item label="无线通信网络信号强度">
+                <span>{{ props.row.wirelessIntensity }}</span>
+              </el-form-item>
+              <el-form-item label="GNSS/定位卫星数">
+                <span>{{ props.row.satellitesNum }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
         <el-table-column prop="plateNum" label="车牌号" sortable min-width="100" />
         <el-table-column prop="phoneNum" label="SIM卡号" sortable min-width="120" />
         <el-table-column

@@ -615,8 +615,15 @@ export default {
               console.log(resultPoint)
               item.longitude = resultPoint[1]
               item.latitude = resultPoint[0]
+              item.is_online='在线'
               item.ACC = p.ACC
+              item.direction=p.direction
+              item.speed=p.speed
+              item.elevation=p.elevation
               item.receiveData=1//代表了已经接收到了信息
+              item.simulation = p.simulation
+              item.wirelessIntensity=p.wirelessIntensity
+              item.satellitesNum=p.satellitesNum
               console.log(item.longitude+"--->"+item.latitude)
               console.log('terminalPhone')
               if (p.overSpeeding === true) {
@@ -1233,5 +1240,16 @@ export default {
     z-index:100
 
   }
-
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
 </style>
