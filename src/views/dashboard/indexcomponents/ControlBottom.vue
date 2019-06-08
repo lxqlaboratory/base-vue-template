@@ -9,18 +9,18 @@
       <div class="menu">功能5</div>
     </div>
 
-    <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 74%" >
+    <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 74%">
       <div>
         <span class="font-span">起点：</span>
-        <el-input   class="dialog-input-text" style="width: 35%"   v-model="startInput" placeholder="请输入内容"></el-input>
+        <el-input v-model="startInput" class="dialog-input-text" style="width: 35%" placeholder="请输入内容" />
         <span class="font-span">终点：</span>
-        <el-input  class="dialog-input-text"   style="width: 35%"  v-model="endInput" placeholder="请输入内容"></el-input>
+        <el-input v-model="endInput" class="dialog-input-text" style="width: 35%" placeholder="请输入内容" />
       </div>
       <div style="margin-top: 2px">
         <span class="font-span">sim卡：</span>
-        <el-input  class="dialog-input-text" style="width: 35%;" v-model="simInput" placeholder="请输入内容"></el-input>
+        <el-input v-model="simInput" class="dialog-input-text" style="width: 35%;" placeholder="请输入内容" />
         <span class="font-span">驾驶员：</span>
-        <el-input  class="dialog-input-text"   style="width: 35%"  v-model="driverInput" placeholder="请输入内容"></el-input>
+        <el-input v-model="driverInput" class="dialog-input-text" style="width: 35%" placeholder="请输入内容" />
       </div>
       <div style="margin-top: 2px">
         <span class="font-span">车队名称：</span>
@@ -29,30 +29,29 @@
             v-for="item in options"
             :key="item.value"
             :label="item.label"
-            :value="item.value" style="font-size: 12px;">
-          </el-option>
+            :value="item.value"
+            style="font-size: 12px;"
+          />
         </el-select>
         <span class="font-span">车牌尾号：</span>
-        <el-input  class="dialog-input-text" style="width: 16%;" v-model="plateInput" placeholder=""></el-input>
+        <el-input v-model="plateInput" class="dialog-input-text" style="width: 16%;" placeholder="" />
       </div>
+      <div style="margin-top: 2px" />
       <div style="margin-top: 2px">
-     </div>
-      <div style="margin-top: 2px">
-      <el-checkbox class="el-dialog--center" v-model="onlineChecked" style=" padding-left: 3px;">选择在线车辆</el-checkbox>
-      <el-checkbox class="el-dialog--center"v-model="videoChecked" style=" padding-left: 3px;">选择视频车辆</el-checkbox>
-      <el-checkbox class="el-dialog--center" v-model="defenceChecked" style=" padding-left: 3px;">主动防御车辆</el-checkbox>
-
+        <el-checkbox v-model="onlineChecked" class="el-dialog--center" style=" padding-left: 3px;">选择在线车辆</el-checkbox>
+        <el-checkbox v-model="videoChecked" class="el-dialog--center" style=" padding-left: 3px;">选择视频车辆</el-checkbox>
+        <el-checkbox v-model="defenceChecked" class="el-dialog--center" style=" padding-left: 3px;">主动防御车辆</el-checkbox>
       </div>
       <div style="margin-top: 2px">
         <span class="font-span">请填写车速范围：</span>
-        <el-input  class="dialog-input-text" style="width: 15%;" v-model="startSpeed" placeholder=""></el-input>
+        <el-input v-model="startSpeed" class="dialog-input-text" style="width: 15%;" placeholder="" />
         <span class="font-span">至</span>
-        <el-input  class="dialog-input-text" style="width: 15%;" v-model="endSpeed" placeholder=""></el-input>
+        <el-input v-model="endSpeed" class="dialog-input-text" style="width: 15%;" placeholder="" />
         <span class="font-span">km/h</span>
       </div>
       <span slot="footer" class="dialog-footer">
-      <el-button size="small" @click="carSelectionVisible = false">取 消</el-button>
-      <el-button size="small" type="primary" @click="seachBottomTable">查 询</el-button>
+        <el-button size="small" @click="carSelectionVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="seachBottomTable">查 询</el-button>
       </span>
     </el-dialog>
 
@@ -105,8 +104,8 @@
     </div>
 
     <div v-show="isShow" class="mapBottomTable">
-      <el-table :data="tableData"  border style="width: 100%" @row-click="throwEmit"  height="250" @row-contextmenu="row_contextmenu">
-      <!--  <el-table-column type="selection" min-width="50" />-->
+      <el-table :data="tableData" border style="width: 100%" height="250" @row-click="throwEmit" @row-contextmenu="row_contextmenu">
+        <!--  <el-table-column type="selection" min-width="50" />-->
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -153,7 +152,7 @@
         <el-table-column prop="driverName" label="驾驶员" sortable min-width="120" />
         <!--<el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />-->
         <el-table-column prop="driverCompany" label="车队名称" sortable min-width="220" />
-       <!-- <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />
+        <!-- <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />
         <el-table-column prop="direction" label="方向" sortable min-width="80" />
         <el-table-column prop="oil_volume" label="油量(L)" sortable min-width="100" />
         <el-table-column prop="sim_flow" label="已用流量(M)" sortable min-width="130" />
@@ -172,62 +171,21 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'ControlBottom',
   data() {
-    const generateData2 = () => {
-      const data = []
-      const cities = ['上海', '北京', '广州', '深圳', '南京', '西安', '成都']
-      const pinyin = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'nanjing', 'xian', 'chengdu']
-      cities.forEach((city, index) => {
-        data.push({
-          label: city,
-          key: index,
-          pinyin: pinyin[index]
-        })
-      })
-      return data
-    }
     return {
-
       isShow: false,
       alarm: 0,
       warning: 0,
-
       carSelectionVisible: false,
-
-      data2: generateData2(),
-      value2: [],
       filterMethod(query, item) {
         return item.pinyin.indexOf(query) > -1
       },
-
-      value1: [1, 4],
-
-      /* tableData: [{
-        plateNum: '鲁N89689',
-        phoneNum: '15153139702',
-        is_online: '在线',
-        acc: '开',
-        speed: 80,
-        gbRecSpeed: 0,
-        longitude: 116.404,
-        latitude: 39.915
-      },
-      {
-        plateNum: '鲁NB3551',
-        phoneNum: '15153139702',
-        is_online: '离线',
-        acc: '开',
-        speed: 80,
-        gbRecSpeed: 0,
-        longitude: 116.404,
-        latitude: 39.915
-      }] */
       tableData: [],
-      startInput:null,
-      endInput:null,
-      simInput:null,
+      startInput: null,
+      endInput: null,
+      simInput: null,
       onlineChecked: false,
-      videoChecked:false,
-      defenceChecked:false,
+      videoChecked: false,
+      defenceChecked: false,
       options: [{
         value: '1',
         label: '鑫华汽车运输有限公司车队'
@@ -243,12 +201,12 @@ export default {
       startSpeed: null,
       endSpeed: null,
       plateInput: null,
-      driverInput: null,
+      driverInput: null
     }
   },
   computed: {
     ...mapGetters([
-      'carList',
+      'carList'
     ]),
     'vehicle_num': function() {
       return this.carList.length
@@ -256,16 +214,16 @@ export default {
     'running': function() {
       var num = 0
       this.carList.forEach(item => {
-          if (item.is_online === '在线') { num++ }
-        }
+        if (item.is_online === '在线') { num++ }
+      }
       )
       return num
     },
     'parking': function() {
       var num = 0
       this.carList.forEach(item => {
-          if (item.is_online === '熄火') { num++ }
-        }
+        if (item.is_online === '熄火') { num++ }
+      }
       )
       return num
     },
@@ -280,8 +238,8 @@ export default {
     'offline_num': function() {
       var num = 0
       this.carList.forEach(item => {
-          if (item.is_online === '离线') { num++ }
-        }
+        if (item.is_online === '离线') { num++ }
+      }
       )
       return num
     },
@@ -291,41 +249,37 @@ export default {
 
   },
   mounted() {
-    let that=this
+    const that = this
     setTimeout(() => {
       that.tableData = that.carList
     }, 5000)
   },
   methods: {
-    throwEmit(val){
-
-      this.$emit('selectrow',val.plateNum)
+    throwEmit(val) {
+      this.$emit('selectrow', val.plateNum)
     },
     showTable() {
       // this.fillTable()
       this.isShow = !this.isShow
     },
-    seachBottomTable(){
-
-      var list=[]
-      //6个if
-      //author：杨培林
+    seachBottomTable() {
+      var list = []
+      // 6个if
+      // author：杨培林
       this.tableData.filter(item => {
-         if(this.simInput==null||item.phoneNum==this.simInput){
-           if(this.plateInput==null||item.plateNum.indexOf(this.plateInput) >= 0) {
-             if(this.driverInput==null||item.driverName==this.driverInput){
-               if(this.fleetValue==null||item.fleetName.indexOf(this.fleetValue) >= 0) {
-                 if(this.startSpeed==null||this.endSpeed==null||(item.speed>this.startSpeed&&item.speed<this.endSpeed)) {
-                   if(!this.onlineChecked||item.is_online === '在线')
-                   list.push(item)
-                 }
-               }
-             }
-           }
-         }
-
+        if (this.simInput == null || item.phoneNum == this.simInput) {
+          if (this.plateInput == null || item.plateNum.indexOf(this.plateInput) >= 0) {
+            if (this.driverInput == null || item.driverName == this.driverInput) {
+              if (this.fleetValue == null || item.fleetName.indexOf(this.fleetValue) >= 0) {
+                if (this.startSpeed == null || this.endSpeed == null || (item.speed > this.startSpeed && item.speed < this.endSpeed)) {
+                  if (!this.onlineChecked || item.is_online === '在线') { list.push(item) }
+                }
+              }
+            }
+          }
+        }
       })
-      this.tableData=list
+      this.tableData = list
     },
     showTableMax() {
       this.isShow = !this.isShow
@@ -348,30 +302,27 @@ export default {
       menu.style.top = e.clientY + 'px'
       menu.style.width = '130px'
     },
-    showAll(){
-      this.tableData=this.carList
+    showAll() {
+      this.tableData = this.carList
     },
-    showRunning(){
-      this.tableData=[]
-        this.carList.forEach(item=>{
-        if(item.is_online=="在线")
-          this.tableData.push(item)
+    showRunning() {
+      this.tableData = []
+      this.carList.forEach(item => {
+        if (item.is_online == '在线') { this.tableData.push(item) }
       })
     },
-    showParking(){
-      this.tableData=[]
-      this.carList.forEach(item=>{
-        if(item.is_online=="熄火")
-          this.tableData.push(item)
+    showParking() {
+      this.tableData = []
+      this.carList.forEach(item => {
+        if (item.is_online == '熄火') { this.tableData.push(item) }
       })
     },
-    showOffline(){
-      this.tableData=[]
-      this.carList.forEach(item=>{
-        if(item.is_online=="离线")
-          this.tableData.push(item)
+    showOffline() {
+      this.tableData = []
+      this.carList.forEach(item => {
+        if (item.is_online == '离线') { this.tableData.push(item) }
       })
-    },
+    }
   }
 }
 </script>

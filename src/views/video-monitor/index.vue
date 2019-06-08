@@ -15,17 +15,15 @@
           :props="defaultProps"
           default-expand-all
           :filter-node-method="filterNode"
+          @node-click="reload"
         />
       </el-aside>
-      <el-main class="video-div">
+      <el-main>
         <!--<video-player
           class="vjs-custom-skin"
           :options="playerOptions"
         />-->
-        <video ref="channel1" class="video1" autoplay muted />
-        <video ref="channel2" class="video2" autoplay muted />
-        <video ref="channel3" class="video3" autoplay muted />
-        <video ref="channel4" class="video4" autoplay muted />
+        <players v-if="isRouterAlive" ref="players" />
       </el-main>
     </el-container>
   </div>
@@ -33,20 +31,20 @@
 
 <script>
 import { mediaTransform } from '@/api/terminal'
-import FlvJs from 'flv.js'
-import videoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import 'vue-video-player/src/custom-theme.css'
 require('@videojs/http-streaming/dist/videojs-http-streaming.min')
 import { mapGetters } from 'vuex'
+import Players from './players/players'
 
 export default {
   name: 'VideoMonitor',
   components: {
-    /* videoPlayer */
+    players: Players
   },
   data() {
     return {
+      isRouterAlive: true,
       /**
        * terminal result
        * 0：成功∕确认
@@ -88,45 +86,6 @@ export default {
   },
   mounted: function() {
     this.data = this.carTree
-    if (FlvJs.isSupported()) {
-      const flvPlayer1 = FlvJs.createPlayer({
-        cors: true,
-        withCredentials: false,
-        isLive: true,
-        type: 'flv',
-        url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=15153139702_1'
-      })
-      const flvPlayer2 = FlvJs.createPlayer({
-        cors: true,
-        withCredentials: false,
-        isLive: true,
-        type: 'flv',
-        url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
-      })
-      const flvPlayer3 = FlvJs.createPlayer({
-        cors: true,
-        withCredentials: false,
-        isLive: true,
-        type: 'flv',
-        url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
-      })
-      const flvPlayer4 = FlvJs.createPlayer({
-        cors: true,
-        withCredentials: false,
-        isLive: true,
-        type: 'flv',
-        url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
-      })
-      flvPlayer1.attachMediaElement(this.$refs.channel1)
-      flvPlayer2.attachMediaElement(this.$refs.channel2)
-      flvPlayer3.attachMediaElement(this.$refs.channel3)
-      flvPlayer4.attachMediaElement(this.$refs.channel4)
-      flvPlayer1.load()
-      flvPlayer2.load()
-      flvPlayer3.load()
-      flvPlayer4.load()
-
-    }
   },
   methods: {
     filterNode(value, data) {
@@ -139,52 +98,16 @@ export default {
         console.log('response.data ' + response.data.result)
       })
       console.log('videoMonitoringResult ' + this.videoMonitoringResult)
+    },
+    reload(event) {
+      console.log(event)
+      this.isRouterAlive = !this.isRouterAlive
     }
   }
 }
 </script>
 
 <style scoped>
-  .video-div {
-    position: absolute;
-    top: 0;
-    left: 265px;
-    padding: 0;
-    width: 960px;
-    height: 860px;
-  }
-  .video1 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 470px;
-    height: 400px;
-    background-color: black;
-  }
-  .video2 {
-    position: absolute;
-    top: 0;
-    left: 471px;
-    width: 470px;
-    height: 400px;
-    background-color: black;
-  }
-  .video3 {
-    position: absolute;
-    top: 401px;
-    left: 0;
-    width: 470px;
-    height: 400px;
-    background-color: black;
-  }
-  .video4 {
-    position: absolute;
-    top: 401px;
-    left: 471px;
-    width: 470px;
-    height: 400px;
-    background-color: black;
-  }
   .el-aside {
     background-color:#304156;
   }
