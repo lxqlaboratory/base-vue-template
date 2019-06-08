@@ -18,14 +18,14 @@
         />
       </el-aside>
       <el-main class="video-div">
-        <video-player
+        <!--<video-player
           class="vjs-custom-skin"
           :options="playerOptions"
-        />
-        <video ref="channel1" class="video1" />
-        <video ref="channel2" class="video2" />
-        <video ref="channel3" class="video3" />
-        <video ref="channel4" class="video4" />
+        />-->
+        <video ref="channel1" class="video1" autoplay muted />
+        <video ref="channel2" class="video2" autoplay muted />
+        <video ref="channel3" class="video3" autoplay muted />
+        <video ref="channel4" class="video4" autoplay muted />
       </el-main>
     </el-container>
   </div>
@@ -43,7 +43,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'VideoMonitor',
   components: {
-    videoPlayer
+    /* videoPlayer */
   },
   data() {
     return {
@@ -94,7 +94,7 @@ export default {
         withCredentials: false,
         isLive: true,
         type: 'flv',
-        url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
+        url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=15153139702_1'
       })
       const flvPlayer2 = FlvJs.createPlayer({
         cors: true,
@@ -122,7 +122,7 @@ export default {
       flvPlayer3.attachMediaElement(this.$refs.channel3)
       flvPlayer4.attachMediaElement(this.$refs.channel4)
       flvPlayer1.load()
-      // flvPlayer1.play()
+      flvPlayer1.play()
       flvPlayer2.load()
       // flvPlayer2.play()
       flvPlayer3.load()
