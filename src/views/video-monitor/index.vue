@@ -122,13 +122,10 @@ export default {
       flvPlayer3.attachMediaElement(this.$refs.channel3)
       flvPlayer4.attachMediaElement(this.$refs.channel4)
       flvPlayer1.load()
-      flvPlayer1.play()
       flvPlayer2.load()
-      // flvPlayer2.play()
       flvPlayer3.load()
-      // flvPlayer3.play()
       flvPlayer4.load()
-      // flvPlayer4.play()
+
     }
   },
   methods: {
