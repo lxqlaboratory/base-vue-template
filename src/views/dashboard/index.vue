@@ -25,13 +25,14 @@
           :center="center"
           :scroll-wheel-zoom="true"
           :zoom="zoom"
+          style="height: 100%;width: 100%;"
           @moving="syncCenterAndZoom"
           @moveend=""
           @zoomend=""
-          style="height: 100%;width: 100%;"
           @ready="handler"
-          @click="getClickInfo">
-          <bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-map-type>
+          @click="getClickInfo"
+        >
+          <bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_RIGHT" />
           <!--<bm-map-type :map-types="['BMAP_NORMAL_MAP', 'BMAP_HYBRID_MAP']" anchor="BMAP_ANCHOR_TOP_LEFT" />-->
           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :show-address-bar="true" :auto-location="true" />
           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT" />
@@ -40,132 +41,133 @@
             :radius="radius"
             stroke-color="blue"
             :stroke-opacity="1"
-            :stroke-weight="2">
-
-          </bm-circle>
+            :stroke-weight="2"
+          />
           <bm-marker
             v-for="marker of carList"
             :position="{lng: marker.longitude, lat: marker.latitude}"
             :icon="{url: marker.imageUrl, size: {width: 30, height: 30}}"
             :title="marker.plateNum"
-            @click="infoWindowOpen(marker)">
-            <bm-label :content= "marker.plateNum" :position="{lng: marker.longitude, lat: marker.latitude}" :offset="{width: -20, height: 25}" :labelStyle="{color : 'black',
-                borderColor: '#CDBA96',
-                backgroundColor: null,
-                fontSize : '12px',
-                height : '20px',
-                lineHeight : '20px',
-                fontFamily:'微软雅黑'}"/>
+            @click="infoWindowOpen(marker)"
+          >
+            <bm-label
+              :content="marker.plateNum"
+              :position="{lng: marker.longitude, lat: marker.latitude}"
+              :offset="{width: -20, height: 25}"
+              :label-style="{color : 'black',
+                             borderColor: '#CDBA96',
+                             backgroundColor: null,
+                             fontSize : '12px',
+                             height : '20px',
+                             lineHeight : '20px',
+                             fontFamily:'微软雅黑'}"
+            />
             <bm-info-window
               :position="{lng: marker.lng, lat: marker.lat}"
               :show="marker.showFlag"
               @close="infoWindowClose(marker)"
-              @open="infoWindowOpen(marker)">
+              @open="infoWindowOpen(marker)"
+            >
               <div class="BMap_bubble_content" style="width: 480px;">
                 <div class="popup-basic">
                   <div class="popup-basic-line">
-                  <div style="float: left; width: 200px;">
+                    <div style="float: left; width: 200px;">
                       <span class="svg-container">
                         <svg-icon icon-class="carNum" />
                       </span>
-                    <span class="popup-span">{{marker.plateNum}}</span>
-                  </div>
-                  <div style="float: left; width: 200px">
+                      <span class="popup-span">{{ marker.plateNum }}</span>
+                    </div>
+                    <div style="float: left; width: 200px">
                       <span class="svg-container">
                         <svg-icon icon-class="driver" />
                       </span>
-                    <span class="popup-span">{{marker.driverName}}</span>
+                      <span class="popup-span">{{ marker.driverName }}</span>
+                    </div>
                   </div>
-                </div>
                   <div class="popup-basic-line">
                     <div style="float: left; width: 200px;">
                       <span class="svg-container">
                         <svg-icon icon-class="speed1" />
                       </span>
-                      <span class="popup-span">{{marker.speed}}km/h</span>
+                      <span class="popup-span">{{ marker.speed }}km/h</span>
                     </div>
                     <div style="float: left; width: 200px">
                       <span class="svg-container">
                         <svg-icon icon-class="time1" />
                       </span>
-                      <span class="popup-span">{{marker.time}}</span>
+                      <span class="popup-span">{{ marker.time }}</span>
                     </div>
                   </div>
                   <div class="popup-basic-line" style="border-bottom: none; height:auto">
-                      <span class="svg-container">
-                        <svg-icon icon-class="direct" />
-                      </span>
-                  <span class="popup-span" style="width:90%;font-weight:normal">{{locationDetailInfo}}</span>
+                    <span class="svg-container">
+                      <svg-icon icon-class="direct" />
+                    </span>
+                    <span class="popup-span" style="width:90%;font-weight:normal">{{ locationDetailInfo }}</span>
                   </div>
                   <div class="popup-basic-line" style="border-bottom: none; float: left; height: 10%; margin-top:3px">
                     <div v-for="item in weatherInfo" style="float: left;">
-                      <img v-bind:src="weatherInfo.dayPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
-                      <img v-bind:src="weatherInfo.nightPictureUrl"class="popup-img" style="height: 20px; width: 28px;">
-                      <span class="popup-span" style="font-weight:normal">{{weatherInfo.weather}}</span>
-                      <span class="popup-span" style="font-weight:normal">{{weatherInfo.dushu}}</span>
-                      <span class="popup-span" style="font-weight:normal">{{weatherInfo.wind}}</span>
-                      </div>
+                      <img :src="weatherInfo.dayPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
+                      <img :src="weatherInfo.nightPictureUrl"class="popup-img" style="height: 20px; width: 28px;">
+                      <span class="popup-span" style="font-weight:normal">{{ weatherInfo.weather }}</span>
+                      <span class="popup-span" style="font-weight:normal">{{ weatherInfo.dushu }}</span>
+                      <span class="popup-span" style="font-weight:normal">{{ weatherInfo.wind }}</span>
+                    </div>
                   </div>
                 </div>
                 <div style="width: 100%; height: 28%; float: left; padding-top: 8px; margin-top:5px">
                   <div class="popup-btn">
-                      <span class="svg-container">
-                        <svg-icon icon-class="videoMonitor" />
-                      </span>
+                    <span class="svg-container">
+                      <svg-icon icon-class="videoMonitor" />
+                    </span>
                     <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="toVideoMonitoring(marker.phoneNum)">视频监控</span>
                   </div>
                   <div class="popup-btn">
-                      <span class="svg-container">
-                        <svg-icon icon-class="direct" />
-                      </span>
+                    <span class="svg-container">
+                      <svg-icon icon-class="direct" />
+                    </span>
                     <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="doTempLocationTrack">定位跟踪</span>
-                    </div>
+                  </div>
                   <div class="popup-btn">
-                      <span class="svg-container">
-                        <svg-icon icon-class="trackplay" />
-                      </span>
+                    <span class="svg-container">
+                      <svg-icon icon-class="trackplay" />
+                    </span>
                     <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTrackPlaybackVisible">轨迹回放</span>
-                    </div>
+                  </div>
                   <div class="popup-btn">
-                      <span class="svg-container">
-                        <svg-icon icon-class="voice" />
-                      </span>
+                    <span class="svg-container">
+                      <svg-icon icon-class="voice" />
+                    </span>
                     <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTalkBackVisible">语音对讲</span>
                   </div>
                   <div class="popup-btn">
-                      <span class="svg-container">
-                        <svg-icon icon-class="picture" />
-                      </span>
+                    <span class="svg-container">
+                      <svg-icon icon-class="picture" />
+                    </span>
                     <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isPhotoShotVisible">图像监管</span>
                   </div>
                   <div class="popup-btn">
-                      <span class="svg-container">
-                        <svg-icon icon-class="bill" />
-                      </span>
+                    <span class="svg-container">
+                      <svg-icon icon-class="bill" />
+                    </span>
                     <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isDigitBillVisible">电子运单</span>
                   </div>
                   <div class="popup-btn">
-                      <span class="svg-container">
-                        <svg-icon icon-class="text" />
-                      </span>
-                  <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTextMsgVisible">文本下发</span>
-                </div>
+                    <span class="svg-container">
+                      <svg-icon icon-class="text" />
+                    </span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTextMsgVisible">文本下发</span>
+                  </div>
                 </div>
               </div>
-              <!--<el-button @click="toVideoMonitoring(marker.phoneNum)">视频监控</el-button>
-              <el-button @click="doTempLocationTrack">定位跟踪</el-button>
-              <el-button @click="isTrackPlaybackVisible">轨迹回放</el-button>
-              <el-button @click="isTalkBackVisible">语音对讲</el-button>
-              <el-button @click="isPhotoShotVisible">图像监管</el-button>
-              <el-button @click="isDigitBillVisible">电子运单</el-button>
-              <el-button @click="isTextMsgVisible">文本下发</el-button>-->
             </bm-info-window>
           </bm-marker>
 
         </baidu-map>
+
         <audio ref="audio" style="display:none" controls="controls">
           <source src="../../assets/mp3/alarm.mp3" type="audio/mpeg">
         </audio>
+
         <!-- dialog -->
         <el-dialog title="文本下发" :visible.sync="textMsgVisible">
           <el-input
@@ -176,38 +178,42 @@
           />
           <el-button @click="sendTextMsg">发送</el-button>
         </el-dialog>
+
         <el-dialog title="电子运单" :visible.sync="digitBillVisible">
           暂时还没有电子运单
         </el-dialog>
-        <el-dialog title="语音对讲" width="20%" :visible.sync="talkBackVisible">
-          <el-button type="primary" round style="display:block;margin:0 auto" @click="talkBackAction">{{ talkBack }}</el-button>
+
+        <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
+          <el-button @click="talkBackAction">{{ talkBack }}</el-button>
         </el-dialog>
 
-        <el-dialog title="图像监管" width="535px" :visible.sync="photoShotVisible">
+        <el-dialog title="图像监管" :visible.sync="photoShotVisible">
           <el-date-picker
             v-model="photoShotTime"
             type="datetimerange"
-            align="right" style="margin-bottom : 20px"
+            align="right"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             :default-time="['12:00:00', '08:00:00']"
           />
-          <el-button type="primary" round size="small"  min-width="10" style="margin-left: 10px ">查询图片</el-button>
+          <el-button @click="getPhotoList">查询图片</el-button>
           <el-radio-group v-model="radio">
             <el-radio :label="1">车前</el-radio>
             <el-radio :label="2">司机</el-radio>
             <el-radio :label="3">罐左侧</el-radio>
             <el-radio :label="4">罐右侧</el-radio>
           </el-radio-group>
-          <el-button type="primary" round size="small" style="margin-left: 82px" @click="cameraShot">图片采集</el-button>
+          <el-button @click="cameraShot">图片采集</el-button>
+          <el-image :src="src" />
+          <el-image :src="srcADAS" />
         </el-dialog>
 
         <el-dialog title="轨迹回放" width="80vw;" :visible.sync="trackPlaybackVisible">
-          <el-input v-model="trackPlaybackStartTime" type="date" style="width: 40%;float: left;"size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
-          <el-input v-model="trackPlaybackEndTime" type="date" style="width: 40%;float: left;margin-left: 10px" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
-          <el-button @click="trackPlaybackDraw" style="margin-left: 10px;float: left; margin-bottom: 10px;margin-right: 20px" size="small">查询</el-button>
-          <el-button @click="trackPlaybackStart"  style="margin-left: 0px;"size="small">开始</el-button>
-          <el-button @click="trackPlaybackStop" size="small" style="margin-bottom: 10px">停止</el-button>
+          <el-input v-model="trackPlaybackStartTime" type="date" size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
+          <el-input v-model="trackPlaybackEndTime" type="date" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
+          <el-button @click="trackPlaybackDraw">查询</el-button>
+          <el-button @click="trackPlaybackStart">开始</el-button>
+          <el-button @click="trackPlaybackStop">停止</el-button>
           <div style="width: 100%;height: 50vh;">
             <baidu-map class="map" :center="center" :zoom="11" style="height: 100%;width: 100%;">
               <bm-driving
@@ -229,7 +235,7 @@
             </baidu-map>
           </div>
         </el-dialog>
-        <control-bottom ref="controlBottom" @selectrow="tableselectrow"/>
+        <control-bottom ref="controlBottom" @selectrow="tableselectrow" />
       </el-main>
     </el-container>
   </div>
@@ -244,8 +250,9 @@ import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
 import { insertViolation } from '@/api/vehicle-manage'
-import { getWeatherInfo } from "../../api/weather";
-import { getLocationDetailInfo } from "../../api/location";
+import { getWeatherInfo } from '../../api/weather'
+import { getLocationDetailInfo } from '../../api/location'
+import { getVehiclePhotoInfoList } from '../../api/photo-info'
 
 export default {
   name: 'Dashboard',
@@ -255,10 +262,8 @@ export default {
   },
   data() {
     return {
-      /* direction: {
-        url: 'http://developer.baidu.com/map/jsdemo/img/fox.gif',
-        size: { width: 300, height: 157 }
-      }, */
+      srcADAS: 'http://202.194.14.73:8080/photos/15153139702/hello.jpg',
+      src: '',
       radio: 1,
       photoShotTime: '',
       textMsg: '',
@@ -279,7 +284,7 @@ export default {
         contents: '视频监控'
       },
       center: { lng: 0, lat: 0 },
-      radius:0,//画圈的半径
+      radius: 0, // 画圈的半径
       zoom: 13,
       videoMonitoringVisible: false,
       trackPlaybackVisible: false,
@@ -302,7 +307,7 @@ export default {
         wind: ''
       }],
       direction: 0,
-      //imageUrl: require("@/icons/svg/icon-car/"+this.getImgPath(0)),
+      // imageUrl: require("@/icons/svg/icon-car/"+this.getImgPath(0)),
       locationDetailInfo: '',
       checkedNode: {},
       checkedNodes: [],
@@ -318,12 +323,12 @@ export default {
         size: { width: 52, height: 26 },
         opts: { anchor: { width: 27, height: 13 }}
       },
-      trackPlaybackStartPoint: {  },
+      trackPlaybackStartPoint: { },
       trackPlaybackEndPoint: { },
       trackPlaybackWayPointList: [
         /* { lng: 116.404844, lat: 39.911836 },
         { lng: 116.308102, lat: 40.056057 }*/
-      ],
+      ]
       //* *****************************************//
 
     }
@@ -403,68 +408,67 @@ export default {
         realTimeMediaControl('15153139702', 6, 4, 0, 0)
       }
     }
-
   },
-  mounted(){
+  mounted() {
   },
   methods: {
-    getImgPath(direction){ //获取markerImg的路径
-      let pic = (direction+22.5)/45+1;
-      if(pic > 8){
-        pic = 8;
+    getImgPath(direction) { // 获取markerImg的路径
+      let pic = (direction + 22.5) / 45 + 1
+      if (pic > 8) {
+        pic = 8
       }
-      return parseInt(pic)+".png";
+      return parseInt(pic) + '.png'
     },
-    tableselectrow(rowplateNum){
-      this.carList.forEach(item=>{
-        if(rowplateNum==item.plateNum){
+    tableselectrow(rowplateNum) {
+      this.carList.forEach(item => {
+        if (rowplateNum == item.plateNum) {
           this.center.lng = item.longitude
           this.center.lat = item.latitude
-          this.radius=800
-          let that=this;
-          var t = setTimeout(function (){
-            that.radius=0 //半径设置成0圈就没啦
+          this.radius = 800
+          const that = this
+          var t = setTimeout(function() {
+            that.radius = 0 // 半径设置成0圈就没啦
             console.log(that.radius)
-          }, 1000);
+          }, 1000)
         }
       })
     },
-    _getLocationDetailInfo({lng,lat}){
-      getLocationDetailInfo({lng,lat}).then(response => {
-        let addressComponent = response.result.addressComponent;
-        let info = addressComponent.province+","+addressComponent.city+","+addressComponent.district+","+
-          addressComponent.street+""+addressComponent.street_number+""+addressComponent.direction;
-        let pois = response.result.pois.reverse();
-        let seInfo="",neInfo="",swInfo="",nwInfo="";
+    _getLocationDetailInfo({ lng, lat }) {
+      getLocationDetailInfo({ lng, lat }).then(response => {
+        const addressComponent = response.result.addressComponent
+        const info = addressComponent.province + ',' + addressComponent.city + ',' + addressComponent.district + ',' +
+          addressComponent.street + '' + addressComponent.street_number + '' + addressComponent.direction
+        const pois = response.result.pois.reverse()
+        let seInfo = ''; let neInfo = ''; let swInfo = ''; let nwInfo = ''
         pois.forEach(item => {
-          if(item.direction == "东南"){
-            seInfo = ","+item.name+""+item.direction+"约"+item.distance+"米";
-          }else if(item.direction == "东北"){
-            neInfo = ","+item.name+""+item.direction+"约"+item.distance+"米";
-          }else if(item.direction == "西南"){
-            swInfo = ","+item.name+""+item.direction+"约"+item.distance+"米";
-          }else if(item.direction == "西北"){
-            nwInfo += ","+item.name+""+item.direction+"约"+item.distance+"米";
+          if (item.direction == '东南') {
+            seInfo = ',' + item.name + '' + item.direction + '约' + item.distance + '米'
+          } else if (item.direction == '东北') {
+            neInfo = ',' + item.name + '' + item.direction + '约' + item.distance + '米'
+          } else if (item.direction == '西南') {
+            swInfo = ',' + item.name + '' + item.direction + '约' + item.distance + '米'
+          } else if (item.direction == '西北') {
+            nwInfo += ',' + item.name + '' + item.direction + '约' + item.distance + '米'
           }
         })
-        this.locationDetailInfo = info+seInfo+neInfo+swInfo+nwInfo+".";
-        console.log(response);
+        this.locationDetailInfo = info + seInfo + neInfo + swInfo + nwInfo + '.'
+        console.log(response)
       })
     },
-    _getWeatherInfo({lng,lat}){
-      getWeatherInfo({lng,lat}).then( response =>{
-        this.weatherInfo.dayPictureUrl = response.results[0].weather_data[0].dayPictureUrl;
-        this.weatherInfo.nightPictureUrl = response.results[0].weather_data[0].nightPictureUrl;
-        this.weatherInfo.weather = response.results[0].weather_data[0].weather;
-        this.weatherInfo.dushu = response.results[0].weather_data[0].date.substring(14, response.results[0].weather_data[0].date.length - 1);
-        this.weatherInfo.wind = response.results[0].weather_data[0].wind;
+    _getWeatherInfo({ lng, lat }) {
+      getWeatherInfo({ lng, lat }).then(response => {
+        this.weatherInfo.dayPictureUrl = response.results[0].weather_data[0].dayPictureUrl
+        this.weatherInfo.nightPictureUrl = response.results[0].weather_data[0].nightPictureUrl
+        this.weatherInfo.weather = response.results[0].weather_data[0].weather
+        this.weatherInfo.dushu = response.results[0].weather_data[0].date.substring(14, response.results[0].weather_data[0].date.length - 1)
+        this.weatherInfo.wind = response.results[0].weather_data[0].wind
         console.log()
       }).catch((err) => {
         console.log(err)
       })
     },
-    syncCenterAndZoom (e) {
-      const {lng, lat} = e.target.getCenter()
+    syncCenterAndZoom(e) {
+      const { lng, lat } = e.target.getCenter()
       this.center.lng = lng
       this.center.lat = lat
       this.zoom = e.target.getZoom()
@@ -487,7 +491,7 @@ export default {
         this.carList = dataList
         this.carList.forEach(item => {
           this.$set(item, 'showFlag', false)
-          this.$set(item, 'imageUrl', require("@/icons/svg/icon-car/"+this.getImgPath((item.direction))))
+          this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath((item.direction))))
         })
       })
     },
@@ -524,77 +528,77 @@ export default {
       console.log(e.point.lat)
       this.center.lng = e.point.lng
       this.center.lat = e.point.lat
-      this._getWeatherInfo({lng: e.point.lng,lat:e.point.lat})
-      this._getLocationDetailInfo({lng:e.point.lng,lat:e.point.lat})
+      this._getWeatherInfo({ lng: e.point.lng, lat: e.point.lat })
+      this._getLocationDetailInfo({ lng: e.point.lng, lat: e.point.lat })
     },
-    GpsToBaiduPoint(lat,lng){
-      var _t = this.wgs2bd(lat,lng);
-      /*var _BPoint = new BMap.Point(_t[1], _t[0]);
+    GpsToBaiduPoint(lat, lng) {
+      var _t = this.wgs2bd(lat, lng)
+      /* var _BPoint = new BMap.Point(_t[1], _t[0]);
       return _BPoint*/
       return _t
     },
-    wgs2bd(lat,lon) {
-      var wgs2gcjR = this.wgs2gcj(lat, lon);
-      var gcj2bdR = this.gcj2bd(wgs2gcjR[0], wgs2gcjR[1]);
+    wgs2bd(lat, lon) {
+      var wgs2gcjR = this.wgs2gcj(lat, lon)
+      var gcj2bdR = this.gcj2bd(wgs2gcjR[0], wgs2gcjR[1])
       return gcj2bdR
     },
-    wgs2gcj(lat,lon) {
+    wgs2gcj(lat, lon) {
       var pi = 3.14159265358979324
       var a = 6378245.0
       var ee = 0.00669342162296594323
-      var x_pi = 3.14159265358979324*3000.0/180.0
-      var dLat = this.transformLat(lon - 105.0, lat - 35.0);
-      var dLon = this.transformLon(lon - 105.0, lat - 35.0);
-      var radLat = lat / 180.0 * pi;
-      var magic = Math.sin(radLat);
-      magic = 1 - ee * magic * magic;
-      var sqrtMagic = Math.sqrt(magic);
-      dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * pi);
-      dLon = (dLon * 180.0) / (a / sqrtMagic * Math.cos(radLat) * pi);
-      var mgLat = lat + dLat;
-      var mgLon = lon + dLon;
-      var result = [];
-      result.push(mgLat);
-      result.push(mgLon);
+      var x_pi = 3.14159265358979324 * 3000.0 / 180.0
+      var dLat = this.transformLat(lon - 105.0, lat - 35.0)
+      var dLon = this.transformLon(lon - 105.0, lat - 35.0)
+      var radLat = lat / 180.0 * pi
+      var magic = Math.sin(radLat)
+      magic = 1 - ee * magic * magic
+      var sqrtMagic = Math.sqrt(magic)
+      dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * pi)
+      dLon = (dLon * 180.0) / (a / sqrtMagic * Math.cos(radLat) * pi)
+      var mgLat = lat + dLat
+      var mgLon = lon + dLon
+      var result = []
+      result.push(mgLat)
+      result.push(mgLon)
       return result
     },
-    transformLat(lat,lon) {
+    transformLat(lat, lon) {
       var pi = 3.14159265358979324
       var a = 6378245.0
       var ee = 0.00669342162296594323
-      var x_pi = 3.14159265358979324*3000.0/180.0
-      var ret = -100.0 + 2.0 * lat + 3.0 * lon + 0.2 * lon * lon + 0.1 * lat * lon + 0.2 * Math.sqrt(Math.abs(lat));
-      ret += (20.0 * Math.sin(6.0 * lat * pi) + 20.0 * Math.sin(2.0 * lat * pi)) * 2.0 / 3.0;
-      ret += (20.0 * Math.sin(lon * pi) + 40.0 * Math.sin(lon / 3.0 * pi)) * 2.0 / 3.0;
-      ret += (160.0 * Math.sin(lon / 12.0 * pi) + 320 * Math.sin(lon * pi  / 30.0)) * 2.0 / 3.0;
-      return ret
-     },
-
-    transformLon(lat,lon) {
-      var pi = 3.14159265358979324
-      var a = 6378245.0
-      var ee = 0.00669342162296594323
-      var x_pi = 3.14159265358979324*3000.0/180.0
-      var ret = 300.0 + lat + 2.0 * lon + 0.1 * lat * lat + 0.1 * lat * lon + 0.1 * Math.sqrt(Math.abs(lat));
-      ret += (20.0 * Math.sin(6.0 * lat * pi) + 20.0 * Math.sin(2.0 * lat * pi)) * 2.0 / 3.0;
-      ret += (20.0 * Math.sin(lat * pi) + 40.0 * Math.sin(lat / 3.0 * pi)) * 2.0 / 3.0;
-      ret += (150.0 * Math.sin(lat / 12.0 * pi) + 300.0 * Math.sin(lat / 30.0 * pi)) * 2.0 / 3.0;
+      var x_pi = 3.14159265358979324 * 3000.0 / 180.0
+      var ret = -100.0 + 2.0 * lat + 3.0 * lon + 0.2 * lon * lon + 0.1 * lat * lon + 0.2 * Math.sqrt(Math.abs(lat))
+      ret += (20.0 * Math.sin(6.0 * lat * pi) + 20.0 * Math.sin(2.0 * lat * pi)) * 2.0 / 3.0
+      ret += (20.0 * Math.sin(lon * pi) + 40.0 * Math.sin(lon / 3.0 * pi)) * 2.0 / 3.0
+      ret += (160.0 * Math.sin(lon / 12.0 * pi) + 320 * Math.sin(lon * pi / 30.0)) * 2.0 / 3.0
       return ret
     },
-    gcj2bd(lat,lon) {
-     var pi = 3.14159265358979324
-     var a = 6378245.0
-     var ee = 0.00669342162296594323
-     var x_pi = 3.14159265358979324*3000.0/180.0
-     var x = lon, y = lat;
-     var z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);
-     var theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);
-     var bd_lon = z * Math.cos(theta) + 0.0065;
-     var bd_lat = z * Math.sin(theta) + 0.006;
-     var result = [];
-     result.push(bd_lat);
-     result.push(bd_lon);
-     return result
+
+    transformLon(lat, lon) {
+      var pi = 3.14159265358979324
+      var a = 6378245.0
+      var ee = 0.00669342162296594323
+      var x_pi = 3.14159265358979324 * 3000.0 / 180.0
+      var ret = 300.0 + lat + 2.0 * lon + 0.1 * lat * lat + 0.1 * lat * lon + 0.1 * Math.sqrt(Math.abs(lat))
+      ret += (20.0 * Math.sin(6.0 * lat * pi) + 20.0 * Math.sin(2.0 * lat * pi)) * 2.0 / 3.0
+      ret += (20.0 * Math.sin(lat * pi) + 40.0 * Math.sin(lat / 3.0 * pi)) * 2.0 / 3.0
+      ret += (150.0 * Math.sin(lat / 12.0 * pi) + 300.0 * Math.sin(lat / 30.0 * pi)) * 2.0 / 3.0
+      return ret
+    },
+    gcj2bd(lat, lon) {
+      var pi = 3.14159265358979324
+      var a = 6378245.0
+      var ee = 0.00669342162296594323
+      var x_pi = 3.14159265358979324 * 3000.0 / 180.0
+      var x = lon; var y = lat
+      var z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi)
+      var theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi)
+      var bd_lon = z * Math.cos(theta) + 0.0065
+      var bd_lat = z * Math.sin(theta) + 0.006
+      var result = []
+      result.push(bd_lat)
+      result.push(bd_lon)
+      return result
     },
     webSocket() {
       const ws = new WebSocket('ws://202.194.14.72:15674/ws')
@@ -611,21 +615,20 @@ export default {
             if (item.phoneNum == terminalPhone) {
               ref.socketPlateNum = item.plateNum
               // 设置 carList 的值   "latitude" : 36665736, "longitude" : 117132753
-              var resultPoint = ref.GpsToBaiduPoint(p.latitude/1000000.0,p.longitude/1000000.0);
+              var resultPoint = ref.GpsToBaiduPoint(p.latitude / 1000000.0, p.longitude / 1000000.0)
               console.log(resultPoint)
               item.longitude = resultPoint[1]
               item.latitude = resultPoint[0]
-              item.is_online='在线'
+              item.is_online = '在线'
               item.ACC = p.ACC
-              item.direction=p.direction
-              item.speed=p.speed
-              item.gbRecSpeed=p.speed
-              item.elevation=p.elevation
-              item.receiveData=1//代表了已经接收到了信息
+              item.direction = p.direction
+              item.speed = p.speed
+              item.elevation = p.elevation
+              item.receiveData = 1// 代表了已经接收到了信息
               item.simulation = p.simulation
-              item.wirelessIntensity=p.wirelessIntensity
-              item.satellitesNum=p.satellitesNum
-              console.log(item.longitude+"--->"+item.latitude)
+              item.wirelessIntensity = p.wirelessIntensity
+              item.satellitesNum = p.satellitesNum
+              console.log(item.longitude + '--->' + item.latitude)
               console.log('terminalPhone')
               if (p.overSpeeding === true) {
                 ref.$message({
@@ -996,29 +999,29 @@ export default {
       setInterval(this.changeControlBottom, 15000)
     },
     changeControlBottom() {
-     if(this.carList[0].receiveData==0||this.carList[0].receiveData===0){
+      if (this.carList[0].receiveData == 0 || this.carList[0].receiveData === 0) {
         console.log('receiveData_Enter A')
         this.carList[0].longitude = (116.404 + Math.random() / 20).toFixed(3)
         this.carList[0].latitude = (39.915 + Math.random() / 20).toFixed(3)
       }
-      if(this.carList[1].receiveData==0||this.carList[1].receiveData===0){
+      if (this.carList[1].receiveData == 0 || this.carList[1].receiveData === 0) {
         console.log('receiveData_Enter B')
         this.carList[1].longitude = (116.404 + Math.random() / 20).toFixed(3)
         this.carList[1].latitude = (39.915 + Math.random() / 20).toFixed(3)
       }
-      if(this.carList[2].receiveData==0||this.carList[2].receiveData===0){
+      if (this.carList[2].receiveData == 0 || this.carList[2].receiveData === 0) {
         console.log('receiveData_Enter C')
         this.carList[2].longitude = (116.404 + Math.random() / 20).toFixed(3)
         this.carList[2].latitude = (39.915 + Math.random() / 20).toFixed(3)
       }
-      },
+    },
     infoWindowClose(marker) {
       marker.showFlag = false
     },
     infoWindowOpen(marker) {
       marker.showFlag = true
       this.currentCarInfo = marker
-      console.log("车辆信息:"+this.currentCarInfo)
+      console.log('车辆信息:' + this.currentCarInfo)
     },
     filterNode(value, data) {
       if (!value) return true
@@ -1039,12 +1042,12 @@ export default {
       console.log(event)
       this.center.lng = event.longitude
       this.center.lat = event.latitude
-      this.radius=800
-      let that=this;
-      var t = setTimeout(function (){
-        that.radius=0 //半径设置成0圈就没啦
+      this.radius = 800
+      const that = this
+      var t = setTimeout(function() {
+        that.radius = 0 // 半径设置成0圈就没啦
         console.log(that.radius)
-      }, 1000);
+      }, 1000)
     },
 
     /* doLocation() {
@@ -1066,9 +1069,9 @@ export default {
     }, */
     // 轨迹回放用到的方法
     trackPlaybackDraw() {
-      this.trackPlaybackStartPoint={ lng: 116.404844, lat: 39.911836 }
-      this.trackPlaybackEndPoint={ lng: 116.308102, lat: 40.056057 }
-      /*getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
+      this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
+      this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
+      /* getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
         this.vehiclePositionFromList = response.data
         if (this.vehiclePositionFromList.length() > 0) {
           console.log(this.vehiclePositionFromList)
@@ -1077,7 +1080,7 @@ export default {
           this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.length() - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.length() - 1].lat }
           console.log('this.trackPlaybackStartPoint=' + this.trackPlaybackStartPoint)
         }
-      })*/
+      }) */
     },
     reset() {
       this.play = false
@@ -1089,14 +1092,19 @@ export default {
     },
     trackPlaybackStart() {
       this.$refs.lushu.$emit('start', this.$refs.lushu)
-    },
-    trackPlaybackStart() {
       this.play = true
     },
     trackPlaybackStop() {
       this.play = false
     },
     // ////////////////////////////////////////////
+    getPhotoList() {
+      console.log(this.photoShotTime[0].toLocaleString())
+      getVehiclePhotoInfoList('15153139702', '190608000000', '190608235959').then(response => {
+        console.log(response.data)
+        this.src = 'http://202.194.14.73:8080/photos/15153139702/' + response.data[0] + '.jpg'
+      })
+    },
     // terminal
     messageHandler(response) {
       switch (response.data.result) {
@@ -1163,8 +1171,7 @@ export default {
         loading.close()
       })
     }
-  },
-
+  }
 }
 
 </script>

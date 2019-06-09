@@ -16,7 +16,7 @@ export function mediaTransform(terminalPhone, channelId, dataType) {
 // 实时音视频传输控制
 export function realTimeMediaControl(terminalPhone, channelId, controlCode, closeMediaType, changeCode) {
   return request({
-    url: '/func/web/mediaTransform',
+    url: '/func/web/mediaTransformControl',
     method: 'POST',
     data: {
       terminalPhone,
