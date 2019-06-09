@@ -169,14 +169,24 @@
         </audio>
 
         <!-- dialog -->
-        <el-dialog title="文本下发" :visible.sync="textMsgVisible">
+        <el-dialog title="文本下发" width="435px" :visible.sync="textMsgVisible">
+          短信模板：
+          <el-select v-model="messageQuery" @change="fnMessageSelect" style="margin-left: 10px;width:310px;margin-bottom: 10px"filterable placeholder="请选择">
+            <el-option
+              v-for="item in templateList"
+              :key="item.messageContent"
+              :label="item.messageContent"
+              :value="item.messageContent"
+            />
+          </el-select>
           <el-input
             v-model="textMsg"
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="请输入内容"
+            style="margin-bottom: 10px"
           />
-          <el-button @click="sendTextMsg">发送</el-button>
+          <el-button type="primary" round @click="sendTextMsg">发送</el-button>
         </el-dialog>
 
         <el-dialog title="电子运单" :visible.sync="digitBillVisible">
@@ -209,11 +219,11 @@
         </el-dialog>
 
         <el-dialog title="轨迹回放" width="80vw;" :visible.sync="trackPlaybackVisible">
-          <el-input v-model="trackPlaybackStartTime" type="date" size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
-          <el-input v-model="trackPlaybackEndTime" type="date" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
-          <el-button @click="trackPlaybackDraw">查询</el-button>
-          <el-button @click="trackPlaybackStart">开始</el-button>
-          <el-button @click="trackPlaybackStop">停止</el-button>
+          <el-input v-model="trackPlaybackStartTime" type="date" style="width: 40%;float: left;"size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
+          <el-input v-model="trackPlaybackEndTime" type="date" style="width: 40%;float: left;margin-left: 10px" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
+          <el-button @click="trackPlaybackDraw" style="margin-left: 10px;float: left; margin-bottom: 10px;margin-right: 20px" size="small">查询</el-button>
+          <el-button @click="trackPlaybackStart"  style="margin-left: 0px;"size="small">开始</el-button>
+          <el-button @click="trackPlaybackStop" size="small" style="margin-bottom: 10px">停止</el-button>
           <div style="width: 100%;height: 50vh;">
             <baidu-map class="map" :center="center" :zoom="11" style="height: 100%;width: 100%;">
               <bm-driving
@@ -253,6 +263,7 @@ import { insertViolation } from '@/api/vehicle-manage'
 import { getWeatherInfo } from '../../api/weather'
 import { getLocationDetailInfo } from '../../api/location'
 import { getVehiclePhotoInfoList } from '../../api/photo-info'
+import { getMessageTemplateList } from '@/api/template-manage'
 
 export default {
   name: 'Dashboard',
@@ -271,6 +282,8 @@ export default {
       trackPlaybackEndTime: '',
       filterText: '',
       vehicleList: [],
+      messageQuery: '',
+      templateList: [],
       carList: [], // 车辆列表
       currentCarInfo: {}, // 当前infoWindow对应的车辆信息
       socketPlateNum: '',
@@ -493,6 +506,9 @@ export default {
           this.$set(item, 'showFlag', false)
           this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath((item.direction))))
         })
+      }),
+      getMessageTemplateList().then(response => {
+          this.templateList = response.data
       })
     },
     handler({ BMap, map }) {
@@ -1142,6 +1158,9 @@ export default {
       }).catch(() => {
         loading.close()
       })
+    },
+    fnMessageSelect(){
+      this.textMsg=this.messageQuery
     },
     sendTextMsg() {
       const loading = this.$loading({
