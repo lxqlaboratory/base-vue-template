@@ -189,14 +189,13 @@
           <el-button type="primary" round @click="sendTextMsg">发送</el-button>
         </el-dialog>
 
-        <el-dialog title="电子运单" :visible.sync="digitBillVisible">
+        <el-dialog title="电子运单" width="435px" :visible.sync="digitBillVisible">
           暂时还没有电子运单
         </el-dialog>
 
-        <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
-          <el-button @click="talkBackAction">{{ talkBack }}</el-button>
+        <el-dialog title="语音对讲" width="20%" :visible.sync="talkBackVisible">
+          <el-button type="primary" round style="display:block;margin:0 auto" @click="talkBackAction">{{ talkBack }}</el-button>
         </el-dialog>
-
         <el-dialog title="图像监管" :visible.sync="photoShotVisible">
           <el-date-picker
             v-model="photoShotTime"
