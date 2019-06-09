@@ -107,7 +107,7 @@
                   <div class="popup-basic-line" style="border-bottom: none; float: left; height: 10%; margin-top:3px">
                     <div v-for="item in weatherInfo" style="float: left;">
                       <img :src="weatherInfo.dayPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
-                      <img :src="weatherInfo.nightPictureUrl"class="popup-img" style="height: 20px; width: 28px;">
+                      <img :src="weatherInfo.nightPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
                       <span class="popup-span" style="font-weight:normal">{{ weatherInfo.weather }}</span>
                       <span class="popup-span" style="font-weight:normal">{{ weatherInfo.dushu }}</span>
                       <span class="popup-span" style="font-weight:normal">{{ weatherInfo.wind }}</span>
@@ -194,6 +194,8 @@
         </el-dialog>
 
         <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
+          <audio ref="talkBackAudio"></audio>
+          <audio :src="audioSrc"></audio>
           <el-button @click="talkBackAction">{{ talkBack }}</el-button>
         </el-dialog>
 
@@ -273,6 +275,7 @@ export default {
   },
   data() {
     return {
+      audioSrc: '',
       srcADAS: 'http://202.194.14.73:8080/photos/15153139702/hello.jpg',
       src: '',
       radio: 1,
@@ -377,18 +380,28 @@ export default {
     setTimeout(() => {
       this.webSocket()
     }, 2000)
-
-    const peer = new WebSocket('ws://211.87.225.203:10004/hello')
-    peer.push = peer.send
-    peer.send = (data) => {
-      peer.push(data)
-    }
-    peer.onopen = () => {
-      peer.binaryType = 'blob'
-      console.log('talkBack connected.')
-    }
-    let recorder
-    this.talkBackAction = () => {
+  },
+  mounted() {
+  },
+  methods: {
+    talkBackAction() {
+      const peer = new WebSocket('ws://211.87.225.211:10004/hello')
+      peer.push = peer.send
+      peer.send = (data) => {
+        peer.push(data)
+      }
+      peer.onopen = () => {
+        peer.binaryType = 'blob'
+        console.log('talkBack connected.')
+      }
+      var mediaSource = new MediaSource()
+      var audio = this.$refs.talkBackAudio
+      audio.src = window.URL.createObjectURL(mediaSource)
+      // var sourceBuffer = mediaSource.addSourceBuffer('audio')
+      peer.onmessage = (data) => {
+        // sourceBuffer.append(data)
+      }
+      let recorder
       if (this.talkBack === '开始对讲') {
         navigator.mediaDevices.getUserMedia({
           audio: true,
@@ -401,6 +414,7 @@ export default {
             disableLogs: true,
             timeSlice: 1000,
             ondataavailable: (blob) => {
+              console.log(blob)
               peer.send(blob)
             },
             desiredSampRate: 8000,
@@ -420,11 +434,7 @@ export default {
         this.talkBack = '开始对讲'
         realTimeMediaControl('15153139702', 6, 4, 0, 0)
       }
-    }
-  },
-  mounted() {
-  },
-  methods: {
+    },
     getImgPath(direction) { // 获取markerImg的路径
       let pic = (direction + 22.5) / 45 + 1
       if (pic > 8) {
