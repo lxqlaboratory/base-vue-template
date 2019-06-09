@@ -14,7 +14,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="信息内容" min-width="30" align="center">
+      <el-table-column label="信息内容" min-width="50" align="center">
         <template slot-scope="scope">
           {{ scope.row.messageContent }}
         </template>
