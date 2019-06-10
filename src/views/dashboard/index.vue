@@ -107,7 +107,7 @@
                   <div class="popup-basic-line" style="border-bottom: none; float: left; height: 10%; margin-top:3px">
                     <div v-for="item in weatherInfo" style="float: left;">
                       <img :src="weatherInfo.dayPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
-                      <img :src="weatherInfo.nightPictureUrl"class="popup-img" style="height: 20px; width: 28px;">
+                      <img :src="weatherInfo.nightPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
                       <span class="popup-span" style="font-weight:normal">{{ weatherInfo.weather }}</span>
                       <span class="popup-span" style="font-weight:normal">{{ weatherInfo.dushu }}</span>
                       <span class="popup-span" style="font-weight:normal">{{ weatherInfo.wind }}</span>
@@ -171,7 +171,7 @@
         <!-- dialog -->
         <el-dialog title="文本下发" width="435px" :visible.sync="textMsgVisible">
           短信模板：
-          <el-select v-model="messageQuery" style="margin-left: 10px;width:310px;margin-bottom: 10px" filterable @change="fnMessageSelect" placeholder="请选择">
+          <el-select v-model="messageQuery" style="margin-left: 10px;width:310px;margin-bottom: 10px" filterable placeholder="请选择" @change="fnMessageSelect">
             <el-option
               v-for="item in templateList"
               :key="item.messageContent"
@@ -194,8 +194,7 @@
         </el-dialog>
 
         <el-dialog title="语音对讲" width="340px" :visible.sync="talkBackVisible">
-          <audio ref="talkBackAudio" autoplay controls></audio>
-          <el-button type="primary" round style="margin-top: 20px; margin-left: 100px" @click="talkBackAction">{{ talkBack }}</el-button>
+          <talk-back v-if="talkBackVisible" />
         </el-dialog>
 
         <el-dialog title="图像监管" width="700px" :visible.sync="photoShotVisible">
@@ -223,8 +222,8 @@
                 <el-radio :label="4">罐右侧</el-radio>
               </el-radio-group>
             </el-col>
-            <el-col :span="6" offset="2">
-              <el-button type="primary" round @click="cameraShot">图片采集</el-button>
+            <el-col :span="6" offset=2>
+              <el-button type="danger" round @click="cameraShot">图片采集</el-button>
             </el-col>
           </el-row>
           <el-row :gutter="40">
@@ -241,12 +240,24 @@
           </el-row>
         </el-dialog>
 
-        <el-dialog title="轨迹回放" width="80vw;" :visible.sync="trackPlaybackVisible">
-          <el-input v-model="trackPlaybackStartTime" type="date" style="width: 40%;float: left;" size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
-          <el-input v-model="trackPlaybackEndTime" type="date" style="width: 40%;float: left;margin-left: 10px" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
-          <el-button style="margin-left: 10px;float: left; margin-bottom: 10px;margin-right: 20px" size="small" @click="trackPlaybackDraw">查询</el-button>
-          <el-button style="margin-left: 0px;" size="small" @click="trackPlaybackStart">开始</el-button>
-          <el-button size="small" style="margin-bottom: 10px" @click="trackPlaybackStop">停止</el-button>
+        <el-dialog title="轨迹回放" width="800px" :visible.sync="trackPlaybackVisible">
+          <el-row :gutter="20">
+            <el-col :span="9">
+              <el-input v-model="trackPlaybackStartTime" size="small" type="date" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
+            </el-col>
+            <el-col :span="9">
+              <el-input v-model="trackPlaybackEndTime" size="small" type="date" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
+            </el-col>
+            <el-col :span="2">
+              <el-button type="primary" round size="small" @click="trackPlaybackDraw">查询</el-button>
+            </el-col>
+            <el-col :span="2">
+              <el-button type="success" round size="small" @click="trackPlaybackStart">开始</el-button>
+            </el-col>
+            <el-col :span="2">
+              <el-button type="danger" round size="small" @click="trackPlaybackStop">停止</el-button>
+            </el-col>
+          </el-row>
           <div style="width: 100%;height: 50vh;">
             <baidu-map class="map" :center="center" :zoom="11" style="height: 100%;width: 100%;">
               <bm-driving
@@ -277,21 +288,22 @@
 <script>
 import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
+import TalkBack from './indexcomponents/TalkBack'
 import { getTreeVehicleFormList } from '@/api/vehicle-list-index'
-import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg, tempLocationTrack, getTerminalParam } from '@/api/terminal'
+import { cameraPhoto, textMsg, tempLocationTrack, getTerminalParam } from '@/api/terminal'
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
-import RecordRTC from 'recordrtc'
-import { getWeatherInfo } from '../../api/weather'
-import { getLocationDetailInfo } from '../../api/location'
-import { getVehiclePhotoInfoList } from '../../api/photo-info'
+import { getWeatherInfo } from '@/api/weather'
+import { getLocationDetailInfo } from '@/api/location'
+import { getVehiclePhotoInfoList } from '@/api/photo-info'
 import { getMessageTemplateList } from '@/api/template-manage'
 
 export default {
   name: 'Dashboard',
   components: {
     BmLushu,
-    controlBottom: ControlBottom
+    controlBottom: ControlBottom,
+    talkBack: TalkBack
   },
   data() {
     return {
@@ -328,7 +340,6 @@ export default {
       photoShotVisible: false,
       digitBillVisible: false,
       textMsgVisible: false,
-      talkBack: '开始对讲',
       weatherInfo: [{
         dayPictureUrl: '',
         nightPictureUrl: '',
@@ -360,7 +371,6 @@ export default {
         { lng: 116.308102, lat: 40.056057 }*/
       ]
       //* *****************************************//
-
     }
   },
   computed: {
@@ -398,64 +408,6 @@ export default {
   mounted() {
   },
   methods: {
-    talkBackAction() {
-      const peer = new WebSocket('ws://211.87.225.211:10004/hello')
-      peer.push = peer.send
-      peer.send = (data) => {
-        peer.push(data)
-      }
-      peer.onopen = () => {
-        peer.binaryType = 'blob'
-        console.log('talkBack connected.')
-      }
-      // var mediaSource = new MediaSource()
-      const audio = this.$refs.talkBackAudio
-      console.log('audio' + audio)
-      // audio.src = URL.createObjectURL(mediaSource)
-      // mediaSource.addEventListener('sourceopen', () => {
-      // var sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="mp4a.40.2"')
-      peer.onmessage = (data) => {
-        console.log(data.data)
-        if (data.data != null) {
-          // data.data.type = 'audio/wav'
-          // sourceBuffer.appendBuffer(new Uint8Array(data.data))
-          audio.src = URL.createObjectURL(data.data)
-        }
-      }
-      // })
-      let recorder
-      if (this.talkBack === '开始对讲') {
-        peer.send('start')
-        mediaTransform('15153139702', 6, 2)
-        navigator.mediaDevices.getUserMedia({
-          audio: true,
-          video: false
-        }).then(function(stream) {
-          peer.MediaStream = stream
-          recorder = RecordRTC(stream, {
-            type: 'audio',
-            recorderType: RecordRTC.StereoAudioRecorder,
-            disableLogs: true,
-            timeSlice: 1000,
-            ondataavailable: (blob) => {
-              peer.send(blob)
-            },
-            desiredSampRate: 8000,
-            numberOfAudioChannels: 1
-          })
-          recorder.startRecording()
-        }).catch(function(error) {
-          console.log(error)
-        })
-        this.talkBack = '停止对讲'
-      } else {
-        peer.send('stop')
-        realTimeMediaControl('15153139702', 6, 4, 0, 0)
-        recorder.stopRecording()
-        if (peer.MediaStream) peer.MediaStream.stop()
-        this.talkBack = '开始对讲'
-      }
-    },
     getImgPath(direction) { // 获取markerImg的路径
       let pic = (direction + 22.5) / 45 + 1
       if (pic > 8) {
@@ -1202,6 +1154,7 @@ export default {
       this.play = false
     },
     // ////////////////////////////////////////////
+    // photo
     getPhotoList() {
       console.log(this.photoShotTime[0].toLocaleString())
       getVehiclePhotoInfoList('15153139702', '190608000000', '190608235959').then(response => {
