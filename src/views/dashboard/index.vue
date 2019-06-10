@@ -633,6 +633,47 @@ export default {
       result.push(bd_lon)
       return result
     },
+    timeCompareMinute(time1,time2){
+      let begin1=time1.substr(0,10).split("-")
+      let end1=time2.substr(0,10).split("-")
+      let date1=new Date(begin1[1] + - + begin1[2] + - + begin1[0])
+      let date2=new Date(end1[1] + - + end1[2] + - + end1[0])
+      //得到两个日期之间的差值m，以分钟为单位
+      //Math.abs(date2-date1)计算出以毫秒为单位的差值
+      //Math.abs(date2-date1)/1000得到以秒为单位的差值
+      //Math.abs(date2-date1)/1000/60得到以分钟为单位的差值
+      let m=parseInt(Math.abs(date2-date1)/1000/60);
+      let min1=parseInt(time1.substr(11,2))*60+parseInt(time1.substr(14,2));
+      let min2=parseInt(time2.substr(11,2))*60+parseInt(time2.substr(14,2));
+      let n=min2-min1;
+      let minutes=m+n;
+      return minutes
+    },
+    getCurrentTime() {
+      //2019-06-10 10:08:35
+      let now = new Date();
+      let year = now.getFullYear();       //年
+      let month = now.getMonth() + 1;     //月
+      let day = now.getDate();            //日
+      let hh = now.getHours();            //时
+      let mm = now.getMinutes();          //分
+      let ss = now.getSeconds();           //秒
+      let clock = year + "-";
+      if (month < 10)
+        clock += "0";
+      clock += month + "-";
+      if (day < 10)
+        clock += "0";
+      clock += day + " ";
+      if (hh < 10)
+        clock += "0";
+      clock += hh + ":";
+      if (mm < 10) clock += '0';
+      clock += mm + ":";
+      if (ss < 10) clock += '0';
+      clock += ss;
+      return (clock);
+    },
     webSocket() {
       const ws = new WebSocket('ws://202.194.14.72:15674/ws')
       var ref = this
@@ -652,7 +693,6 @@ export default {
               console.log(resultPoint)
               item.longitude = resultPoint[1]
               item.latitude = resultPoint[0]
-              item.is_online = '在线'
               item.ACC = p.ACC
               item.direction = p.direction
               item.speed = p.speed
@@ -662,7 +702,21 @@ export default {
               item.wirelessIntensity = p.wirelessIntensity
               item.satellitesNum = p.satellitesNum
               console.log(item.longitude + '--->' + item.latitude)
-              console.log('terminalPhone')
+              //p.time=190610093043
+              item.time='20'+p.time.substring(0,2)+'-'+p.time.substring(2,4)+'-'+p.time.substring(4,6)
+                +' '+p.time.substring(6,8)+':'+p.time.substring(8,10)+':'+p.time.substring(10,12)
+              console.log(item.time)
+              let currentTime=ref.getCurrentTime()
+              let minutes=ref.timeCompareMinute(item.time,currentTime)
+              if(minutes<1){
+                item.is_online = '在线'
+              }else{
+                item.is_online = '离线'
+              }
+              console.log('minutes')
+              console.log(item.time)
+              console.log(currentTime)
+              console.log(minutes)
               if (p.overSpeeding === true) {
                 ref.$message({
                   showClose: true,
@@ -1021,7 +1075,14 @@ export default {
         })
         client.subscribe('/exchange/jt808/driverIdentity', function(message) {
           const p = JSON.parse(message.body)
-          // console.log(p)
+          const terminalPhone = p.terminalPhone
+          ref.carList.filter(item => {
+            if (item.phoneNum == terminalPhone) {
+              item.driverName=p.driverName
+              item.qualificationCode=p.qualificationCode
+              item.authorityName=p.authorityName
+            }
+          })
         })
       }
       const on_error = function() {

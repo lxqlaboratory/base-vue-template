@@ -115,6 +115,12 @@
               <el-form-item label="驾驶员号码">
                 <span>{{ props.row.driverPhoneNumber }}</span>
               </el-form-item>
+              <el-form-item label="从业资格证编码">
+                <span>{{ props.row.qualificationCode }}</span>
+              </el-form-item>
+              <el-form-item label="发证机构名称">
+                <span>{{ props.row.authorityName }}</span>
+              </el-form-item>
               <el-form-item label="方向">
                 <span>{{ props.row.direction }}</span>
               </el-form-item>
