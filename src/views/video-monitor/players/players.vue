@@ -18,6 +18,7 @@ export default {
   },
   mounted: function() {
     mediaTransform('15153139702', 1, 1).then(response => {
+      console.info(response.data.result)
       if (FlvJs.isSupported()) {
         const flvPlayer1 = FlvJs.createPlayer({
           cors: true,
@@ -38,14 +39,14 @@ export default {
           withCredentials: false,
           isLive: true,
           type: 'flv',
-          url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
+          url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test1'
         })
         const flvPlayer4 = FlvJs.createPlayer({
           cors: true,
           withCredentials: false,
           isLive: true,
           type: 'flv',
-          url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test'
+          url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=test2'
         })
         flvPlayer1.attachMediaElement(this.$refs.channel1)
         flvPlayer2.attachMediaElement(this.$refs.channel2)

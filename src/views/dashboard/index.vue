@@ -171,7 +171,7 @@
         <!-- dialog -->
         <el-dialog title="文本下发" width="435px" :visible.sync="textMsgVisible">
           短信模板：
-          <el-select v-model="messageQuery" @change="fnMessageSelect" style="margin-left: 10px;width:310px;margin-bottom: 10px"filterable placeholder="请选择">
+          <el-select v-model="messageQuery" style="margin-left: 10px;width:310px;margin-bottom: 10px" filterable @change="fnMessageSelect" placeholder="请选择">
             <el-option
               v-for="item in templateList"
               :key="item.messageContent"
@@ -186,45 +186,67 @@
             placeholder="请输入内容"
             style="margin-bottom: 10px"
           />
-          <el-button type="primary" round @click="sendTextMsg">发送</el-button>
+          <el-button type="primary" round style="margin-left: 310px" @click="sendTextMsg">发送</el-button>
         </el-dialog>
 
         <el-dialog title="电子运单" :visible.sync="digitBillVisible">
           暂时还没有电子运单
         </el-dialog>
 
-        <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
+        <el-dialog title="语音对讲" width="340px" :visible.sync="talkBackVisible">
           <audio ref="talkBackAudio" autoplay controls></audio>
-          <el-button @click="talkBackAction">{{ talkBack }}</el-button>
+          <el-button type="primary" round style="margin-top: 20px; margin-left: 100px" @click="talkBackAction">{{ talkBack }}</el-button>
         </el-dialog>
 
-        <el-dialog title="图像监管" :visible.sync="photoShotVisible">
-          <el-date-picker
-            v-model="photoShotTime"
-            type="datetimerange"
-            align="right"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['12:00:00', '08:00:00']"
-          />
-          <el-button @click="getPhotoList">查询图片</el-button>
-          <el-radio-group v-model="radio">
-            <el-radio :label="1">车前</el-radio>
-            <el-radio :label="2">司机</el-radio>
-            <el-radio :label="3">罐左侧</el-radio>
-            <el-radio :label="4">罐右侧</el-radio>
-          </el-radio-group>
-          <el-button @click="cameraShot">图片采集</el-button>
-          <el-image :src="src" />
-          <el-image :src="srcADAS" />
+        <el-dialog title="图像监管" width="700px" :visible.sync="photoShotVisible">
+          <el-row :gutter="40">
+            <el-col :span="18">
+              <el-date-picker
+                v-model="photoShotTime"
+                type="datetimerange"
+                align="right"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :default-time="['12:00:00', '08:00:00']"
+              />
+            </el-col>
+            <el-col :span="6">
+              <el-button type="primary" round @click="getPhotoList">查询图片</el-button>
+            </el-col>
+          </el-row>
+          <el-row :gutter="40">
+            <el-col :span="16" style="margin-top: 10px">
+              <el-radio-group v-model="radio">
+                <el-radio :label="1">车前</el-radio>
+                <el-radio :label="2">司机</el-radio>
+                <el-radio :label="3">罐左侧</el-radio>
+                <el-radio :label="4">罐右侧</el-radio>
+              </el-radio-group>
+            </el-col>
+            <el-col :span="6" offset="2">
+              <el-button type="primary" round @click="cameraShot">图片采集</el-button>
+            </el-col>
+          </el-row>
+          <el-row :gutter="40">
+            <el-col :span="8">
+              <div type="height: 200; width: 300">
+                <el-image :src="src" />
+              </div>
+            </el-col>
+            <el-col :span="16">
+              <div type="height:200; width: 300">
+                <el-image :src="srcADAS" />
+              </div>
+            </el-col>
+          </el-row>
         </el-dialog>
 
         <el-dialog title="轨迹回放" width="80vw;" :visible.sync="trackPlaybackVisible">
-          <el-input v-model="trackPlaybackStartTime" type="date" style="width: 40%;float: left;"size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
+          <el-input v-model="trackPlaybackStartTime" type="date" style="width: 40%;float: left;" size="small" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
           <el-input v-model="trackPlaybackEndTime" type="date" style="width: 40%;float: left;margin-left: 10px" size="small" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
-          <el-button @click="trackPlaybackDraw" style="margin-left: 10px;float: left; margin-bottom: 10px;margin-right: 20px" size="small">查询</el-button>
-          <el-button @click="trackPlaybackStart"  style="margin-left: 0px;"size="small">开始</el-button>
-          <el-button @click="trackPlaybackStop" size="small" style="margin-bottom: 10px">停止</el-button>
+          <el-button style="margin-left: 10px;float: left; margin-bottom: 10px;margin-right: 20px" size="small" @click="trackPlaybackDraw">查询</el-button>
+          <el-button style="margin-left: 0px;" size="small" @click="trackPlaybackStart">开始</el-button>
+          <el-button size="small" style="margin-bottom: 10px" @click="trackPlaybackStop">停止</el-button>
           <div style="width: 100%;height: 50vh;">
             <baidu-map class="map" :center="center" :zoom="11" style="height: 100%;width: 100%;">
               <bm-driving
@@ -255,12 +277,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
-import { getTreeVehicleFormList, getVehiclePositionFromList } from '@/api/vehicle-list-index'
+import { getTreeVehicleFormList } from '@/api/vehicle-list-index'
 import { cameraPhoto, mediaTransform, realTimeMediaControl, textMsg, tempLocationTrack, getTerminalParam } from '@/api/terminal'
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import RecordRTC from 'recordrtc'
-import { insertViolation } from '@/api/vehicle-manage'
 import { getWeatherInfo } from '../../api/weather'
 import { getLocationDetailInfo } from '../../api/location'
 import { getVehiclePhotoInfoList } from '../../api/photo-info'
@@ -388,7 +409,7 @@ export default {
         console.log('talkBack connected.')
       }
       // var mediaSource = new MediaSource()
-      var audio = this.$refs.talkBackAudio
+      const audio = this.$refs.talkBackAudio
       console.log('audio' + audio)
       // audio.src = URL.createObjectURL(mediaSource)
       // mediaSource.addEventListener('sourceopen', () => {
@@ -397,7 +418,6 @@ export default {
         console.log(data.data)
         if (data.data != null) {
           // data.data.type = 'audio/wav'
-          console.log(data.data)
           // sourceBuffer.appendBuffer(new Uint8Array(data.data))
           audio.src = URL.createObjectURL(data.data)
         }
@@ -405,6 +425,7 @@ export default {
       // })
       let recorder
       if (this.talkBack === '开始对讲') {
+        peer.send('start')
         mediaTransform('15153139702', 6, 2)
         navigator.mediaDevices.getUserMedia({
           audio: true,
@@ -423,16 +444,15 @@ export default {
             numberOfAudioChannels: 1
           })
           recorder.startRecording()
-          peer.send('start')
         }).catch(function(error) {
           console.log(error)
         })
         this.talkBack = '停止对讲'
       } else {
+        peer.send('stop')
         realTimeMediaControl('15153139702', 6, 4, 0, 0)
         recorder.stopRecording()
         if (peer.MediaStream) peer.MediaStream.stop()
-        peer.send('stop')
         this.talkBack = '开始对讲'
       }
     },
@@ -519,7 +539,7 @@ export default {
         })
       }),
       getMessageTemplateList().then(response => {
-          this.templateList = response.data
+        this.templateList = response.data
       })
     },
     handler({ BMap, map }) {
@@ -528,7 +548,7 @@ export default {
       this.center.lat = 39.915
     },
     toVideoMonitoring(phoneNum) {
-      mediaTransform(phoneNum, 1, 0).then()
+      // mediaTransform(phoneNum, 1, 0).then()
       this.$router.push({ path: '/videoMonitor/videoMonitor' })
     },
     toTerminalParam(phoneNum) {
@@ -627,46 +647,43 @@ export default {
       result.push(bd_lon)
       return result
     },
-    timeCompareMinute(time1,time2){
-      let begin1=time1.substr(0,10).split("-")
-      let end1=time2.substr(0,10).split("-")
-      let date1=new Date(begin1[1] + - + begin1[2] + - + begin1[0])
-      let date2=new Date(end1[1] + - + end1[2] + - + end1[0])
-      //得到两个日期之间的差值m，以分钟为单位
-      //Math.abs(date2-date1)计算出以毫秒为单位的差值
-      //Math.abs(date2-date1)/1000得到以秒为单位的差值
-      //Math.abs(date2-date1)/1000/60得到以分钟为单位的差值
-      let m=parseInt(Math.abs(date2-date1)/1000/60);
-      let min1=parseInt(time1.substr(11,2))*60+parseInt(time1.substr(14,2));
-      let min2=parseInt(time2.substr(11,2))*60+parseInt(time2.substr(14,2));
-      let n=min2-min1;
-      let minutes=m+n;
+    timeCompareMinute(time1, time2) {
+      const begin1 = time1.substr(0, 10).split('-')
+      const end1 = time2.substr(0, 10).split('-')
+      const date1 = new Date(begin1[1] + -+begin1[2] + -+begin1[0])
+      const date2 = new Date(end1[1] + -+end1[2] + -+end1[0])
+      // 得到两个日期之间的差值m，以分钟为单位
+      // Math.abs(date2-date1)计算出以毫秒为单位的差值
+      // Math.abs(date2-date1)/1000得到以秒为单位的差值
+      // Math.abs(date2-date1)/1000/60得到以分钟为单位的差值
+      const m = parseInt(Math.abs(date2 - date1) / 1000 / 60)
+      const min1 = parseInt(time1.substr(11, 2)) * 60 + parseInt(time1.substr(14, 2))
+      const min2 = parseInt(time2.substr(11, 2)) * 60 + parseInt(time2.substr(14, 2))
+      const n = min2 - min1
+      const minutes = m + n
       return minutes
     },
     getCurrentTime() {
-      //2019-06-10 10:08:35
-      let now = new Date();
-      let year = now.getFullYear();       //年
-      let month = now.getMonth() + 1;     //月
-      let day = now.getDate();            //日
-      let hh = now.getHours();            //时
-      let mm = now.getMinutes();          //分
-      let ss = now.getSeconds();           //秒
-      let clock = year + "-";
-      if (month < 10)
-        clock += "0";
-      clock += month + "-";
-      if (day < 10)
-        clock += "0";
-      clock += day + " ";
-      if (hh < 10)
-        clock += "0";
-      clock += hh + ":";
-      if (mm < 10) clock += '0';
-      clock += mm + ":";
-      if (ss < 10) clock += '0';
-      clock += ss;
-      return (clock);
+      // 2019-06-10 10:08:35
+      const now = new Date()
+      const year = now.getFullYear() // 年
+      const month = now.getMonth() + 1 // 月
+      const day = now.getDate() // 日
+      const hh = now.getHours() // 时
+      const mm = now.getMinutes() // 分
+      const ss = now.getSeconds() // 秒
+      let clock = year + '-'
+      if (month < 10) { clock += '0' }
+      clock += month + '-'
+      if (day < 10) { clock += '0' }
+      clock += day + ' '
+      if (hh < 10) { clock += '0' }
+      clock += hh + ':'
+      if (mm < 10) clock += '0'
+      clock += mm + ':'
+      if (ss < 10) clock += '0'
+      clock += ss
+      return (clock)
     },
     webSocket() {
       const ws = new WebSocket('ws://202.194.14.72:15674/ws')
@@ -696,15 +713,15 @@ export default {
               item.wirelessIntensity = p.wirelessIntensity
               item.satellitesNum = p.satellitesNum
               console.log(item.longitude + '--->' + item.latitude)
-              //p.time=190610093043
-              item.time='20'+p.time.substring(0,2)+'-'+p.time.substring(2,4)+'-'+p.time.substring(4,6)
-                +' '+p.time.substring(6,8)+':'+p.time.substring(8,10)+':'+p.time.substring(10,12)
+              // p.time=190610093043
+              item.time = '20' + p.time.substring(0, 2) + '-' + p.time.substring(2, 4) + '-' + p.time.substring(4, 6) +
+                ' ' + p.time.substring(6, 8) + ':' + p.time.substring(8, 10) + ':' + p.time.substring(10, 12)
               console.log(item.time)
-              let currentTime=ref.getCurrentTime()
-              let minutes=ref.timeCompareMinute(item.time,currentTime)
-              if(minutes<1){
+              const currentTime = ref.getCurrentTime()
+              const minutes = ref.timeCompareMinute(item.time, currentTime)
+              if (minutes < 1) {
                 item.is_online = '在线'
-              }else{
+              } else {
                 item.is_online = '离线'
               }
               console.log('minutes')
@@ -1072,9 +1089,9 @@ export default {
           const terminalPhone = p.terminalPhone
           ref.carList.filter(item => {
             if (item.phoneNum == terminalPhone) {
-              item.driverName=p.driverName
-              item.qualificationCode=p.qualificationCode
-              item.authorityName=p.authorityName
+              item.driverName = p.driverName
+              item.qualificationCode = p.qualificationCode
+              item.authorityName = p.authorityName
             }
           })
         })
@@ -1103,18 +1120,18 @@ export default {
         this.carList[2].latitude = (39.915 + Math.random() / 20).toFixed(3)
       }
     },
-    infoWindowClose(marker) {//infoWindow关闭
+    infoWindowClose(marker) { // infoWindow关闭
       marker.showFlag = false
     },
-    infoWindowOpen(marker) {//infoWindow打开
+    infoWindowOpen(marker) { // infoWindow打开
       marker.showFlag = true
-      this.currentCarInfo = marker //记录当前infoWindow的车辆信息
+      this.currentCarInfo = marker // 记录当前infoWindow的车辆信息
     },
     filterNode(value, data) {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     },
-    getChecked() {//获取树上选中的节点
+    getChecked() { // 获取树上选中的节点
       this.checkedNodes = this.$refs.tree2.getCheckedNodes()
       // console.log(this.checkedNodes)
       this.checkedNodes.forEach(item => {
@@ -1124,7 +1141,7 @@ export default {
       console.log(this.plateNumList)
       // this.doLocation()
     },
-    getCurryClick(event) {//获取树上刚刚被点击的结点
+    getCurryClick(event) { // 获取树上刚刚被点击的结点
       // this.checkedNode = this.$refs.tree2.getCurrentNode
       console.log(event)
       this.center.lng = event.longitude
@@ -1155,7 +1172,7 @@ export default {
       )
     }, */
     // 轨迹回放用到的方法
-    trackPlaybackDraw() {// 查询一段时间间隔的坐标，画路径
+    trackPlaybackDraw() { // 查询一段时间间隔的坐标，画路径
       this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
       this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
       /* getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
@@ -1177,11 +1194,11 @@ export default {
 
       console.log(this.path)
     },
-    trackPlaybackStart() {//开始回放
+    trackPlaybackStart() { // 开始回放
       this.$refs.lushu.$emit('start', this.$refs.lushu)
       this.play = true
     },
-    trackPlaybackStop() {//停止回放
+    trackPlaybackStop() { // 停止回放
       this.play = false
     },
     // ////////////////////////////////////////////
@@ -1230,8 +1247,8 @@ export default {
         loading.close()
       })
     },
-    fnMessageSelect(){
-      this.textMsg=this.messageQuery
+    fnMessageSelect() {
+      this.textMsg = this.messageQuery
     },
     sendTextMsg() {
       const loading = this.$loading({
@@ -1349,5 +1366,31 @@ export default {
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+  }
+  .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .el-col {
+    border-radius: 4px;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .bg-purple {
+    background: #d3dce6;
+  }
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
   }
 </style>
