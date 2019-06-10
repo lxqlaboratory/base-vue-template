@@ -308,12 +308,6 @@ export default {
       digitBillVisible: false,
       textMsgVisible: false,
       talkBack: '开始对讲',
-      vehicleInfo: [{
-        plateNum: '鲁YPL666',
-        driverName: '杨培林',
-        speed: '666km/h',
-        time: '2018-12-25 10:49:48'
-      }],
       weatherInfo: [{
         dayPictureUrl: '',
         nightPictureUrl: '',
@@ -1109,19 +1103,18 @@ export default {
         this.carList[2].latitude = (39.915 + Math.random() / 20).toFixed(3)
       }
     },
-    infoWindowClose(marker) {
+    infoWindowClose(marker) {//infoWindow关闭
       marker.showFlag = false
     },
-    infoWindowOpen(marker) {
+    infoWindowOpen(marker) {//infoWindow打开
       marker.showFlag = true
-      this.currentCarInfo = marker
-      console.log('车辆信息:' + this.currentCarInfo)
+      this.currentCarInfo = marker //记录当前infoWindow的车辆信息
     },
     filterNode(value, data) {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     },
-    getChecked() {
+    getChecked() {//获取树上选中的节点
       this.checkedNodes = this.$refs.tree2.getCheckedNodes()
       // console.log(this.checkedNodes)
       this.checkedNodes.forEach(item => {
@@ -1131,7 +1124,7 @@ export default {
       console.log(this.plateNumList)
       // this.doLocation()
     },
-    getCurryClick(event) {
+    getCurryClick(event) {//获取树上刚刚被点击的结点
       // this.checkedNode = this.$refs.tree2.getCurrentNode
       console.log(event)
       this.center.lng = event.longitude
@@ -1162,7 +1155,7 @@ export default {
       )
     }, */
     // 轨迹回放用到的方法
-    trackPlaybackDraw() {
+    trackPlaybackDraw() {// 查询一段时间间隔的坐标，画路径
       this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
       this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
       /* getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
@@ -1184,11 +1177,11 @@ export default {
 
       console.log(this.path)
     },
-    trackPlaybackStart() {
+    trackPlaybackStart() {//开始回放
       this.$refs.lushu.$emit('start', this.$refs.lushu)
       this.play = true
     },
-    trackPlaybackStop() {
+    trackPlaybackStop() {//停止回放
       this.play = false
     },
     // ////////////////////////////////////////////
