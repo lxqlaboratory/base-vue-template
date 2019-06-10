@@ -194,6 +194,7 @@
         </el-dialog>
 
         <el-dialog title="语音对讲" :visible.sync="talkBackVisible">
+          <audio ref="talkBackAudio" autoplay controls></audio>
           <el-button @click="talkBackAction">{{ talkBack }}</el-button>
         </el-dialog>
 
@@ -273,6 +274,7 @@ export default {
   },
   data() {
     return {
+      srcAudio: '',
       srcADAS: 'http://202.194.14.73:8080/photos/15153139702/hello.jpg',
       src: '',
       radio: 1,
@@ -377,19 +379,39 @@ export default {
     setTimeout(() => {
       this.webSocket()
     }, 2000)
-
-    const peer = new WebSocket('ws://211.87.225.203:10004/hello')
-    peer.push = peer.send
-    peer.send = (data) => {
-      peer.push(data)
-    }
-    peer.onopen = () => {
-      peer.binaryType = 'blob'
-      console.log('talkBack connected.')
-    }
-    let recorder
-    this.talkBackAction = () => {
+  },
+  mounted() {
+  },
+  methods: {
+    talkBackAction() {
+      const peer = new WebSocket('ws://211.87.225.211:10004/hello')
+      peer.push = peer.send
+      peer.send = (data) => {
+        peer.push(data)
+      }
+      peer.onopen = () => {
+        peer.binaryType = 'blob'
+        console.log('talkBack connected.')
+      }
+      // var mediaSource = new MediaSource()
+      var audio = this.$refs.talkBackAudio
+      console.log('audio' + audio)
+      // audio.src = URL.createObjectURL(mediaSource)
+      // mediaSource.addEventListener('sourceopen', () => {
+      // var sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="mp4a.40.2"')
+      peer.onmessage = (data) => {
+        console.log(data.data)
+        if (data.data != null) {
+          // data.data.type = 'audio/wav'
+          console.log(data.data)
+          // sourceBuffer.appendBuffer(new Uint8Array(data.data))
+          audio.src = URL.createObjectURL(data.data)
+        }
+      }
+      // })
+      let recorder
       if (this.talkBack === '开始对讲') {
+        mediaTransform('15153139702', 6, 2)
         navigator.mediaDevices.getUserMedia({
           audio: true,
           video: false
@@ -412,19 +434,14 @@ export default {
           console.log(error)
         })
         this.talkBack = '停止对讲'
-        mediaTransform('15153139702', 6, 2)
       } else {
+        realTimeMediaControl('15153139702', 6, 4, 0, 0)
         recorder.stopRecording()
         if (peer.MediaStream) peer.MediaStream.stop()
         peer.send('stop')
         this.talkBack = '开始对讲'
-        realTimeMediaControl('15153139702', 6, 4, 0, 0)
       }
-    }
-  },
-  mounted() {
-  },
-  methods: {
+    },
     getImgPath(direction) { // 获取markerImg的路径
       let pic = (direction + 22.5) / 45 + 1
       if (pic > 8) {
