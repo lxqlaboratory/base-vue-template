@@ -418,12 +418,26 @@ export default {
   mounted() {
   },
   methods: {
-    getImgPath(direction) { // 获取markerImg的路径
+    getImgPath(direction,is_online) { // 获取markerImg的路径
       let pic = (direction + 22.5) / 45 + 1
       if (pic > 8) {
         pic = 8
       }
-      return parseInt(pic) + '.png'
+      if(typeof(is_online) == "undefined"){
+        return parseInt(pic) + '.png'
+      }
+      if(is_online === '熄火'){
+        return parseInt(pic+8) + '.png'
+      }
+      else if(is_online === '离线'){
+        return parseInt(pic+16) + '.png'
+      }
+      else{
+        return parseInt(pic) + '.png'
+      }
+
+
+
     },
     tableselectrow(rowplateNum) {
       this.carList.forEach(item => {
@@ -497,7 +511,8 @@ export default {
         this.carList = dataList
         this.carList.forEach(item => {
           this.$set(item, 'showFlag', false)
-          this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath((item.direction))))
+          this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction,item.is_online)))
+
         })
       }),
       getMessageTemplateList().then(response => {
