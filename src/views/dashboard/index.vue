@@ -435,9 +435,6 @@ export default {
       else{
         return parseInt(pic) + '.png'
       }
-
-
-
     },
     tableselectrow(rowplateNum) {
       this.carList.forEach(item => {
