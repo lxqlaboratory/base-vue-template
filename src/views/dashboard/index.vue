@@ -289,7 +289,7 @@
 import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
 import TalkBack from './indexcomponents/TalkBack'
-import { getTreeVehicleFormList } from '@/api/vehicle-list-index'
+import { getTreeVehicleFormList,getVehiclePositionFromList } from '@/api/vehicle-list-index'
 import { cameraPhoto, textMsg, tempLocationTrack, getTerminalParam } from '@/api/terminal'
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
@@ -369,7 +369,8 @@ export default {
       trackPlaybackWayPointList: [
         /* { lng: 116.404844, lat: 39.911836 },
         { lng: 116.308102, lat: 40.056057 }*/
-      ]
+      ],
+      vehiclePositionFromList:[{}],
       //* *****************************************//
     }
   },
@@ -1125,18 +1126,28 @@ export default {
     }, */
     // 轨迹回放用到的方法
     trackPlaybackDraw() { // 查询一段时间间隔的坐标，画路径
-      this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
-      this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
-      /* getVehiclePositionFromList(this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
+      //this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
+      //this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
+      if(!this.trackPlaybackStartTime){
+        alert("请选择开始时间!")
+        return
+      }
+      if(!this.trackPlaybackEndTime){
+        alert("请选择开始时间!")
+        return
+      }
+      getVehiclePositionFromList(this.currentCarInfo.phoneNum,this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
         this.vehiclePositionFromList = response.data
-        if (this.vehiclePositionFromList.length() > 0) {
-          console.log(this.vehiclePositionFromList)
-          console.log(this.vehiclePositionFromList[0])
+        console.log(1111111111111111111111111)
+        console.log(this.vehiclePositionFromList)
+        if (this.vehiclePositionFromList.length > 0) {
           this.trackPlaybackStartPoint = { lng: this.vehiclePositionFromList[0].lng, lat: this.vehiclePositionFromList[0].lat }
-          this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.length() - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.length() - 1].lat }
-          console.log('this.trackPlaybackStartPoint=' + this.trackPlaybackStartPoint)
+          this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lat }
         }
-      }) */
+        else{
+          alert("数据为空!")
+        }
+      })
     },
     reset() {
       this.play = false

@@ -7,11 +7,12 @@ export function getTreeVehicleFormList() {
   })
 }
 
-export function getVehiclePositionFromList(trackPlaybackStartTime, trackPlaybackEndTime) {
+export function getVehiclePositionFromList(phoneNum, trackPlaybackStartTime, trackPlaybackEndTime) {
   return request({
     url: '/func/web/getVehiclePositionFromList',
     method: 'POST',
     data: {
+      phoneNum,
       trackPlaybackStartTime,
       trackPlaybackEndTime
     }
