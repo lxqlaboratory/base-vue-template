@@ -14,56 +14,64 @@ export default {
   name: 'TalkBack',
   data() {
     return {
-      talkBack: '开始对讲'
+      talkBack: '开始对讲',
+      peer: null,
+      recorder: null,
+      stream: null
     }
   },
+  created() {
+  },
   mounted() {
+    this.peer = new WebSocket('ws://211.87.225.211:10004/hello')
+    this.peer.push = this.peer.send
+    this.peer.send = (data) => {
+      this.peer.push(data)
+    }
+    this.peer.onopen = () => {
+      this.peer.binaryType = 'blob'
+    }
+    const audio = this.$refs.talkBackAudio
+    this.peer.onmessage = (data) => {
+      if (data.data != null) {
+        audio.src = URL.createObjectURL(data.data)
+      }
+    }
+    this.peer.onclose = () => {
+      console.log('closed')
+    }
+  },
+  destroyed() {
+    this.peer.close()
   },
   methods: {
-    talkBackAction() {
-      const peer = new WebSocket('ws://211.87.225.211:10004/hello')
-      peer.push = peer.send
-      peer.send = (data) => {
-        peer.push(data)
-      }
-      peer.onopen = () => {
-        peer.binaryType = 'blob'
-        console.log('talkBack connected.')
-        peer.send('start')
-      }
-      const audio = this.$refs.talkBackAudio
-      peer.onmessage = (data) => {
-        if (data.data != null) {
-          audio.src = URL.createObjectURL(data.data)
-        }
-      }
-      let recorder
+    async talkBackAction() {
       if (this.talkBack === '开始对讲') {
-        mediaTransform('15153139702', 6, 2)
-        navigator.mediaDevices.getUserMedia({
-          audio: true,
-          video: false
-        }).then(function(stream) {
-          peer.MediaStream = stream
-          recorder = RecordRTC(stream, {
-            type: 'audio',
-            recorderType: RecordRTC.StereoAudioRecorder,
-            disableLogs: true,
-            timeSlice: 1000,
-            ondataavailable: (blob) => {
-              peer.send(blob)
-            },
-            desiredSampRate: 8000,
-            numberOfAudioChannels: 1
-          })
-          recorder.startRecording()
+        this.peer.send('start')
+        this.stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true })
+        this.recorder = new RecordRTC(this.stream, {
+          type: 'audio',
+          recorderType: RecordRTC.StereoAudioRecorder,
+          disableLogs: true,
+          timeSlice: 1000,
+          ondataavailable: (blob) => {
+            this.peer.send(blob)
+          },
+          desiredSampRate: 8000,
+          numberOfAudioChannels: 1
         })
+        mediaTransform('15153139702', 6, 2)
+        this.recorder.startRecording()
         this.talkBack = '停止对讲'
       } else {
-        peer.send('stop')
+        this.peer.send('stop')
         realTimeMediaControl('15153139702', 6, 4, 0, 0)
-        recorder.stopRecording()
-        if (peer.MediaStream) peer.MediaStream.stop()
+        if (this.stream) {
+          this.stream.stop()
+          this.stream = null
+        }
+        this.recorder.stopRecording()
+        this.recorder = null
         this.talkBack = '开始对讲'
       }
     }
