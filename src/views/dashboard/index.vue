@@ -204,6 +204,7 @@
                 v-model="photoShotTime"
                 type="datetimerange"
                 align="right"
+                value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 :default-time="['12:00:00', '08:00:00']"
@@ -1166,12 +1167,34 @@ export default {
     },
     // ////////////////////////////////////////////
     // photo
+    timeFormatToString(time){
+      //2019-07-15 12:00:00
+      //190608000000
+      let timeStr=time.substring(2,4)+time.substring(5,7)+time.substring(8,10)
+        +time.substring(11,13)+time.substring(14,16)+time.substring(17,19)
+      return timeStr
+    },
+    // ////////////////////////////////////////////
+    // photo
     getPhotoList() {
-      console.log(this.photoShotTime[0].toLocaleString())
-      getVehiclePhotoInfoList('15153139702', '190608000000', '190608235959').then(response => {
-        console.log(response.data)
-        this.src = 'http://202.194.14.73:8080/photos/15153139702/' + response.data[0] + '.jpg'
-      })
+      if(this.photoShotTime==''){
+        this.$message({
+          showClose: true,
+          message: '必须输入开始时间和结束时间',
+          type: 'error'
+        });
+      }
+      else
+      {
+        console.log(this.photoShotTime[0].toLocaleString())
+        this.timea=this.timeFormatToString(this.photoShotTime[0].toLocaleString())
+        this.timeb=this.timeFormatToString(this.photoShotTime[1].toLocaleString())
+        console.log(this.timea)
+        getVehiclePhotoInfoList('15153139702', this.timea, this.timeb).then(response => {
+          console.log(response.data)
+          this.src = 'http://202.194.14.73:8080/photos/15153139702/' + response.data[0] + '.jpg'
+        })
+      }
     },
     // terminal
     messageHandler(response) {
