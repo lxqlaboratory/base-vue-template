@@ -14,6 +14,8 @@
           show-checkbox
           :props="defaultProps"
           default-expand-all
+          node-key="id"
+          :default-checked-keys="[1,2,3,4,5]"
           :filter-node-method="filterNode"
           @node-click="getCurryClick"
           @check-change="getChecked"
@@ -1146,6 +1148,9 @@ export default {
         }
         else{
           alert("数据为空!")
+          //演示的时候如果数据是空的就显示假数据
+          this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
+          this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
         }
       })
     },
