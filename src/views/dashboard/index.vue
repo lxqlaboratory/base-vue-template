@@ -206,6 +206,7 @@
                 v-model="photoShotTime"
                 type="datetimerange"
                 align="right"
+                value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 :default-time="['12:00:00', '08:00:00']"
@@ -231,7 +232,12 @@
           <el-row :gutter="40">
             <el-col :span="8">
               <div type="height: 200; width: 300">
-                <el-image :src="src" />
+                <!--el-image :src="src" />-->
+                <el-carousel height="200px"  direction="vertical" :autoplay="false">
+                  <el-carousel-item v-for="item in listPhotoSrc" :key="item">
+                     <el-image :src="item" />
+                  </el-carousel-item>
+                </el-carousel>
               </div>
             </el-col>
             <el-col :span="16">
@@ -312,6 +318,7 @@ export default {
       srcAudio: '',
       srcADAS: 'http://202.194.14.73:8080/photos/15153139702/hello.jpg',
       src: '',
+      listPhotoSrc:[],
       radio: 1,
       photoShotTime: '',
       textMsg: '',
@@ -1171,12 +1178,41 @@ export default {
     },
     // ////////////////////////////////////////////
     // photo
+    timeFormatToString(time){
+      //2019-07-15 12:00:00
+      //190608000000
+      let timeStr=time.substring(2,4)+time.substring(5,7)+time.substring(8,10)
+        +time.substring(11,13)+time.substring(14,16)+time.substring(17,19)
+      return timeStr
+    },
+    // ////////////////////////////////////////////
+    // photo
     getPhotoList() {
-      console.log(this.photoShotTime[0].toLocaleString())
-      getVehiclePhotoInfoList('15153139702', '190608000000', '190608235959').then(response => {
-        console.log(response.data)
-        this.src = 'http://202.194.14.73:8080/photos/15153139702/' + response.data[0] + '.jpg'
-      })
+      if(this.photoShotTime==''){
+        this.$message({
+          showClose: true,
+          message: '必须输入开始时间和结束时间',
+          type: 'error'
+        });
+      }
+      else
+      {
+        console.log(this.photoShotTime[0].toLocaleString())
+        this.timea=this.timeFormatToString(this.photoShotTime[0].toLocaleString())
+        this.timeb=this.timeFormatToString(this.photoShotTime[1].toLocaleString())
+        console.log(this.timea)
+
+        getVehiclePhotoInfoList('15153139702', this.timea, this.timeb).then(response => {
+          console.log(response.data)
+          this.listPhotoSrc=[]
+          let listData=response.data
+            listData.filter(item => {
+
+              this.listPhotoSrc.push('http://202.194.14.73:8080/photos/15153139702/'+item+ '.jpg')
+          })
+          //this.src = 'http://202.194.14.73:8080/photos/15153139702/' + response.data[0] + '.jpg'
+        })
+      }
     },
     // terminal
     messageHandler(response) {
@@ -1361,5 +1397,20 @@ export default {
   .row-bg {
     padding: 10px 0;
     background-color: #f9fafc;
+  }
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
   }
 </style>
