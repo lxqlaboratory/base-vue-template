@@ -18,6 +18,12 @@ export function getViolationAlarmFormList() {
     method: 'POST'
   })
 }
+export function getAlarmProcessContentInfo() {
+  return request({
+    url: '/func/web/getAlarmProcessContentInfo',
+    method: 'POST'
+  })
+}
 
 export function getUserMassageFormList() {
   return request({

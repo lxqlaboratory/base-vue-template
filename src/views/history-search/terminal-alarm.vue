@@ -18,8 +18,8 @@
       <span style="margin-left:10px">报警内容</span>
       <el-select v-model="alamTypeValue" filterable placeholder="请选择">
         <el-option
-          v-for="item in list"
-          :key="item.alarmId"
+          v-for="item in listAlarm"
+          :key="item.alarmContent"
           :label="item.alarmContent"
           :value="item.alarmContent"
         />
@@ -27,33 +27,33 @@
       <el-button style="margin-left:10px" type="primary" icon="el-icon-search">搜索</el-button>
     </div>
 
-    <el-table :data="tableList" border fit highlight-current-row style="margin-top:10px">
-      <el-table-column align="center" label="ID" width="50">
+    <el-table :data="tableList" border height="calc(100vh - 50px)" style="margin-top:10px;">
+      <el-table-column align="center" label="ID" min-width="10">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="车牌号" width="110" align="center">
+      <el-table-column label="车牌号" min-width="20" align="center">
         <template slot-scope="scope">
           {{ scope.row.plateNum }}
         </template>
       </el-table-column>
-      <el-table-column label="报警内容" width="260" align="center">
+      <el-table-column label="报警内容" min-width="50"align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.alarmContent }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="报警时间" width="260" align="center">
+      <el-table-column label="报警时间" min-width="50" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="车队名称" width="300" align="center">
+      <el-table-column label="车队名称" min-width="50" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.fleetName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="位置信息" width="260" align="center">
+      <el-table-column label="位置信息" min-width="50"  align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.address }} </span>
         </template>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-  import { getViolationAlarmFormList } from '@/api/history-search'
+  import { getViolationAlarmFormList,getAlarmProcessContentInfo } from '@/api/history-search'
   import { getCarList } from '@/api/vehicle-manage'
 
   export default {
@@ -74,6 +74,7 @@
     data() {
       return {
         list: [],
+        listAlarm: [],
         alamTypeValue: [],
         plateValue: [],
         plateList: [],
@@ -122,9 +123,20 @@
         getViolationAlarmFormList().then(response => {
           this.list = response.data
         }),
-          getCarList().then(response => {
+        getCarList().then(response => {
             this.plateList = response.data
-          })
+        }),
+        getAlarmProcessContentInfo().then(response => {
+          let list = response.data
+          console.log( this.listAlarm)
+          let list_map = new Array();
+          for ( let i = 0; i < list.length; i++) {
+            list_map.push({alarmContent:list[i],alarmContent:list[i]});
+          }
+          this.listAlarm=list_map
+          console.log( this.listAlarm)
+        })
+
       },
       startTimeStatus: function(value) {
         this.createDate = value
