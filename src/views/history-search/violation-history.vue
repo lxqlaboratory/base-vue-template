@@ -27,7 +27,7 @@
       <el-button style="margin-left:10px" type="primary" icon="el-icon-search">搜索</el-button>
     </div>
 
-    <el-table :data="tableList" border fit highlight-current-row style="margin-top:10px">
+    <el-table :data="tableList.slice((currentPage-1)*pageSize,currentPage*pageSize)" strip border fit highlight-current-row style="margin-top:10px">
       <el-table-column align="center" label="ID" width="50">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -64,6 +64,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination class="fy"
+                   layout="prev, pager, next"
+                   @current-change="current_change"
+                   :total="total"
+                   :page-size="pageSize"
+                   background>
+    </el-pagination>
   </div>
 </template>
 
@@ -79,6 +86,9 @@ export default {
   },
   data() {
     return {
+      total:1000,//默认数据总数
+      pageSize:10,//每页的数据条数
+      currentPage:1,//默认开始页面
       list: [],
       violationTypeList: [],
       violationTypeValue: null,
@@ -129,6 +139,7 @@ export default {
     fetchData() {
       getViolationQueryFormList().then(response => {
         this.list = response.data
+        this.total=this.list.length;
       }),
       getVehicleMonitoringViolationType().then(response => {
         this.violationTypeList = response.data
@@ -143,7 +154,29 @@ export default {
     // 时间结束选择器
     endTimeStatus: function(value) {
       this.overDate = value
+    },
+    tableRowClassName({row, rowIndex}) {
+      if (rowIndex === 0) {
+        return 'th';
+      }
+      return '';
+    },
+    current_change:function(currentPage){
+      this.currentPage = currentPage;
     }
   }
 }
 </script>
+<style>
+  .fl{
+    float: right;
+    margin-right:20px;
+  }
+  .fy{
+    text-align:center;
+    margin-top:30px;
+  }
+  .title{
+    height:100%;
+  }
+</style>
