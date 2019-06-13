@@ -152,7 +152,7 @@
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
           <el-tab-pane label="基本信息" name="first">
             <el-form :model="save" label-position="left" label-width="140px" style="width: 430px; margin-left:50px;">
-              <el-form-item label="驾驶证号:">
+              <el-form-item label="车牌号:">
                 <el-input v-model="save.plateNum"  style="width: 80%" autocomplete="off" />
               </el-form-item>
               <el-form-item label="SIM卡号:">

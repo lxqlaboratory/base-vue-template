@@ -934,7 +934,7 @@ export default {
               if (p.throughArea === true) {
                 ref.$message({
                   showClose: true,
-                  message: '[' + ref.socketPlateNum + ']' + '进出区域',
+                  message: '[' + ref.socketPlateNum + ']' + '进入区域',
                   type: 'warning',
                   duration: 8000
                 })
@@ -942,7 +942,7 @@ export default {
               if (p.throughRoad === true) {
                 ref.$message({
                   showClose: true,
-                  message: '[' + ref.socketPlateNum + ']' + '进出路线',
+                  message: '[' + ref.socketPlateNum + ']' + '进入路线',
                   type: 'warning',
                   duration: 8000
                 })
