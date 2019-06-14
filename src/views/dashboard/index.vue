@@ -1078,21 +1078,14 @@ export default {
       setInterval(this.changeControlBottom, 15000)
     },
     changeControlBottom() {
-      if (this.carList[0].receiveData == 0 || this.carList[0].receiveData === 0) {
-        console.log('receiveData_Enter A')
-        this.carList[0].longitude = (116.404 + Math.random() / 20).toFixed(3)
-        this.carList[0].latitude = (39.915 + Math.random() / 20).toFixed(3)
-      }
-      if (this.carList[1].receiveData == 0 || this.carList[1].receiveData === 0) {
-        console.log('receiveData_Enter B')
-        this.carList[1].longitude = (116.404 + Math.random() / 20).toFixed(3)
-        this.carList[1].latitude = (39.915 + Math.random() / 20).toFixed(3)
-      }
-      if (this.carList[2].receiveData == 0 || this.carList[2].receiveData === 0) {
-        console.log('receiveData_Enter C')
-        this.carList[2].longitude = (116.404 + Math.random() / 20).toFixed(3)
-        this.carList[2].latitude = (39.915 + Math.random() / 20).toFixed(3)
-      }
+      this.carList.filter(item => {
+        if(item.receiveData == 0 || item.receiveData === 0){
+
+          item.longitude = (116.404 + Math.random() / 20).toFixed(3)
+          item.latitude = (39.915 + Math.random() / 20).toFixed(3)
+
+        }
+      })
     },
     infoWindowClose(marker) { // infoWindow关闭
       marker.showFlag = false
