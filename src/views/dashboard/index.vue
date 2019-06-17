@@ -1082,7 +1082,7 @@ export default {
       }
       client.connect('admin', '123', on_connect, on_error, 'jt808')
 
-      setInterval(this.changeControlBottom, 1000)
+      setInterval(this.changeControlBottom, 15000)
     },
     changeControlBottom() {
       this.carList.forEach(item => {
@@ -1091,8 +1091,8 @@ export default {
           item.direction = '1'
           item.speed = 0
           item.is_online = '离线'
-          item.longitude=116.98695649121092
-          item.latitude=38.65221385853693
+          //item.longitude=116.98695649121092
+          //item.latitude=38.65221385853693
         }
         this.$set(item, 'showFlag', false)
         this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction,item.is_online)))
