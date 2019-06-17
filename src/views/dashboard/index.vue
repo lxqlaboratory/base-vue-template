@@ -420,6 +420,9 @@ export default {
   },
   methods: {
     getImgPath(direction,is_online) { // 获取markerImg的路径
+      //console.log('getImgPath')
+      //console.log(is_online)
+      //console.log(direction)
       let pic = (direction + 22.5) / 45 + 1
       if (pic > 8) {
         pic = 8
@@ -507,16 +510,9 @@ export default {
         }
         this.$store.dispatch('ChangeCarList', dataList).then()
         this.carList = dataList
-        this.carList.forEach(item => {
-          this.$set(item, 'showFlag', false)
-          this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction,item.is_online)))
-         // this._getLocationDetailInfo({ lng:item.longitude, lat: item.latitude })
-          console.log("ssssssssss")
-          console.log(this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude}))
-          //this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude})
-         this.$set(item, 'locationDetail',  this._getLocationDetailInfo({ lng:item.longitude, lat: item.latitude }))
+        console.log(this.carList)
+        this.changeControlBottom();
 
-        })
       }),
       getMessageTemplateList().then(response => {
         this.templateList = response.data
@@ -1086,16 +1082,24 @@ export default {
       }
       client.connect('admin', '123', on_connect, on_error, 'jt808')
 
-      setInterval(this.changeControlBottom, 15000)
+      setInterval(this.changeControlBottom, 1000)
     },
     changeControlBottom() {
-      this.carList.filter(item => {
+      this.carList.forEach(item => {
         if(item.receiveData == 0 || item.receiveData === 0){
           item.acc = false
           item.direction = '1'
           item.speed = 0
           item.is_online = '离线'
+          item.longitude=116.98695649121092
+          item.latitude=38.65221385853693
         }
+        this.$set(item, 'showFlag', false)
+        this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction,item.is_online)))
+        // this._getLocationDetailInfo({ lng:item.longitude, lat: item.latitude })
+        //console.log(this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude}))
+        //this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude})
+        this.$set(item, 'locationDetail',  this._getLocationDetailInfo({ lng:item.longitude, lat: item.latitude }))
       })
     },
     infoWindowClose(marker) { // infoWindow关闭
