@@ -469,7 +469,7 @@ export default {
           }
         })
         this.locationDetailInfo = info + seInfo + neInfo + swInfo + nwInfo + '.'
-        console.log(response)
+        return info + seInfo + neInfo + swInfo + nwInfo + '.'
       })
     },
     _getWeatherInfo({ lng, lat }) {
@@ -509,6 +509,11 @@ export default {
         this.carList.forEach(item => {
           this.$set(item, 'showFlag', false)
           this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction,item.is_online)))
+         // this._getLocationDetailInfo({ lng:item.longitude, lat: item.latitude })
+          console.log("ssssssssss")
+          console.log(this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude}))
+          //this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude})
+         this.$set(item, 'locationDetail',  this._getLocationDetailInfo({ lng:item.longitude, lat: item.latitude }))
 
         })
       }),
