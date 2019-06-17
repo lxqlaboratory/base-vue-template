@@ -689,9 +689,9 @@ export default {
               console.log(resultPoint)
               item.longitude = resultPoint[1]
               item.latitude = resultPoint[0]
-              item.ACC = p.ACC
+              item.acc = p.ACC
               item.direction = p.direction
-              item.speed = p.speed
+              item.speed = p.speed/10.0
               item.elevation = p.elevation
               item.receiveData = 1// 代表了已经接收到了信息
               item.simulation = p.simulation
@@ -1091,10 +1091,10 @@ export default {
     changeControlBottom() {
       this.carList.filter(item => {
         if(item.receiveData == 0 || item.receiveData === 0){
-
-          item.longitude = (116.404 + Math.random() / 20).toFixed(3)
-          item.latitude = (39.915 + Math.random() / 20).toFixed(3)
-
+          item.acc = false
+          item.direction = '1'
+          item.speed = 0
+          item.is_online = '离线'
         }
       })
     },
