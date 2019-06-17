@@ -1132,7 +1132,7 @@ export default {
       const that = this
       var t = setTimeout(function() {
         that.radius = 0 // 半径设置成0圈就没啦
-        console.log(that.radius)
+        //console.log(that.radius)
       }, 1000)
     },
 
