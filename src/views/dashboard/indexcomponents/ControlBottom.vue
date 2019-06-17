@@ -104,7 +104,7 @@
     </div>
 
     <div v-show="isShow" class="mapBottomTable">
-      <el-table :data="tableData" border style="width: 100%" height="250" @row-click="throwEmit" @row-contextmenu="row_contextmenu">
+      <el-table :data="tableData" border style="width: 100%;max-height:40vh"  @row-click="throwEmit" @row-contextmenu="row_contextmenu">
         <!--  <el-table-column type="selection" min-width="50" />-->
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -149,7 +149,12 @@
           :filters="[{ text: '离线', value: '离线' }, { text: '在线', value: '在线' }, { text: '熄火', value: '熄火' }]"
           min-width="120"
         />
-        <el-table-column prop="acc" label="ACC" sortable min-width="80" />
+        <el-table-column prop="acc" label="ACC" sortable min-width="80" >
+          <template slot-scope="scope">
+            <div v-if="scope.row.acc" >{{'开启'}}</div>
+            <div v-else >{{'关闭'}}</div>
+          </template>
+        </el-table-column>
         <el-table-column  label="卫星速度"  sortable min-width="110" >
           <template slot-scope="scope">
               <div v-if="scope.row.speed>75" style="color: red">{{scope.row.speed}}</div>
@@ -395,6 +400,7 @@ export default {
     bottom: 0;
     left: 0;
     min-height: 40vh;
+    max-height: 45vh;
     border-top: 1px solid gray;
     width: 100%;
     background-color: ghostwhite;
