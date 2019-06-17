@@ -168,7 +168,7 @@
                   />
                 </el-select>
               </el-form-item>
-              <el-form-item label="所属司机(必选):">
+              <!--<el-form-item label="所属司机(必选):">
                 <el-select v-model="driverNameQuery" filterable   style="margin-bottom: 10px" placeholder="请选择">
                   <el-option
                     v-for="item in driverList"
@@ -177,7 +177,7 @@
                     :value="item.personId"
                   />
                 </el-select>
-              </el-form-item>
+              </el-form-item>-->
               <el-form-item label="车主:">
                 <el-input v-model="save.ownerName" style="width: 80%" autocomplete="off" />
               </el-form-item>
@@ -427,7 +427,7 @@ export default {
     saveTemplate() {
       this.dialogSaveFormVisible = false
       saveCarList(this.save.plateNum, this.save.simNum,
-        this.fleetNameEdit, this.driverNameQuery , this.save.ownerName, this.save.ownerPhoneNum,
+        this.fleetNameEdit, this.save.ownerName, this.save.ownerPhoneNum,
         this.save.businessScope1,  this.save.lineType1,  this.save.transportCertificateNum1,  this.save.nameplateType1
         , this.boolSleeper,  this.save.vehicleType1, this.save.vehicleType, this.save.fuelType1
         , this.save.plateColor1 , this.save.nameplateBrand1 , this.save.busRank1 , this.save.transportCertificateWord1 ,
