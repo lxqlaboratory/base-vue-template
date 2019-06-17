@@ -264,7 +264,7 @@ export default {
     const that = this
     setTimeout(() => {
       that.tableData = that.carList
-    }, 5000)
+    }, 1000)
   },
   methods: {
     throwEmit(val) {
