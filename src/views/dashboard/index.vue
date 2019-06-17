@@ -127,37 +127,37 @@
                     <span class="svg-container">
                       <svg-icon icon-class="direct" />
                     </span>
-                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="doTempLocationTrack">定位跟踪</span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="doTempLocationTrack(marker.phoneNum)">定位跟踪</span>
                   </div>
                   <div class="popup-btn">
                     <span class="svg-container">
                       <svg-icon icon-class="trackplay" />
                     </span>
-                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTrackPlaybackVisible">轨迹回放</span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTrackPlaybackVisible(marker.phoneNum)">轨迹回放</span>
                   </div>
                   <div class="popup-btn">
                     <span class="svg-container">
                       <svg-icon icon-class="voice" />
                     </span>
-                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTalkBackVisible">语音对讲</span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTalkBackVisible(marker.phoneNum)">语音对讲</span>
                   </div>
                   <div class="popup-btn">
                     <span class="svg-container">
                       <svg-icon icon-class="picture" />
                     </span>
-                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isPhotoShotVisible">图像监管</span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isPhotoShotVisible(marker.phoneNum)">图像监管</span>
                   </div>
                   <div class="popup-btn">
                     <span class="svg-container">
                       <svg-icon icon-class="bill" />
                     </span>
-                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isDigitBillVisible">电子运单</span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isDigitBillVisible(marker.phoneNum)">电子运单</span>
                   </div>
                   <div class="popup-btn">
                     <span class="svg-container">
                       <svg-icon icon-class="text" />
                     </span>
-                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTextMsgVisible">文本下发</span>
+                    <span class="popup-span" style="margin-left: 2px;font-weight:normal" @click="isTextMsgVisible(marker.phoneNum)">文本下发</span>
                   </div>
                 </div>
               </div>
@@ -319,6 +319,7 @@ export default {
       srcADAS: 'http://202.194.14.73:8080/photos/15153139702/hello.jpg',
       src: '',
       listPhotoSrc:[],
+      phoneNum:'',
       radio: 1,
       photoShotTime: '',
       textMsg: '',
@@ -534,19 +535,24 @@ export default {
       getTerminalParam(phoneNum).then()
       this.$router.push({ path: '/terminalControl/terminalParam' })
     },
-    isTrackPlaybackVisible() {
+    isTrackPlaybackVisible(phoneNum) {
+      this.phoneNum=phoneNum
       this.trackPlaybackVisible = !this.trackPlaybackVisible
     },
-    isTalkBackVisible() {
+    isTalkBackVisible(phoneNum) {
       this.talkBackVisible = !this.talkBackVisible
+      this.phoneNum=phoneNum
     },
-    isPhotoShotVisible() {
+    isPhotoShotVisible(phoneNum) {
+      this.phoneNum=phoneNum
       this.photoShotVisible = !this.photoShotVisible
     },
-    isDigitBillVisible() {
+    isDigitBillVisible(phoneNum) {
+      this.phoneNum=phoneNum
       this.digitBillVisible = !this.digitBillVisible
     },
-    isTextMsgVisible() {
+    isTextMsgVisible(phoneNum) {
+      this.phoneNum=phoneNum
       this.textMsgVisible = !this.textMsgVisible
     },
     getClickInfo(e) {
@@ -558,42 +564,42 @@ export default {
       this._getLocationDetailInfo({ lng: e.point.lng, lat: e.point.lat })
     },
     GpsToBaiduPoint(lat, lng) {
-      var _t = this.wgs2bd(lat, lng)
+      let _t = this.wgs2bd(lat, lng)
       /* var _BPoint = new BMap.Point(_t[1], _t[0]);
       return _BPoint*/
       return _t
     },
     wgs2bd(lat, lon) {
-      var wgs2gcjR = this.wgs2gcj(lat, lon)
-      var gcj2bdR = this.gcj2bd(wgs2gcjR[0], wgs2gcjR[1])
+      let wgs2gcjR = this.wgs2gcj(lat, lon)
+      let gcj2bdR = this.gcj2bd(wgs2gcjR[0], wgs2gcjR[1])
       return gcj2bdR
     },
     wgs2gcj(lat, lon) {
-      var pi = 3.14159265358979324
-      var a = 6378245.0
-      var ee = 0.00669342162296594323
-      var x_pi = 3.14159265358979324 * 3000.0 / 180.0
-      var dLat = this.transformLat(lon - 105.0, lat - 35.0)
-      var dLon = this.transformLon(lon - 105.0, lat - 35.0)
-      var radLat = lat / 180.0 * pi
-      var magic = Math.sin(radLat)
+      let pi = 3.14159265358979324
+      let a = 6378245.0
+      let ee = 0.00669342162296594323
+      let x_pi = 3.14159265358979324 * 3000.0 / 180.0
+      let dLat = this.transformLat(lon - 105.0, lat - 35.0)
+      let dLon = this.transformLon(lon - 105.0, lat - 35.0)
+      let radLat = lat / 180.0 * pi
+      let magic = Math.sin(radLat)
       magic = 1 - ee * magic * magic
-      var sqrtMagic = Math.sqrt(magic)
+      let sqrtMagic = Math.sqrt(magic)
       dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * pi)
       dLon = (dLon * 180.0) / (a / sqrtMagic * Math.cos(radLat) * pi)
-      var mgLat = lat + dLat
-      var mgLon = lon + dLon
-      var result = []
+      let mgLat = lat + dLat
+      let mgLon = lon + dLon
+      let result = []
       result.push(mgLat)
       result.push(mgLon)
       return result
     },
     transformLat(lat, lon) {
-      var pi = 3.14159265358979324
-      var a = 6378245.0
-      var ee = 0.00669342162296594323
-      var x_pi = 3.14159265358979324 * 3000.0 / 180.0
-      var ret = -100.0 + 2.0 * lat + 3.0 * lon + 0.2 * lon * lon + 0.1 * lat * lon + 0.2 * Math.sqrt(Math.abs(lat))
+      let pi = 3.14159265358979324
+      let a = 6378245.0
+      let ee = 0.00669342162296594323
+      let x_pi = 3.14159265358979324 * 3000.0 / 180.0
+      let ret = -100.0 + 2.0 * lat + 3.0 * lon + 0.2 * lon * lon + 0.1 * lat * lon + 0.2 * Math.sqrt(Math.abs(lat))
       ret += (20.0 * Math.sin(6.0 * lat * pi) + 20.0 * Math.sin(2.0 * lat * pi)) * 2.0 / 3.0
       ret += (20.0 * Math.sin(lon * pi) + 40.0 * Math.sin(lon / 3.0 * pi)) * 2.0 / 3.0
       ret += (160.0 * Math.sin(lon / 12.0 * pi) + 320 * Math.sin(lon * pi / 30.0)) * 2.0 / 3.0
@@ -601,27 +607,27 @@ export default {
     },
 
     transformLon(lat, lon) {
-      var pi = 3.14159265358979324
-      var a = 6378245.0
-      var ee = 0.00669342162296594323
-      var x_pi = 3.14159265358979324 * 3000.0 / 180.0
-      var ret = 300.0 + lat + 2.0 * lon + 0.1 * lat * lat + 0.1 * lat * lon + 0.1 * Math.sqrt(Math.abs(lat))
+      let pi = 3.14159265358979324
+      let a = 6378245.0
+      let ee = 0.00669342162296594323
+      let x_pi = 3.14159265358979324 * 3000.0 / 180.0
+      let ret = 300.0 + lat + 2.0 * lon + 0.1 * lat * lat + 0.1 * lat * lon + 0.1 * Math.sqrt(Math.abs(lat))
       ret += (20.0 * Math.sin(6.0 * lat * pi) + 20.0 * Math.sin(2.0 * lat * pi)) * 2.0 / 3.0
       ret += (20.0 * Math.sin(lat * pi) + 40.0 * Math.sin(lat / 3.0 * pi)) * 2.0 / 3.0
       ret += (150.0 * Math.sin(lat / 12.0 * pi) + 300.0 * Math.sin(lat / 30.0 * pi)) * 2.0 / 3.0
       return ret
     },
     gcj2bd(lat, lon) {
-      var pi = 3.14159265358979324
-      var a = 6378245.0
-      var ee = 0.00669342162296594323
-      var x_pi = 3.14159265358979324 * 3000.0 / 180.0
-      var x = lon; var y = lat
-      var z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi)
-      var theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi)
-      var bd_lon = z * Math.cos(theta) + 0.0065
-      var bd_lat = z * Math.sin(theta) + 0.006
-      var result = []
+      let pi = 3.14159265358979324
+      let a = 6378245.0
+      let ee = 0.00669342162296594323
+      let x_pi = 3.14159265358979324 * 3000.0 / 180.0
+      let x = lon; var y = lat
+      let z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi)
+      let theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi)
+      let bd_lon = z * Math.cos(theta) + 0.0065
+      let bd_lat = z * Math.sin(theta) + 0.006
+      let result = []
       result.push(bd_lat)
       result.push(bd_lon)
       return result
@@ -1083,21 +1089,14 @@ export default {
       setInterval(this.changeControlBottom, 15000)
     },
     changeControlBottom() {
-      if (this.carList[0].receiveData == 0 || this.carList[0].receiveData === 0) {
-        console.log('receiveData_Enter A')
-        this.carList[0].longitude = (116.404 + Math.random() / 20).toFixed(3)
-        this.carList[0].latitude = (39.915 + Math.random() / 20).toFixed(3)
-      }
-      if (this.carList[1].receiveData == 0 || this.carList[1].receiveData === 0) {
-        console.log('receiveData_Enter B')
-        this.carList[1].longitude = (116.404 + Math.random() / 20).toFixed(3)
-        this.carList[1].latitude = (39.915 + Math.random() / 20).toFixed(3)
-      }
-      if (this.carList[2].receiveData == 0 || this.carList[2].receiveData === 0) {
-        console.log('receiveData_Enter C')
-        this.carList[2].longitude = (116.404 + Math.random() / 20).toFixed(3)
-        this.carList[2].latitude = (39.915 + Math.random() / 20).toFixed(3)
-      }
+      this.carList.filter(item => {
+        if(item.receiveData == 0 || item.receiveData === 0){
+
+          item.longitude = (116.404 + Math.random() / 20).toFixed(3)
+          item.latitude = (39.915 + Math.random() / 20).toFixed(3)
+
+        }
+      })
     },
     infoWindowClose(marker) { // infoWindow关闭
       marker.showFlag = false
@@ -1164,7 +1163,6 @@ export default {
       }
       getVehiclePositionFromList(this.currentCarInfo.phoneNum,this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
         this.vehiclePositionFromList = response.data
-        console.log(1111111111111111111111111)
         console.log(this.vehiclePositionFromList)
         if (this.vehiclePositionFromList.length > 0) {
           this.trackPlaybackStartPoint = { lng: this.vehiclePositionFromList[0].lng, lat: this.vehiclePositionFromList[0].lat }
@@ -1219,7 +1217,7 @@ export default {
         this.timeb=this.timeFormatToString(this.photoShotTime[1].toLocaleString())
         console.log(this.timea)
 
-        getVehiclePhotoInfoList('15153139702', this.timea, this.timeb).then(response => {
+        getVehiclePhotoInfoList(this.phoneNum, this.timea, this.timeb).then(response => {
           console.log(response.data)
           this.listPhotoSrc=[]
           let listData=response.data
@@ -1261,7 +1259,7 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
-      cameraPhoto('15153139702', this.radio).then(response => {
+      cameraPhoto(this.phoneNum, this.radio).then(response => {
         console.log(response.data.result)
         loading.close()
         this.messageHandler(response)
@@ -1279,21 +1277,21 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
-      textMsg('15153139702', 0, this.textMsg).then(response => {
+      textMsg(this.phoneNum, 0, this.textMsg).then(response => {
         loading.close()
         this.messageHandler(response)
       }).catch(() => {
         loading.close()
       })
     },
-    doTempLocationTrack() {
+    doTempLocationTrack(phoneNum) {
       const loading = this.$loading({
         lock: true,
         text: '消息发送中',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
-      tempLocationTrack('15153139702', 0, this.textMsg).then(response => {
+      tempLocationTrack(phoneNum, 0, this.textMsg).then(response => {
         loading.close()
         this.messageHandler(response)
       }).catch(() => {

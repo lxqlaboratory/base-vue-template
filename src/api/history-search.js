@@ -31,3 +31,9 @@ export function getUserMassageFormList() {
     method: 'POST'
   })
 }
+export function getVueAllOnlineRecordingInfo() {
+  return request({
+    url: '/func/web/getVueAllOnlineRecordingInfo',
+    method: 'POST'
+  })
+}

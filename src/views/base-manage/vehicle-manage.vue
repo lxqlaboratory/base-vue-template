@@ -314,7 +314,7 @@ export default {
       plateNumQuery: '',
       activeName: 'first',
       fleetNameQuery: '',
-      fleetNameEdit:'德州市鑫华汽车运输有限公司车队',
+      fleetNameEdit:'',
       driverNameQuery:'',
       dialogFormVisible: false,
       dialogSaveFormVisible: false,
@@ -395,11 +395,14 @@ export default {
       getDriverList().then(response => {
         this.driverList = response.data
         if(this.driverList!=[]){
-          this.driverNameQuery=this.driverList[0].driverName
+          this.driverNameQuery=this.driverList[0].personId
         }
       }),
       getFleetList().then(response => {
         this.fleetList = response.data
+        if(this.fleetList!=[]){
+          this.fleetNameEdit=this.fleetList[0].companyName
+        }
       })
     },
     handleClick(tab, event) {
@@ -426,7 +429,7 @@ export default {
       saveCarList(this.save.plateNum, this.save.simNum,
         this.fleetNameEdit, this.driverNameQuery , this.save.ownerName, this.save.ownerPhoneNum,
         this.save.businessScope1,  this.save.lineType1,  this.save.transportCertificateNum1,  this.save.nameplateType1
-        , this.boolSleeper,  this.save.vehicleType1,  this.save.fuelType1
+        , this.boolSleeper,  this.save.vehicleType1, this.save.vehicleType, this.save.fuelType1
         , this.save.plateColor1 , this.save.nameplateBrand1 , this.save.busRank1 , this.save.transportCertificateWord1 ,
         this.save.operationStatus1,  this.save.vehicleLength , this.save.vehicleWidth,
         this.save.vehicleHeight,  this.save.vehicleTonnage,  this.save.availableRice,  this.save.availableVolume,

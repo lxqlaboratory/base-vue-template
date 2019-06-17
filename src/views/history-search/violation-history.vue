@@ -24,41 +24,40 @@
           :value="item.value"
         />
       </el-select>
-      <el-button style="margin-left:10px" type="primary" icon="el-icon-search">搜索</el-button>
     </div>
 
     <el-table :data="tableList.slice((currentPage-1)*pageSize,currentPage*pageSize)" strip border fit highlight-current-row style="margin-top:10px">
-      <el-table-column align="center" label="ID" width="50">
+      <el-table-column align="center" label="ID" min-width="50">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="车牌号" width="110" align="center">
+      <el-table-column label="车牌号" min-width="110" align="center">
         <template slot-scope="scope">
           {{ scope.row.plateNum }}
         </template>
       </el-table-column>
-      <el-table-column label="报警类型" width="250" align="center">
+      <el-table-column label="报警类型" min-width="250" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.violationParameterName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="报警时间" width="160" align="center">
+      <el-table-column label="报警时间" min-width="160" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.violationTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="车队名称" width="260" align="center">
+      <el-table-column label="车队名称" min-width="260" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.fleetName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="公司名称" width="260" align="center">
+      <el-table-column label="公司名称" min-width="260" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.companyName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="位置" width="160" align="center">
+      <el-table-column label="位置" min-width="160" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.location }}</span>
         </template>

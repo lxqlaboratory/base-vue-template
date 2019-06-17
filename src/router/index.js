@@ -133,6 +133,12 @@ export const constantRoutes = [
         meta: { title: '离线预警历史', icon: 'history' }
       },*/
       {
+        path: 'onlineHistory',
+        name: 'onlineHistory',
+        component: () => import('@/views/history-search/online-history'),
+        meta: { title: '驾驶员换卡历史', icon: 'history' }
+      },
+      {
         path: 'userMessage',
         name: 'userMessage',
         component: () => import('@/views/history-search/user-message'),
