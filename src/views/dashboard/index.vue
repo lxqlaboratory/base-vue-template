@@ -200,52 +200,7 @@
         </el-dialog>
 
         <el-dialog title="图像监管" width="700px" :visible.sync="photoShotVisible">
-          <el-row :gutter="40">
-            <el-col :span="18">
-              <el-date-picker
-                v-model="photoShotTime"
-                type="datetimerange"
-                align="right"
-                value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :default-time="['12:00:00', '08:00:00']"
-              />
-            </el-col>
-            <el-col :span="6">
-              <el-button type="primary" round @click="getPhotoList">查询图片</el-button>
-            </el-col>
-          </el-row>
-          <el-row :gutter="40">
-            <el-col :span="16" style="margin-top: 10px">
-              <el-radio-group v-model="radio">
-                <el-radio :label="1">车前</el-radio>
-                <el-radio :label="2">司机</el-radio>
-                <el-radio :label="3">罐左侧</el-radio>
-                <el-radio :label="4">罐右侧</el-radio>
-              </el-radio-group>
-            </el-col>
-            <el-col :span="6" offset=2>
-              <el-button type="danger" round @click="cameraShot">图片采集</el-button>
-            </el-col>
-          </el-row>
-          <el-row :gutter="40">
-            <el-col :span="8">
-              <div type="height: 200; width: 300">
-                <!--el-image :src="src" />-->
-                <el-carousel height="200px"  direction="vertical" :autoplay="false">
-                  <el-carousel-item v-for="item in listPhotoSrc" :key="item">
-                     <el-image :src="item" />
-                  </el-carousel-item>
-                </el-carousel>
-              </div>
-            </el-col>
-            <el-col :span="16">
-              <div type="height:200; width: 300">
-                <el-image :src="srcADAS" />
-              </div>
-            </el-col>
-          </el-row>
+          <photo-manager />
         </el-dialog>
 
         <el-dialog title="轨迹回放" width="800px" :visible.sync="trackPlaybackVisible">
@@ -297,13 +252,13 @@
 import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
 import TalkBack from './indexcomponents/TalkBack'
+import PhotoManager from './indexcomponents/PhotoManager'
 import { getTreeVehicleFormList,getVehiclePositionFromList } from '@/api/vehicle-list-index'
 import { cameraPhoto, textMsg, tempLocationTrack, getTerminalParam } from '@/api/terminal'
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'
 import { getWeatherInfo } from '@/api/weather'
 import { getLocationDetailInfo } from '@/api/location'
-import { getVehiclePhotoInfoList } from '@/api/photo-info'
 import { getMessageTemplateList } from '@/api/template-manage'
 
 export default {
@@ -311,17 +266,13 @@ export default {
   components: {
     BmLushu,
     controlBottom: ControlBottom,
-    talkBack: TalkBack
+    talkBack: TalkBack,
+    photoManager: PhotoManager
   },
   data() {
     return {
       srcAudio: '',
-      srcADAS: 'http://202.194.14.73:8080/photos/15153139702/hello.jpg',
-      src: '',
-      listPhotoSrc:[],
-      phoneNum:'',
-      radio: 1,
-      photoShotTime: '',
+      phoneNum: '',
       textMsg: '',
       trackPlaybackStartTime: '',
       trackPlaybackEndTime: '',
@@ -380,7 +331,7 @@ export default {
         /* { lng: 116.404844, lat: 39.911836 },
         { lng: 116.308102, lat: 40.056057 }*/
       ],
-      vehiclePositionFromList:[{}],
+      vehiclePositionFromList: [{}]
       //* *****************************************//
     }
   },
@@ -1207,43 +1158,7 @@ export default {
       this.play = false
     },
     // ////////////////////////////////////////////
-    // photo
-    timeFormatToString(time){
-      //2019-07-15 12:00:00
-      //190608000000
-      let timeStr=time.substring(2,4)+time.substring(5,7)+time.substring(8,10)
-        +time.substring(11,13)+time.substring(14,16)+time.substring(17,19)
-      return timeStr
-    },
-    // ////////////////////////////////////////////
-    // photo
-    getPhotoList() {
-      if(this.photoShotTime==''){
-        this.$message({
-          showClose: true,
-          message: '必须输入开始时间和结束时间',
-          type: 'error'
-        });
-      }
-      else
-      {
-        console.log(this.photoShotTime[0].toLocaleString())
-        this.timea=this.timeFormatToString(this.photoShotTime[0].toLocaleString())
-        this.timeb=this.timeFormatToString(this.photoShotTime[1].toLocaleString())
-        console.log(this.timea)
 
-        getVehiclePhotoInfoList(this.phoneNum, this.timea, this.timeb).then(response => {
-          console.log(response.data)
-          this.listPhotoSrc=[]
-          let listData=response.data
-            listData.filter(item => {
-
-              this.listPhotoSrc.push('http://202.194.14.73:8080/photos/15153139702/'+item+ '.jpg')
-          })
-          //this.src = 'http://202.194.14.73:8080/photos/15153139702/' + response.data[0] + '.jpg'
-        })
-      }
-    },
     // terminal
     messageHandler(response) {
       switch (response.data.result) {
