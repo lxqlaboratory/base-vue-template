@@ -1,11 +1,17 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="9">
-        <el-input v-model="trackPlaybackStartTime" size="small" type="date" placeholder="请输入开始时间" suffix-icon="el-icon-date" />
-      </el-col>
-      <el-col :span="9">
-        <el-input v-model="trackPlaybackEndTime" size="small" type="date" placeholder="请输入结束时间" suffix-icon="el-icon-date" />
+      <el-col :span="18">
+        <el-date-picker
+          v-model="TrackPlaybackShotTime"
+          type="datetimerange"
+          align="right"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          format="yyyy-MM-dd HH:mm:ss"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="['12:00:00', '08:00:00']"
+        />
       </el-col>
       <el-col :span="2">
         <el-button type="primary" round size="small" @click="trackPlaybackDraw">查询</el-button>
@@ -56,6 +62,11 @@
     },
     data() {
       return {
+        phoneNum:'23021181444',
+        TrackPlaybackShotTime: '',
+        trackPlaybackStartTime:'',
+        trackPlaybackEndTime:'',
+        center: { lng: 116.404844, lat: 39.911836 },
         play: false,
         path: [
 
@@ -77,30 +88,32 @@
     computed: {},
     methods: {
       trackPlaybackDraw() { // 查询一段时间间隔的坐标，画路径
-        //this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
-        //this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
-        if(!this.trackPlaybackStartTime){
-          alert("请选择开始时间!")
-          return
+        if (this.TrackPlaybackShotTime == '') {
+          this.$message({
+            showClose: true,
+            message: '必须输入开始时间和结束时间',
+            type: 'error'
+          })
+        }else{
+          this.trackPlaybackStartTime = this.timeFormatToString(this.TrackPlaybackShotTime[0].toLocaleString())
+          this.trackPlaybackEndTime = this.timeFormatToString(this.TrackPlaybackShotTime[1].toLocaleString())
+          getVehiclePositionFromList(this.phoneNum,this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
+            this.vehiclePositionFromList = response.data
+            console.log(this.vehiclePositionFromList)
+            if (this.vehiclePositionFromList.length > 0) {
+              this.trackPlaybackStartPoint = { lng: this.vehiclePositionFromList[0].lng, lat: this.vehiclePositionFromList[0].lat }
+              this.center.lng = this.trackPlaybackStartPoint.longitude
+              this.center.lat = this.trackPlaybackStartPoint.latitude
+              this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lat }
+            }
+            else{
+              alert("数据为空!")
+              //演示的时候如果数据是空的就显示假数据
+              this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
+              this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
+            }
+          })
         }
-        if(!this.trackPlaybackEndTime){
-          alert("请选择开始时间!")
-          return
-        }
-        getVehiclePositionFromList(this.currentCarInfo.phoneNum,this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
-          this.vehiclePositionFromList = response.data
-          console.log(this.vehiclePositionFromList)
-          if (this.vehiclePositionFromList.length > 0) {
-            this.trackPlaybackStartPoint = { lng: this.vehiclePositionFromList[0].lng, lat: this.vehiclePositionFromList[0].lat }
-            this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lat }
-          }
-          else{
-            alert("数据为空!")
-            //演示的时候如果数据是空的就显示假数据
-            this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
-            this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
-          }
-        })
       },
       reset() {
         this.play = false
