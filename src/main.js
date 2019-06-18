@@ -17,6 +17,9 @@ import '@/icons' // icon
 import BaiduMap from 'vue-baidu-map'
 import splitPane from 'vue-splitpane'
 import Toast from './utils/message'
+import gpsToBaiduPoint from "./utils/gpsToBaiduPoint";
+import timeCompareMinute from "./utils/timeCompareMinute";
+import getCurrentTime from "./utils/getCurrentTime";
 
 /**
  * If you don't want to use mock-server
@@ -34,7 +37,11 @@ Vue.component('split-pane', splitPane)
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
 Vue.use(Toast)
+Vue.prototype.$gpsToBaiduPoint = gpsToBaiduPoint
+Vue.prototype.$timeCompareMinute = timeCompareMinute
 Vue.prototype.$moment = moment
+Vue.prototype.$getCurrentTime = getCurrentTime
+
 moment.locale('zh-cn')
 new Vue({
   el: '#app',

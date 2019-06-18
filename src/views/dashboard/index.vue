@@ -521,113 +521,6 @@ export default {
       this._getWeatherInfo({ lng: e.point.lng, lat: e.point.lat })
       this._getLocationDetailInfo({ lng: e.point.lng, lat: e.point.lat })
     },
-    GpsToBaiduPoint(lat, lng) {
-      let _t = this.wgs2bd(lat, lng)
-      /* var _BPoint = new BMap.Point(_t[1], _t[0]);
-      return _BPoint*/
-      return _t
-    },
-    wgs2bd(lat, lon) {
-      let wgs2gcjR = this.wgs2gcj(lat, lon)
-      let gcj2bdR = this.gcj2bd(wgs2gcjR[0], wgs2gcjR[1])
-      return gcj2bdR
-    },
-    wgs2gcj(lat, lon) {
-      let pi = 3.14159265358979324
-      let a = 6378245.0
-      let ee = 0.00669342162296594323
-      let x_pi = 3.14159265358979324 * 3000.0 / 180.0
-      let dLat = this.transformLat(lon - 105.0, lat - 35.0)
-      let dLon = this.transformLon(lon - 105.0, lat - 35.0)
-      let radLat = lat / 180.0 * pi
-      let magic = Math.sin(radLat)
-      magic = 1 - ee * magic * magic
-      let sqrtMagic = Math.sqrt(magic)
-      dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * pi)
-      dLon = (dLon * 180.0) / (a / sqrtMagic * Math.cos(radLat) * pi)
-      let mgLat = lat + dLat
-      let mgLon = lon + dLon
-      let result = []
-      result.push(mgLat)
-      result.push(mgLon)
-      return result
-    },
-    transformLat(lat, lon) {
-      let pi = 3.14159265358979324
-      let a = 6378245.0
-      let ee = 0.00669342162296594323
-      let x_pi = 3.14159265358979324 * 3000.0 / 180.0
-      let ret = -100.0 + 2.0 * lat + 3.0 * lon + 0.2 * lon * lon + 0.1 * lat * lon + 0.2 * Math.sqrt(Math.abs(lat))
-      ret += (20.0 * Math.sin(6.0 * lat * pi) + 20.0 * Math.sin(2.0 * lat * pi)) * 2.0 / 3.0
-      ret += (20.0 * Math.sin(lon * pi) + 40.0 * Math.sin(lon / 3.0 * pi)) * 2.0 / 3.0
-      ret += (160.0 * Math.sin(lon / 12.0 * pi) + 320 * Math.sin(lon * pi / 30.0)) * 2.0 / 3.0
-      return ret
-    },
-
-    transformLon(lat, lon) {
-      let pi = 3.14159265358979324
-      let a = 6378245.0
-      let ee = 0.00669342162296594323
-      let x_pi = 3.14159265358979324 * 3000.0 / 180.0
-      let ret = 300.0 + lat + 2.0 * lon + 0.1 * lat * lat + 0.1 * lat * lon + 0.1 * Math.sqrt(Math.abs(lat))
-      ret += (20.0 * Math.sin(6.0 * lat * pi) + 20.0 * Math.sin(2.0 * lat * pi)) * 2.0 / 3.0
-      ret += (20.0 * Math.sin(lat * pi) + 40.0 * Math.sin(lat / 3.0 * pi)) * 2.0 / 3.0
-      ret += (150.0 * Math.sin(lat / 12.0 * pi) + 300.0 * Math.sin(lat / 30.0 * pi)) * 2.0 / 3.0
-      return ret
-    },
-    gcj2bd(lat, lon) {
-      let pi = 3.14159265358979324
-      let a = 6378245.0
-      let ee = 0.00669342162296594323
-      let x_pi = 3.14159265358979324 * 3000.0 / 180.0
-      let x = lon; var y = lat
-      let z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi)
-      let theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi)
-      let bd_lon = z * Math.cos(theta) + 0.0065
-      let bd_lat = z * Math.sin(theta) + 0.006
-      let result = []
-      result.push(bd_lat)
-      result.push(bd_lon)
-      return result
-    },
-    timeCompareMinute(time1, time2) {
-      const begin1 = time1.substr(0, 10).split('-')
-      const end1 = time2.substr(0, 10).split('-')
-      const date1 = new Date(begin1[1] + -+begin1[2] + -+begin1[0])
-      const date2 = new Date(end1[1] + -+end1[2] + -+end1[0])
-      // 得到两个日期之间的差值m，以分钟为单位
-      // Math.abs(date2-date1)计算出以毫秒为单位的差值
-      // Math.abs(date2-date1)/1000得到以秒为单位的差值
-      // Math.abs(date2-date1)/1000/60得到以分钟为单位的差值
-      const m = parseInt(Math.abs(date2 - date1) / 1000 / 60)
-      const min1 = parseInt(time1.substr(11, 2)) * 60 + parseInt(time1.substr(14, 2))
-      const min2 = parseInt(time2.substr(11, 2)) * 60 + parseInt(time2.substr(14, 2))
-      const n = min2 - min1
-      const minutes = m + n
-      return minutes
-    },
-    getCurrentTime() {
-      // 2019-06-10 10:08:35
-      const now = new Date()
-      const year = now.getFullYear() // 年
-      const month = now.getMonth() + 1 // 月
-      const day = now.getDate() // 日
-      const hh = now.getHours() // 时
-      const mm = now.getMinutes() // 分
-      const ss = now.getSeconds() // 秒
-      let clock = year + '-'
-      if (month < 10) { clock += '0' }
-      clock += month + '-'
-      if (day < 10) { clock += '0' }
-      clock += day + ' '
-      if (hh < 10) { clock += '0' }
-      clock += hh + ':'
-      if (mm < 10) clock += '0'
-      clock += mm + ':'
-      if (ss < 10) clock += '0'
-      clock += ss
-      return (clock)
-    },
     webSocket() {
       const ws = new WebSocket('ws://202.194.14.72:15674/ws')
       var ref = this
@@ -643,7 +536,7 @@ export default {
             if (item.phoneNum == terminalPhone) {
               ref.socketPlateNum = item.plateNum
               // 设置 carList 的值   "latitude" : 36665736, "longitude" : 117132753
-              var resultPoint = ref.GpsToBaiduPoint(p.latitude / 1000000.0, p.longitude / 1000000.0)
+              var resultPoint =ref.$gpsToBaiduPoint.GpsToBaiduPoint(p.latitude / 1000000.0, p.longitude / 1000000.0)
               console.log(resultPoint)
               item.longitude = resultPoint[1]
               item.latitude = resultPoint[0]
@@ -660,8 +553,8 @@ export default {
               item.time = '20' + p.time.substring(0, 2) + '-' + p.time.substring(2, 4) + '-' + p.time.substring(4, 6) +
                 ' ' + p.time.substring(6, 8) + ':' + p.time.substring(8, 10) + ':' + p.time.substring(10, 12)
               console.log(item.time)
-              const currentTime = ref.getCurrentTime()
-              const minutes = ref.timeCompareMinute(item.time, currentTime)
+              const currentTime = ref.$getCurrentTime.getCurrentTime()
+              const minutes = ref.$timeCompareMinute.timeCompareMinute(item.time, currentTime)
               if (minutes < 1) {
                 item.is_online = '在线'
               } else {
