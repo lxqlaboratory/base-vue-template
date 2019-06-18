@@ -280,7 +280,7 @@ export default {
       checkedNode: {},
       checkedNodes: [],
       plateNumList: [],
-      plateNumList2: []，
+      plateNumList2: [],
     }
   },
   computed: {
