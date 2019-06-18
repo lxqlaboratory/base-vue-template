@@ -161,7 +161,7 @@
         <el-table-column prop="time" label="最后上线时间" sortable min-width="160" />
         <el-table-column prop="driverName" label="驾驶员" sortable min-width="120" />
         <!--<el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />-->
-        .0<el-table-column prop="driverCompany" label="车队名称" sortable min-width="220" />
+        <el-table-column prop="driverCompany" label="车队名称" sortable min-width="220" />
         <!-- <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />
         <el-table-column prop="direction" label="方向" sortable min-width="80" />
         <el-table-column prop="oil_volume" label="油量(L)" sortable min-width="100" />
