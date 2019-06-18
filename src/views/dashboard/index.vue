@@ -443,6 +443,16 @@ export default {
     tableselectrow(rowplateNum) {
       this.carList.forEach(item => {
         if (rowplateNum == item.plateNum) {
+          //console.log('item.latitude+item.longitude')
+          //console.log(item.latitude)
+          if(typeof(item.latitude) == "undefined"||typeof(item.longitude) == "undefined"){
+            this.$message({
+              showClose: true,
+              message: '[' + item.plateNum + ']' + '定位信息未找到',
+              type: 'error',
+              duration: 8000
+            })
+          }else{
           this.center.lng = item.longitude
           this.center.lat = item.latitude
           this.radius = 800
@@ -451,6 +461,7 @@ export default {
             that.radius = 0 // 半径设置成0圈就没啦
             console.log(that.radius)
           }, 1000)
+          }
         }
       })
     },
