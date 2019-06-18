@@ -199,7 +199,7 @@
           <talk-back v-if="talkBackVisible" />
         </el-dialog>
 
-        <el-dialog title="图像监管" width="700px" :visible.sync="photoShotVisible">
+        <el-dialog title="图像监管" width="750px" :visible.sync="photoShotVisible">
           <photo-manager />
         </el-dialog>
 
@@ -253,7 +253,7 @@ import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
 import TalkBack from './indexcomponents/TalkBack'
 import PhotoManager from './indexcomponents/PhotoManager'
-import { getTreeVehicleFormList,getVehiclePositionFromList } from '@/api/vehicle-list-index'
+import { getTreeVehicleFormList, getVehiclePositionFromList } from '@/api/vehicle-list-index'
 import { cameraPhoto, textMsg, tempLocationTrack, getTerminalParam } from '@/api/terminal'
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
 import Stomp from 'stompjs'

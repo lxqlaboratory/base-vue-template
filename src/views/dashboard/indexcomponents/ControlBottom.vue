@@ -104,7 +104,7 @@
     </div>
 
     <div v-show="isShow" class="mapBottomTable">
-      <el-table :data="tableData" border style="width: 100%;max-height:40vh"  @row-click="throwEmit" @row-contextmenu="row_contextmenu">
+      <el-table :data="tableData" border style="width: 100%;max-height:40vh" @row-click="throwEmit" @row-contextmenu="row_contextmenu">
         <!--  <el-table-column type="selection" min-width="50" />-->
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -141,28 +141,21 @@
         </el-table-column>
         <el-table-column prop="plateNum" label="车牌号" sortable min-width="100" />
         <!--<el-table-column prop="phoneNum" label="SIM卡号" sortable min-width="120" />-->
-        <el-table-column
-          prop="is_online"
-          label="是否在线"
-          sortable
-          :filter-method="filterHandler"
-          :filters="[{ text: '离线', value: '离线' }, { text: '在线', value: '在线' }, { text: '熄火', value: '熄火' }]"
-          min-width="120"
-        />
-        <el-table-column prop="acc" label="ACC" sortable min-width="80" >
+        <el-table-column prop="is_online" label="是否在线" sortable min-width="120" />
+        <el-table-column prop="acc" label="ACC" sortable min-width="80">
           <template slot-scope="scope">
-            <div v-if="scope.row.acc" >{{'开启'}}</div>
-            <div v-else >{{'关闭'}}</div>
+            <div v-if="scope.row.acc">{{ '开启' }}</div>
+            <div v-else>{{ '关闭' }}</div>
           </template>
         </el-table-column>
-        <el-table-column  label="卫星速度"  sortable min-width="110" >
+        <el-table-column label="卫星速度" sortable min-width="110">
           <template slot-scope="scope">
-              <div v-if="scope.row.speed>75" style="color: red">{{scope.row.speed}}</div>
-              <div v-else >{{scope.row.speed}}</div>
+            <div v-if="scope.row.speed>75" style="color: red">{{ scope.row.speed }}</div>
+            <div v-else>{{ scope.row.speed }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="gbRecSpeed" label="记录仪速度"sortable min-width="120" />
-       <!-- <el-table-column prop="longitude" label="经度" sortable min-width="80" />
+        <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />
+        <!-- <el-table-column prop="longitude" label="经度" sortable min-width="80" />
         <el-table-column prop="latitude" label="纬度" sortable min-width="80" />-->
         <el-table-column prop="locationDetail" label="位置" sortable min-width="240" />
         <el-table-column prop="time" label="最后上线时间" sortable min-width="160" />

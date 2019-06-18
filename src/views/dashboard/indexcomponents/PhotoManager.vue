@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 700px">
+  <div style="width: 750px">
     <el-row :gutter="40">
       <el-col :span="18">
         <el-date-picker
@@ -17,7 +17,7 @@
         <el-button type="primary" round @click="getPhotoList">查询图片</el-button>
       </el-col>
     </el-row>
-    <el-row :gutter="40">
+    <el-row :gutter="40" style="margin-top: 10px">
       <el-col :span="16" style="margin-top: 10px">
         <el-radio-group v-model="radio">
           <el-radio :label="1">车前</el-radio>
@@ -33,16 +33,14 @@
     <el-row :gutter="40">
       <el-col :span="12">
         <!--el-image :src="src" />-->
-        <el-carousel height="200px" direction="vertical" :autoplay="false">
+        <el-carousel height="300px" direction="vertical" :autoplay="false">
           <el-carousel-item v-for="item in listPhotoSrc" :key="item">
             <el-image :src="item" />
           </el-carousel-item>
         </el-carousel>
       </el-col>
       <el-col :span="12">
-        <div type="height:150; width: 200">
-          <el-image :src="srcADAS" />
-        </div>
+        <!-- TODO -->
       </el-col>
     </el-row>
   </div>
@@ -56,7 +54,6 @@ export default {
   name: 'PhotoManager',
   data() {
     return {
-      srcADAS: 'http://202.194.14.73:8080/photos/15153139702/hello.jpg',
       listPhotoSrc: [],
       photoShotTime: '',
       radio: 1
