@@ -73,14 +73,15 @@ export default {
                 item.is_online = '离线'
               }
               if(typeof(item.identityTime) != "undefined") {
-                let currentTimeDate = new Date()
-                let startTime = ref.$timeCompareMinute.strDateToDate(item.identityTime)
-                console.log(startTime)
-                console.log(currentTimeDate)
-                let timeStr = ref.$timeCompareMinute.diffTime(startTime, currentTimeDate)
+                const currentTimeDate = new Date()
+                const startTime = ref.$timeCompareMinute.strDateToDate(item.identityTime)
+                //console.log(startTime)
+                //console.log(currentTime)
+                //console.log(currentTimeDate)
+                const timeStr = ref.$timeCompareMinute.diffTime(startTime, currentTimeDate)
                 item.subTime = timeStr
-                console.log('timeStr')
-                console.log(timeStr)
+                //console.log('timeStr')
+                //console.log(timeStr)
               }
               console.log('minutes')
               //console.log(item.time)
@@ -96,11 +97,6 @@ export default {
                   duration: 8000
                 })
                 console.log('车辆超速')
-                /* /!* insertViolation(terminalPhone, '超速',p.longitude, p.latitude).then(res => {
-
-                 }).catch(e => {
-
-                 })*!/*/
                 ref.$refs.audio.play()
               }
               if (p.overTired === true) {
@@ -110,11 +106,6 @@ export default {
                   type: 'error',
                   duration: 8000
                 })
-                /* insertViolation(terminalPhone, '疲劳驾驶',p.longitude, p.latitude).then(res => {
-
-                }).catch(e => {
-
-                })*/
                 ref.$refs.audio.play()
               }
               if (p.dangeous === true) {

@@ -115,6 +115,9 @@
               <el-form-item label="驾驶员号码">
                 <span>{{ props.row.driverPhoneNumber }}</span>
               </el-form-item>
+              <el-form-item label="车队名称">
+                <span>{{ props.row.driverCompany }}</span>
+              </el-form-item>
               <el-form-item label="从业资格证编码">
                 <span>{{ props.row.qualificationCode }}</span>
               </el-form-item>

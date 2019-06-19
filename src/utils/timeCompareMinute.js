@@ -28,32 +28,32 @@ timeCompareMinute.diffTime= function (startDate, endDate) {
   //计算相差秒数
   let leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
   let seconds=Math.round(leave3/1000)
-  console.log(days)
-  console.log(hours)
-  console.log(seconds)
+  //console.log(days)
+  //console.log(hours)
+  //console.log(seconds)
   let returnStr =''
   if(days>0) {
-    returnStr = returnStr+'day:'+days
+    returnStr = returnStr+days+'天 '
   }
   if(hours>0) {
-    returnStr =returnStr+'h:'+hours
+    returnStr =returnStr+hours+'时 '
   }
   if(minutes>0) {
-    returnStr = returnStr+'m:'+minutes
+    returnStr = returnStr+minutes+'分 '
   }
   if(seconds>0) {
-    returnStr = returnStr + 's:' + seconds
+    returnStr = returnStr +seconds+'秒'
   }
-  console.log('returnStr'+returnStr)
-  console.log(returnStr)
+  //console.log('returnStr'+returnStr)
+  //console.log(returnStr)
   return returnStr
 };
-timeCompareMinute.strDateToDate= function (strDate){
-  let st = strDate;
-  let a = st.split(" ");
-  let b = a[0].split("-");
-  let c = a[1].split(":");
-  let date = new Date(b[0], b[1], b[2], c[0], c[1], c[2]);
+timeCompareMinute.strDateToDate= function (strDate){//2019-06-19 14:38:11
+  let st = strDate
+  let a = st.split(" ")
+  let b = a[0].split("-")
+  let c = a[1].split(":")
+  const date = new Date(b[0], b[1]-1, b[2], c[0], c[1], c[2])
   return date;
 };
 export default timeCompareMinute
