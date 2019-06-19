@@ -64,8 +64,8 @@
       return {
         phoneNum:'23021181444',
         TrackPlaybackShotTime: '',
-        trackPlaybackStartTime:'',
-        trackPlaybackEndTime:'',
+        //trackPlaybackStartTime:'',
+        //trackPlaybackEndTime:'',
         center: { lng: 116.404844, lat: 39.911836 },
         play: false,
         path: [
@@ -88,6 +88,8 @@
     computed: {},
     methods: {
       trackPlaybackDraw() { // 查询一段时间间隔的坐标，画路径
+        //this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
+       // this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
         if (this.TrackPlaybackShotTime == '') {
           this.$message({
             showClose: true,
@@ -95,9 +97,9 @@
             type: 'error'
           })
         }else{
-          this.trackPlaybackStartTime = this.timeFormatToString(this.TrackPlaybackShotTime[0].toLocaleString())
-          this.trackPlaybackEndTime = this.timeFormatToString(this.TrackPlaybackShotTime[1].toLocaleString())
-          getVehiclePositionFromList(this.phoneNum,this.trackPlaybackStartTime, this.trackPlaybackEndTime).then(response => {
+          var trackPlaybackStartTime = this.TrackPlaybackShotTime[0].toLocaleString()
+          var trackPlaybackEndTime = this.TrackPlaybackShotTime[1].toLocaleString()
+          getVehiclePositionFromList(this.phoneNum,trackPlaybackStartTime, trackPlaybackEndTime).then(response => {
             this.vehiclePositionFromList = response.data
             console.log(this.vehiclePositionFromList)
             if (this.vehiclePositionFromList.length > 0) {
