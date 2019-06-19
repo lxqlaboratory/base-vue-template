@@ -115,6 +115,9 @@
               <el-form-item label="驾驶员号码">
                 <span>{{ props.row.driverPhoneNumber }}</span>
               </el-form-item>
+              <el-form-item label="车队名称">
+                <span>{{ props.row.driverCompany }}</span>
+              </el-form-item>
               <el-form-item label="从业资格证编码">
                 <span>{{ props.row.qualificationCode }}</span>
               </el-form-item>
@@ -148,20 +151,21 @@
             <div v-else>{{ '关闭' }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="卫星速度" sortable min-width="110">
+        <el-table-column label="卫星速度" sortable min-width="90">
           <template slot-scope="scope">
             <div v-if="scope.row.speed>75" style="color: red">{{ scope.row.speed }}</div>
             <div v-else>{{ scope.row.speed }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />
+       <!-- <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />-->
         <!-- <el-table-column prop="longitude" label="经度" sortable min-width="80" />
         <el-table-column prop="latitude" label="纬度" sortable min-width="80" />-->
         <el-table-column prop="locationDetail" label="位置" sortable min-width="240" />
+        <el-table-column prop="subTime" label="持续上线时间" sortable min-width="160" />
         <el-table-column prop="time" label="最后上线时间" sortable min-width="160" />
         <el-table-column prop="driverName" label="驾驶员" sortable min-width="120" />
         <!--<el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />-->
-        <el-table-column prop="driverCompany" label="车队名称" sortable min-width="220" />
+        <!--<el-table-column prop="driverCompany" label="车队名称" sortable min-width="220" />-->
         <!-- <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />
         <el-table-column prop="direction" label="方向" sortable min-width="80" />
         <el-table-column prop="oil_volume" label="油量(L)" sortable min-width="100" />
