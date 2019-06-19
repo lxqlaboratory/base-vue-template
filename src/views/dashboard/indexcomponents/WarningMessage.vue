@@ -64,7 +64,7 @@ export default {
               // p.time=190610093043
               item.time = '20' + p.time.substring(0, 2) + '-' + p.time.substring(2, 4) + '-' + p.time.substring(4, 6) +
                 ' ' + p.time.substring(6, 8) + ':' + p.time.substring(8, 10) + ':' + p.time.substring(10, 12)
-              console.log(item.time)
+              //console.log(item.time)
               const currentTime = ref.$getCurrentTime.getCurrentTime()
               const minutes = ref.$timeCompareMinute.timeCompareMinute(item.time, currentTime)
               if (minutes < 1) {
@@ -72,10 +72,21 @@ export default {
               } else {
                 item.is_online = '离线'
               }
+              if(typeof(item.identityTime) != "undefined") {
+                let currentTimeDate = new Date()
+                let startTime = ref.$timeCompareMinute.strDateToDate(item.identityTime)
+                console.log(startTime)
+                console.log(currentTimeDate)
+                let timeStr = ref.$timeCompareMinute.diffTime(startTime, currentTimeDate)
+                item.subTime = timeStr
+                console.log('timeStr')
+                console.log(timeStr)
+              }
               console.log('minutes')
-              console.log(item.time)
+              //console.log(item.time)
               //console.log(currentTime)
-              //console.log(minutes)
+              console.log(minutes)
+
               //ref.$getWarningMessage.getWarningMessage(p,ref.socketPlateNum)
               if (p.overSpeeding === true) {
                 ref.$message({
@@ -441,6 +452,12 @@ export default {
               item.driverName = p.driverName
               item.qualificationCode = p.qualificationCode
               item.authorityName = p.authorityName
+              //下面进行上线时间判断
+              let timeStart = '20' + p.time.substring(0, 2) + '-' + p.time.substring(2, 4) + '-' + p.time.substring(4, 6) +
+                ' ' + p.time.substring(6, 8) + ':' + p.time.substring(8, 10) + ':' + p.time.substring(10, 12)
+              if (p.state === 1) {
+                item.identityTime = timeStart
+              }
             }
           })
         })

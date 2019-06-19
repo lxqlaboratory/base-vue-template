@@ -17,18 +17,20 @@ timeCompareMinute.timeCompareMinute= function (time1, time2 ) {
 };
 
 timeCompareMinute.diffTime= function (startDate, endDate) {
-  let diff=endDate.getTime() - startDate.getTime()//时间差的毫秒数
-  //计算出相差天数
-  let days=Math.floor(diff/(24*3600*1000))
+  let date3=endDate.getTime() - startDate.getTime()//时间差的毫秒数
+  let days=Math.floor(date3/(24*3600*1000))
   //计算出小时数
-  let leave1=diff%(24*3600*1000);    //计算天数后剩余的毫秒数
+  let leave1=date3%(24*3600*1000)    //计算天数后剩余的毫秒数
   let hours=Math.floor(leave1/(3600*1000))
   //计算相差分钟数
-  let leave2=leave1%(3600*1000);        //计算小时数后剩余的毫秒数
+  let leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数
   let minutes=Math.floor(leave2/(60*1000))
   //计算相差秒数
-  let leave3=leave2%(60*1000);      //计算分钟数后剩余的毫秒数
+  let leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
   let seconds=Math.round(leave3/1000)
+  console.log(days)
+  console.log(hours)
+  console.log(seconds)
   let returnStr =''
   if(days>0) {
     returnStr = returnStr+'day:'+days
@@ -42,6 +44,16 @@ timeCompareMinute.diffTime= function (startDate, endDate) {
   if(seconds>0) {
     returnStr = returnStr + 's:' + seconds
   }
+  console.log('returnStr'+returnStr)
+  console.log(returnStr)
   return returnStr
+};
+timeCompareMinute.strDateToDate= function (strDate){
+  let st = strDate;
+  let a = st.split(" ");
+  let b = a[0].split("-");
+  let c = a[1].split(":");
+  let date = new Date(b[0], b[1], b[2], c[0], c[1], c[2]);
+  return date;
 };
 export default timeCompareMinute
