@@ -6,13 +6,14 @@
 
 <script>
 
-import {mapGetters} from "vuex";
+import { mapGetters } from 'vuex'
+import Stomp from 'stompjs'
 
 export default {
   name: 'WarningMessage',
   data() {
     return {
-
+      peer: null
     }
   },
   created() {
@@ -21,7 +22,7 @@ export default {
     setTimeout(() => {
       this.webSocket()
     }, 2000)
-    //setInterval(this.changeControlBottom, 15000)
+    // setInterval(this.changeControlBottom, 15000)
   },
   destroyed() {
     this.peer.close()
@@ -32,11 +33,11 @@ export default {
     ])
   },
   methods: {
-    webSocket(){
+    webSocket() {
       console.log('进入WarningMessage')
-      const ws = new WebSocket('ws://202.194.14.72:15674/ws')
-      var ref = this
-      const client = Stomp.over(ws)
+      this.peer = new WebSocket('ws://202.194.14.72:15674/ws')
+      const ref = this
+      const client = Stomp.over(this.peer)
       const on_connect = function() {
         console.log('connected')
         client.subscribe('/exchange/jt808/location', function(message) {
@@ -48,13 +49,13 @@ export default {
             if (item.phoneNum == terminalPhone) {
               ref.socketPlateNum = item.plateNum
               // 设置 carList 的值   "latitude" : 36665736, "longitude" : 117132753
-              var resultPoint =ref.$gpsToBaiduPoint.GpsToBaiduPoint(p.latitude / 1000000.0, p.longitude / 1000000.0)
+              var resultPoint = ref.$gpsToBaiduPoint.GpsToBaiduPoint(p.latitude / 1000000.0, p.longitude / 1000000.0)
               console.log(resultPoint)
               item.longitude = resultPoint[1]
               item.latitude = resultPoint[0]
               item.acc = p.ACC
               item.direction = p.direction
-              item.speed = p.speed/10.0
+              item.speed = p.speed / 10.0
               item.elevation = p.elevation
               item.receiveData = 1// 代表了已经接收到了信息
               item.simulation = p.simulation
@@ -64,7 +65,6 @@ export default {
               // p.time=190610093043
               item.time = '20' + p.time.substring(0, 2) + '-' + p.time.substring(2, 4) + '-' + p.time.substring(4, 6) +
                 ' ' + p.time.substring(6, 8) + ':' + p.time.substring(8, 10) + ':' + p.time.substring(10, 12)
-              //console.log(item.time)
               const currentTime = ref.$getCurrentTime.getCurrentTime()
               const minutes = ref.$timeCompareMinute.timeCompareMinute(item.time, currentTime)
               if (minutes < 1) {
@@ -72,23 +72,13 @@ export default {
               } else {
                 item.is_online = '离线'
               }
-              if(typeof(item.identityTime) != "undefined") {
+              if (typeof (item.identityTime) !== 'undefined') {
                 const currentTimeDate = new Date()
                 const startTime = ref.$timeCompareMinute.strDateToDate(item.identityTime)
-                //console.log(startTime)
-                //console.log(currentTime)
-                //console.log(currentTimeDate)
-                const timeStr = ref.$timeCompareMinute.diffTime(startTime, currentTimeDate)
-                item.subTime = timeStr
-                //console.log('timeStr')
-                //console.log(timeStr)
+                item.subTime = ref.$timeCompareMinute.diffTime(startTime, currentTimeDate)
               }
-              console.log('minutes')
-              //console.log(item.time)
-              //console.log(currentTime)
-              console.log(minutes)
 
-              //ref.$getWarningMessage.getWarningMessage(p,ref.socketPlateNum)
+              // ref.$getWarningMessage.getWarningMessage(p,ref.socketPlateNum)
               if (p.overSpeeding === true) {
                 ref.$message({
                   showClose: true,
@@ -433,7 +423,7 @@ export default {
         })
         client.subscribe('/exchange/jt808/digitWaybill', function(message) {
           const p = JSON.parse(message.body)
-          // console.log(p)
+          console.log(p)
         })
         client.subscribe('/exchange/jt808/driverIdentity', function(message) {
           const p = JSON.parse(message.body)
@@ -443,8 +433,8 @@ export default {
               item.driverName = p.driverName
               item.qualificationCode = p.qualificationCode
               item.authorityName = p.authorityName
-              //下面进行上线时间判断
-              let timeStart = '20' + p.time.substring(0, 2) + '-' + p.time.substring(2, 4) + '-' + p.time.substring(4, 6) +
+              // 下面进行上线时间判断
+              const timeStart = '20' + p.time.substring(0, 2) + '-' + p.time.substring(2, 4) + '-' + p.time.substring(4, 6) +
                 ' ' + p.time.substring(6, 8) + ':' + p.time.substring(8, 10) + ':' + p.time.substring(10, 12)
               if (p.state === 1) {
                 item.identityTime = timeStart

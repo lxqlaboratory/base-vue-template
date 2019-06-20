@@ -1,13 +1,13 @@
 <template>
   <div class="bottom-container" :class="{active:isShow}">
 
-    <div id="menu">
+    <!--<div id="menu">
       <div class="menu">功能1</div>
       <div class="menu">功能2</div>
       <div class="menu">功能3</div>
       <div class="menu">功能4</div>
       <div class="menu">功能5</div>
-    </div>
+    </div>-->
 
     <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 74%">
       <div>
@@ -94,7 +94,7 @@
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
-        &nbsp;&nbsp;&nbsp;车辆在线数：&nbsp;{{ online_num }}&nbsp;&nbsp;&nbsp;当前在线率：&nbsp;{{ online_rate }}
+        &nbsp;&nbsp;&nbsp;车辆在线数：&nbsp;{{ online_num }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当前在线率：&nbsp;{{ online_rate }}
       </div>
 
       <div class="item-mapbottom-right">
@@ -144,14 +144,14 @@
         </el-table-column>
         <el-table-column prop="plateNum" label="车牌号" sortable min-width="100" />
         <!--<el-table-column prop="phoneNum" label="SIM卡号" sortable min-width="120" />-->
-        <el-table-column prop="is_online" label="是否在线" sortable min-width="120" />
+        <el-table-column prop="is_online" label="是否在线" sortable min-width="80" />
         <el-table-column prop="acc" label="ACC" sortable min-width="80">
           <template slot-scope="scope">
-            <div v-if="scope.row.acc">{{ '开启' }}</div>
-            <div v-else>{{ '关闭' }}</div>
+            <div v-if="scope.row.acc">{{ '开' }}</div>
+            <div v-else>{{ '关' }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="卫星速度" sortable min-width="90">
+        <el-table-column label="卫星速度" sortable min-width="80">
           <template slot-scope="scope">
             <div v-if="scope.row.speed>75" style="color: red">{{ scope.row.speed }}</div>
             <div v-else>{{ scope.row.speed }}</div>
@@ -160,8 +160,8 @@
        <!-- <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />-->
         <!-- <el-table-column prop="longitude" label="经度" sortable min-width="80" />
         <el-table-column prop="latitude" label="纬度" sortable min-width="80" />-->
-        <el-table-column prop="locationDetail" label="位置" sortable min-width="240" />
-        <el-table-column prop="subTime" label="持续上线时间" sortable min-width="160" />
+        <el-table-column prop="locationDetail" label="位置" sortable min-width="300" />
+        <el-table-column prop="subTime" label="连续驾驶时间" sortable min-width="120" />
         <el-table-column prop="time" label="最后上线时间" sortable min-width="160" />
         <el-table-column prop="driverName" label="驾驶员" sortable min-width="120" />
         <!--<el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />-->

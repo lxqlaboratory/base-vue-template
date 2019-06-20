@@ -47,6 +47,7 @@
           />
           <bm-marker
             v-for="marker of carList"
+            :key="marker.phoneNum"
             :position="{lng: marker.longitude, lat: marker.latitude}"
             :icon="{url: marker.imageUrl, size: {width: 30, height: 30}}"
             :title="marker.plateNum"
@@ -108,11 +109,11 @@
                   </div>
                   <div class="popup-basic-line" style="border-bottom: none; float: left; height: 10%; margin-top:3px">
                     <div v-for="item in weatherInfo" style="float: left;">
-                      <img :src="weatherInfo.dayPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
-                      <img :src="weatherInfo.nightPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
-                      <span class="popup-span" style="font-weight:normal">{{ weatherInfo.weather }}</span>
-                      <span class="popup-span" style="font-weight:normal">{{ weatherInfo.dushu }}</span>
-                      <span class="popup-span" style="font-weight:normal">{{ weatherInfo.wind }}</span>
+                      <img :src="item.dayPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
+                      <img :src="item.nightPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
+                      <span class="popup-span" style="font-weight:normal">{{ item.weather }}</span>
+                      <span class="popup-span" style="font-weight:normal">{{ item.dushu }}</span>
+                      <span class="popup-span" style="font-weight:normal">{{ item.wind }}</span>
                     </div>
                   </div>
                 </div>
@@ -204,7 +205,7 @@
         </el-dialog>
 
         <el-dialog title="轨迹回放" width="800px" :visible.sync="trackPlaybackVisible">
-          <TrackPlayback v-if="trackPlaybackVisible"/>
+          <TrackPlayback v-if="trackPlaybackVisible" />
         </el-dialog>
         <control-bottom ref="controlBottom" @selectrow="tableselectrow" />
         <warning-message />
@@ -220,10 +221,9 @@ import TalkBack from './indexcomponents/TalkBack'
 import WarningMessage from './indexcomponents/WarningMessage'
 import TrackPlayback from './indexcomponents/TrackPlayback'
 import PhotoManager from './indexcomponents/PhotoManager'
-import { getTreeVehicleFormList, getVehiclePositionFromList } from '@/api/vehicle-list-index'
+import { getTreeVehicleFormList } from '@/api/vehicle-list-index'
 import { cameraPhoto, textMsg, tempLocationTrack, getTerminalParam } from '@/api/terminal'
 import BmLushu from '../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
-import Stomp from 'stompjs'
 import { getWeatherInfo } from '@/api/weather'
 import { getLocationDetailInfo } from '@/api/location'
 import { getMessageTemplateList } from '@/api/template-manage'
@@ -234,9 +234,9 @@ export default {
     BmLushu,
     controlBottom: ControlBottom,
     talkBack: TalkBack,
-    TrackPlayback:TrackPlayback,
+    TrackPlayback: TrackPlayback,
     photoManager: PhotoManager,
-    warningMessage:WarningMessage
+    warningMessage: WarningMessage
   },
   data() {
     return {
@@ -283,7 +283,7 @@ export default {
       checkedNode: {},
       checkedNodes: [],
       plateNumList: [],
-      plateNumList2: [],
+      plateNumList2: []
     }
   },
   computed: {
@@ -318,48 +318,43 @@ export default {
   mounted() {
   },
   methods: {
-    getImgPath(direction,is_online) { // 获取markerImg的路径
-      //console.log('getImgPath')
-      //console.log(is_online)
-      //console.log(direction)
+    getImgPath(direction, is_online) { // 获取markerImg的路径
       let pic = (direction + 22.5) / 45 + 1
       if (pic > 8) {
         pic = 8
       }
-      if(typeof(is_online) == "undefined"){
+      if (typeof (is_online) === 'undefined') {
         return parseInt(pic) + '.png'
       }
-      if(is_online === '熄火'){
-        return parseInt(pic+8) + '.png'
-      }
-      else if(is_online === '离线'){
-        return parseInt(pic+16) + '.png'
-      }
-      else{
+      if (is_online === '熄火') {
+        return parseInt(pic + 8) + '.png'
+      } else if (is_online === '离线') {
+        return parseInt(pic + 16) + '.png'
+      } else {
         return parseInt(pic) + '.png'
       }
     },
     tableselectrow(rowplateNum) {
       this.carList.forEach(item => {
         if (rowplateNum == item.plateNum) {
-          //console.log('item.latitude+item.longitude')
-          //console.log(item.latitude)
-          if(typeof(item.latitude) == "undefined"||typeof(item.longitude) == "undefined"){
+          // console.log('item.latitude+item.longitude')
+          // console.log(item.latitude)
+          if (typeof (item.latitude) === 'undefined' || typeof (item.longitude) === 'undefined') {
             this.$message({
               showClose: true,
               message: '[' + item.plateNum + ']' + '定位信息未找到',
               type: 'error',
               duration: 8000
             })
-          }else{
-          this.center.lng = item.longitude
-          this.center.lat = item.latitude
-          this.radius = 800
-          const that = this
-          var t = setTimeout(function() {
-            that.radius = 0 // 半径设置成0圈就没啦
-            console.log(that.radius)
-          }, 1000)
+          } else {
+            this.center.lng = item.longitude
+            this.center.lat = item.latitude
+            this.radius = 800
+            const that = this
+            var t = setTimeout(function() {
+              that.radius = 0 // 半径设置成0圈就没啦
+              console.log(that.radius)
+            }, 1000)
           }
         }
       })
@@ -421,15 +416,14 @@ export default {
         this.$store.dispatch('ChangeCarList', dataList).then()
         this.carList = dataList
         console.log(this.carList)
-        this.changeControlBottom();
-
-      }),
+        this.changeControlBottom()
+      })
       getMessageTemplateList().then(response => {
         this.templateList = response.data
       })
     },
     handler({ BMap, map }) {
-      console.log(BMap, map)
+      // console.log(BMap, map)
       this.center.lng = 116.404
       this.center.lat = 39.915
     },
@@ -442,23 +436,23 @@ export default {
       this.$router.push({ path: '/terminalControl/terminalParam' })
     },
     isTrackPlaybackVisible(phoneNum) {
-      this.phoneNum=phoneNum
+      this.phoneNum = phoneNum
       this.trackPlaybackVisible = !this.trackPlaybackVisible
     },
     isTalkBackVisible(phoneNum) {
       this.talkBackVisible = !this.talkBackVisible
-      this.phoneNum=phoneNum
+      this.phoneNum = phoneNum
     },
     isPhotoShotVisible(phoneNum) {
-      this.phoneNum=phoneNum
+      this.phoneNum = phoneNum
       this.photoShotVisible = !this.photoShotVisible
     },
     isDigitBillVisible(phoneNum) {
-      this.phoneNum=phoneNum
+      this.phoneNum = phoneNum
       this.digitBillVisible = !this.digitBillVisible
     },
     isTextMsgVisible(phoneNum) {
-      this.phoneNum=phoneNum
+      this.phoneNum = phoneNum
       this.textMsgVisible = !this.textMsgVisible
     },
     getClickInfo(e) {
@@ -471,20 +465,20 @@ export default {
     },
     changeControlBottom() {
       this.carList.forEach(item => {
-        if(item.receiveData == 0 || item.receiveData === 0){
+        if (item.receiveData == 0 || item.receiveData === 0) {
           item.acc = false
           item.direction = '1'
           item.speed = 0
           item.is_online = '离线'
-          //item.longitude=116.98695649121092
-          //item.latitude=38.65221385853693
+          // item.longitude=116.98695649121092
+          // item.latitude=38.65221385853693
         }
         this.$set(item, 'showFlag', false)
-        this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction,item.is_online)))
+        this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction, item.is_online)))
         // this._getLocationDetailInfo({ lng:item.longitude, lat: item.latitude })
-        //console.log(this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude}))
-        //this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude})
-        this.$set(item, 'locationDetail',  this._getLocationDetailInfo({ lng:item.longitude, lat: item.latitude }))
+        // console.log(this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude}))
+        // this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude})
+        this.$set(item, 'locationDetail', this._getLocationDetailInfo({ lng: item.longitude, lat: item.latitude }))
       })
     },
     infoWindowClose(marker) { // infoWindow关闭
@@ -517,7 +511,7 @@ export default {
       const that = this
       var t = setTimeout(function() {
         that.radius = 0 // 半径设置成0圈就没啦
-        //console.log(that.radius)
+        // console.log(that.radius)
       }, 1000)
     },
     // terminal
