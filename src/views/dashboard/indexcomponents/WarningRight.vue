@@ -1,5 +1,7 @@
 <template>
-  <div class="mapright" />
+  <div class="mapRight" >
+
+  </div>
 </template>
 
 <script>
@@ -9,15 +11,8 @@ export default {
 </script>
 
 <style scoped>
-  .mapright{
+  .mapRight{
     position: absolute;
-    z-index: 99;
-    bottom: 40vh;
-    right: -8vw;
-    background-color: white;
-    border: 1px solid whitesmoke;
-    border-radius: 7px;
-    height: 40vh;
-    width: 10vw;
+    width: 700px;
   }
 </style>
