@@ -59,6 +59,11 @@ export default {
       radio: 1
     }
   },
+  props: {
+    terminalPhone: {
+      type: String, required: true
+    }
+  },
   methods: {
     // photo
     timeFormatToString(time) {

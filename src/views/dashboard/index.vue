@@ -201,7 +201,7 @@
         </el-dialog>
 
         <el-dialog title="图像监管" width="750px" :visible.sync="photoShotVisible">
-          <photo-manager />
+          <photo-manager :terminal-phone="phoneNum" />
         </el-dialog>
 
         <el-dialog title="轨迹回放" width="800px" :visible.sync="trackPlaybackVisible">
