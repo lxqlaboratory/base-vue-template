@@ -27,7 +27,7 @@
     "stompjs": "^2.3.3",
     "video.js": "^7.5.5",
     "vue": "2.6.10",
-    "vue-baidu-map": "^0.21.20",
+    "vue-baidu-map": "^0.21.21",
     "vue-router": "3.0.6",
     "vue-splitpane": "^1.0.4",
     "vue-video-player": "^5.0.2",

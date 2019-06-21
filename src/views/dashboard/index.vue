@@ -475,9 +475,6 @@ export default {
         }
         this.$set(item, 'showFlag', false)
         this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction, item.is_online)))
-        // this._getLocationDetailInfo({ lng:item.longitude, lat: item.latitude })
-        // console.log(this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude}))
-        // this._getLocationDetailInfo({lng:item.longitude,lat:item.latitude})
         this.$set(item, 'locationDetail', this._getLocationDetailInfo({ lng: item.longitude, lat: item.latitude }))
       })
     },
