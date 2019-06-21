@@ -85,12 +85,12 @@
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="alarm" />
-        <el-button type="text" style="color:red" @click="clearFilter">报警</el-button>&nbsp;&nbsp;&nbsp;{{ alarm }}
+        <el-button type="text" style="color:red" @click="showViolation">报警</el-button>&nbsp;&nbsp;&nbsp;{{ alarm }}
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
         <svg-icon icon-class="warning" />
-        <el-button type="text" style="color:red" @click="clearFilter">预警</el-button>&nbsp;&nbsp;&nbsp;{{ warning }}
+        <el-button type="text" style="color:red" @click="showAlarm">预警</el-button>&nbsp;&nbsp;&nbsp;{{ warning }}
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
@@ -102,7 +102,9 @@
         <svg-icon icon-class="maxscreen" @click="showTableMax" />
       </div>
     </div>
-
+    <el-dialog title="违章信息处理" width="700px" :visible.sync="warningRightVisible">
+      <WarningRight v-if="warningRightVisible"/>
+    </el-dialog>
     <div v-show="isShow" class="mapBottomTable">
       <el-table :data="tableData" border style="width: 100%;max-height:40vh" @row-click="throwEmit" @row-contextmenu="row_contextmenu">
         <!--  <el-table-column type="selection" min-width="50" />-->
@@ -196,6 +198,7 @@ export default {
       tableData: [],
       startInput: null,
       endInput: null,
+      warningRightVisible:false,
       simInput: null,
       onlineChecked: false,
       videoChecked: false,
@@ -220,7 +223,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'carList'
+      'carList',
     ]),
     'vehicle_num': function() {
       return this.carList.length
@@ -336,6 +339,13 @@ export default {
       this.carList.forEach(item => {
         if (item.is_online == '离线') { this.tableData.push(item) }
       })
+    },
+    showViolation() {
+      console.log(this.warningRightVisible)
+      this.warningRightVisible = !this.warningRightVisible
+    },
+    showAlarm() {
+      this.warningRightVisible = !this.warningRightVisible
     }
   }
 }

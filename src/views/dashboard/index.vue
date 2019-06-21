@@ -195,15 +195,12 @@
         <el-dialog title="电子运单" :visible.sync="digitBillVisible">
           暂时还没有电子运单
         </el-dialog>
-
         <el-dialog title="语音对讲" width="340px" :visible.sync="talkBackVisible">
           <talk-back v-if="talkBackVisible" />
         </el-dialog>
-
         <el-dialog title="图像监管" width="750px" :visible.sync="photoShotVisible">
           <photo-manager :terminal-phone="phoneNum" />
         </el-dialog>
-
         <el-dialog title="轨迹回放" width="800px" :visible.sync="trackPlaybackVisible">
           <TrackPlayback v-if="trackPlaybackVisible" />
         </el-dialog>
@@ -219,6 +216,7 @@ import { mapGetters } from 'vuex'
 import ControlBottom from './indexcomponents/ControlBottom'
 import TalkBack from './indexcomponents/TalkBack'
 import WarningMessage from './indexcomponents/WarningMessage'
+import WarningRight from './indexcomponents/WarningRight'
 import TrackPlayback from './indexcomponents/TrackPlayback'
 import PhotoManager from './indexcomponents/PhotoManager'
 import { getTreeVehicleFormList } from '@/api/vehicle-list-index'
@@ -236,7 +234,8 @@ export default {
     talkBack: TalkBack,
     TrackPlayback: TrackPlayback,
     photoManager: PhotoManager,
-    warningMessage: WarningMessage
+    warningMessage: WarningMessage,
+    WarningRight:WarningRight,
   },
   data() {
     return {
