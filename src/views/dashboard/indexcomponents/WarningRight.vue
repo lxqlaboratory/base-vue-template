@@ -59,13 +59,36 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="信息发送" name="third" >配置管理</el-tab-pane>
+      <el-tab-pane label="信息发送" name="third" >
+        <el-table :data="textMsgList" height="380" border fit highlight-current-row style="margin-top:10px">
+          <el-table-column align="center" label="ID" min-width="15">
+            <template slot-scope="scope">
+              {{ scope.$index+1 }}
+            </template>
+          </el-table-column>
+          <el-table-column label="车牌号" min-width="30" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.plateNum}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="发送内容" min-width="60" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.content }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="发送时间" min-width="40" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.addTime }} </span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-  import { getViolationTodayList,getOfflineList } from '@/api/warning-right'
+  import { getViolationTodayList,getOfflineList ,getVehicleTextMsgInfo} from '@/api/warning-right'
 export default {
   name: 'WarningRight',
   data() {
@@ -73,6 +96,7 @@ export default {
       activeName: 'first',
       violationList:[],
       offlineList:[],
+      textMsgList:[],
     };
   },
   created() {
@@ -88,6 +112,9 @@ export default {
       }),
       getOfflineList().then(response => {
         this.offlineList = response.data
+      }),
+      getVehicleTextMsgInfo().then(response => {
+        this.textMsgList = response.data
       })
     },
   }

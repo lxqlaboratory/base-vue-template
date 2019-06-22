@@ -10,8 +10,11 @@ export function getOfflineList(messageContent) {
   return request({
     url: '/func/web/getOfflineList',
     method: 'POST',
-    data: {
-      messageContent
-    }
+  })
+}
+export function getVehicleTextMsgInfo(messageContent) {
+  return request({
+    url: '/func/web/getVehicleTextMsgInfo',
+    method: 'POST',
   })
 }
