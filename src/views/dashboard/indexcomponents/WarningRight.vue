@@ -1,14 +1,14 @@
 <template>
   <div>
-    <el-tabs style="height: 330px;" v-model="activeName" type="border-card" :tab-position="left" :stretch="true">
+    <el-tabs style="height: 450px; width: 768px" v-model="activeName" type="border-card" :tab-position="left" :stretch="true">
       <el-tab-pane label="今日违章情况" name="first" >
-        <el-table :data="violationList" border fit highlight-current-row height="250" style="margin-top:10px">
+        <el-table :data="violationList" border fit highlight-current-row height="380" style="margin-top:10px">
           <el-table-column align="center" label="ID" min-width="15">
             <template slot-scope="scope">
               {{ scope.$index+1 }}
             </template>
           </el-table-column>
-          <el-table-column label="车牌号" min-width="20" align="center">
+          <el-table-column label="车牌号" min-width="30" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.plateNum}}</span>
             </template>
@@ -18,7 +18,7 @@
               <span>{{ scope.row.violationTime }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="违章类型" min-width="40" align="center">
+          <el-table-column label="违章类型" min-width="30" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.violationParameterName }} </span>
             </template>
@@ -31,7 +31,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="离线预警" name="second" >
-        <el-table :data="offlineList" height="250" border fit highlight-current-row style="margin-top:10px">
+        <el-table :data="offlineList" height="380" border fit highlight-current-row style="margin-top:10px">
           <el-table-column align="center" label="ID" min-width="15">
             <template slot-scope="scope">
               {{ scope.$index+1 }}
