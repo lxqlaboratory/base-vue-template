@@ -226,7 +226,8 @@ export default {
       startSpeed: null,
       endSpeed: null,
       plateInput: null,
-      driverInput: null
+      driverInput: null,
+      activeNames: 'first'
     }
   },
   computed: {
@@ -349,11 +350,12 @@ export default {
       })
     },
     showViolation() {
-      console.log(this.warningRightVisible)
       this.warningRightVisible = !this.warningRightVisible
+      this.activeNames='first'
     },
     showAlarm() {
       this.warningRightVisible = !this.warningRightVisible
+      this.activeNames='third'
     }
   }
 }

@@ -59,7 +59,7 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="预警情况" name="four" >
+      <el-tab-pane label="预警情况" name="third" >
         <el-table :data="alarmList" height="380" border fit highlight-current-row style="margin-top:10px">
           <el-table-column align="center" label="ID" min-width="15">
             <template slot-scope="scope">
@@ -88,7 +88,7 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="信息发送" name="third" >
+      <el-tab-pane label="信息发送" name="four" >
         <el-table :data="textMsgList" height="380" border fit highlight-current-row style="margin-top:10px">
           <el-table-column align="center" label="ID" min-width="15">
             <template slot-scope="scope">
@@ -120,6 +120,7 @@
   import { getViolationTodayList,getOfflineList ,getTodayVehicleTextMsgInfo,getTodayAlarmProcessInfo} from '@/api/warning-right'
 export default {
   name: 'WarningRight',
+  props:['activeNames'],
   data() {
     return {
       activeName: 'first',
@@ -128,6 +129,14 @@ export default {
       textMsgList:[],
       alarmList:[]
     };
+  },
+  mounted() {
+    let _this=this;
+    setTimeout(()=>{
+      _this.activeName=_this.activeNames
+      console.log(_this.activeName)
+      console.log(_this.activeNames)
+    },2000)
   },
   created() {
     this.fetchData()
