@@ -18,3 +18,9 @@ export function getTodayVehicleTextMsgInfo(messageContent) {
     method: 'POST',
   })
 }
+export function getTodayAlarmProcessInfo(messageContent) {
+  return request({
+    url: '/func/web/getTodayAlarmProcessInfo',
+    method: 'POST',
+  })
+}

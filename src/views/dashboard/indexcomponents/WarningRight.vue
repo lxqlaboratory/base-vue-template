@@ -59,6 +59,35 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
+      <el-tab-pane label="预警情况" name="four" >
+        <el-table :data="alarmList" height="380" border fit highlight-current-row style="margin-top:10px">
+          <el-table-column align="center" label="ID" min-width="15">
+            <template slot-scope="scope">
+              {{ scope.$index+1 }}
+            </template>
+          </el-table-column>
+          <el-table-column label="车牌号" min-width="30" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.plateNum}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="预警内容" min-width="30" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.alarmContent }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="预警时间" min-width="50" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.updateTime }} </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="地址" min-width="60" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.address }} </span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
       <el-tab-pane label="信息发送" name="third" >
         <el-table :data="textMsgList" height="380" border fit highlight-current-row style="margin-top:10px">
           <el-table-column align="center" label="ID" min-width="15">
@@ -88,7 +117,7 @@
 </template>
 
 <script>
-  import { getViolationTodayList,getOfflineList ,getTodayVehicleTextMsgInfo} from '@/api/warning-right'
+  import { getViolationTodayList,getOfflineList ,getTodayVehicleTextMsgInfo,getTodayAlarmProcessInfo} from '@/api/warning-right'
 export default {
   name: 'WarningRight',
   data() {
@@ -97,6 +126,7 @@ export default {
       violationList:[],
       offlineList:[],
       textMsgList:[],
+      alarmList:[]
     };
   },
   created() {
@@ -115,6 +145,9 @@ export default {
       }),
       getTodayVehicleTextMsgInfo().then(response => {
         this.textMsgList = response.data
+      }),
+      getTodayAlarmProcessInfo().then(response => {
+        this.alarmList = response.data
       })
     },
   }
