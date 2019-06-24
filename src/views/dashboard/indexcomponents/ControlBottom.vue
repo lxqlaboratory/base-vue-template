@@ -8,7 +8,9 @@
       <div class="menu">功能4</div>
       <div class="menu">功能5</div>
     </div>-->
-
+    <el-dialog title="违章信息处理":visible.sync="warningRightVisible" style="width: 100%" class="el-dialog--centers" :center="true">
+      <WarningRight v-if="warningRightVisible"/>
+    </el-dialog>
     <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 74%">
       <div>
         <span class="font-span">起点：</span>
@@ -102,9 +104,6 @@
         <svg-icon icon-class="maxscreen" @click="showTableMax" />
       </div>
     </div>
-    <el-dialog title="违章信息处理" width="700px" :visible.sync="warningRightVisible">
-      <WarningRight v-if="warningRightVisible"/>
-    </el-dialog>
     <div v-show="isShow" class="mapBottomTable">
       <el-table :data="tableData" border style="width: 100%;max-height:40vh" @row-click="throwEmit" @row-contextmenu="row_contextmenu">
         <!--  <el-table-column type="selection" min-width="50" />-->
@@ -140,6 +139,12 @@
               </el-form-item>
               <el-form-item label="GNSS/定位卫星数">
                 <span>{{ props.row.satellitesNum }}</span>
+              </el-form-item>
+              <el-form-item label="经度">
+                <span>{{ props.row.longitude }}</span>
+              </el-form-item>
+              <el-form-item label="纬度">
+                <span>{{ props.row.latitude }}</span>
               </el-form-item>
             </el-form>
           </template>
@@ -182,10 +187,13 @@
 </template>
 
 <script>
-
+import WarningRight from './WarningRight'
 import { mapGetters } from 'vuex'
 export default {
   name: 'ControlBottom',
+  components: {
+    WarningRight:WarningRight,
+  },
   data() {
     return {
       isShow: false,
@@ -475,5 +483,8 @@ export default {
   }
   .colorred{
     color: red
+  }
+  .el-dialog--centers>>> .el-dialog__body{
+    padding: 10px 0px 0px 0px;
   }
 </style>
