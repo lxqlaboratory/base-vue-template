@@ -33,6 +33,9 @@ export default {
     ])
   },
   methods: {
+    changeBottoms(){
+      this.$emit('changeBottom')
+    },
     webSocket() {
       console.log('进入WarningMessage')
       this.peer = new WebSocket('ws://202.194.14.72:15674/ws')
@@ -447,6 +450,7 @@ export default {
         console.log('error')
       }
       client.connect('admin', '123', on_connect, on_error, 'jt808')
+      this.changeBottoms()
     }
 
   }

@@ -204,7 +204,7 @@
         <el-dialog title="轨迹回放" width="800px" :visible.sync="trackPlaybackVisible">
           <TrackPlayback v-if="trackPlaybackVisible" />
         </el-dialog>
-        <control-bottom ref="controlBottom" @selectrow="tableselectrow" />
+        <control-bottom ref="controlBottom" @selectrow="tableSelectRow" @changeBottom="changeControlBottom"/>
         <warning-message />
       </el-main>
     </el-container>
@@ -322,6 +322,9 @@ export default {
       if (pic > 8) {
         pic = 8
       }
+      console.log('getImgPath')
+      console.log(direction)
+      console.log(is_online)
       if (typeof (is_online) === 'undefined') {
         return parseInt(pic) + '.png'
       }
@@ -333,11 +336,14 @@ export default {
         return parseInt(pic) + '.png'
       }
     },
-    tableselectrow(rowplateNum) {
+    tableSelectRow(rowPlateNum) {
       this.carList.forEach(item => {
-        if (rowplateNum == item.plateNum) {
-          // console.log('item.latitude+item.longitude')
-          // console.log(item.latitude)
+        console.log('tableSelectRow')
+        console.log(rowPlateNum)
+        if (rowPlateNum == item.plateNum) {
+          console.log('item.latitude+item.longitude')
+          console.log(item.latitude)
+          console.log(item.longitude)
           if (typeof (item.latitude) === 'undefined' || typeof (item.longitude) === 'undefined') {
             this.$message({
               showClose: true,
@@ -465,10 +471,10 @@ export default {
     changeControlBottom() {
       this.carList.forEach(item => {
 
-        item.acc = false
-        item.direction = '1'
-        item.speed = 0
-        item.is_online = '离线'
+        //item.acc = false
+        //item.direction = '1'
+        //item.speed = 0
+        //item.is_online = '离线'
         // item.longitude=116.98695649121092
         // item.latitude=38.65221385853693
         this.$set(item, 'showFlag', false)
