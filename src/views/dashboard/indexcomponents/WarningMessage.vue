@@ -274,7 +274,7 @@ export default {
                   duration: 8000
                 })
               }
-              if (p.isLocation === true) {
+              if (p.isLocation === false) {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '未定位',

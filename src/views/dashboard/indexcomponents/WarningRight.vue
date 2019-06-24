@@ -30,7 +30,7 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="离线预警" name="second" >
+      <el-tab-pane label="离线情况" name="second" >
         <el-table :data="offlineList" height="380" border fit highlight-current-row style="margin-top:10px">
           <el-table-column align="center" label="ID" min-width="15">
             <template slot-scope="scope">
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-  import { getViolationTodayList,getOfflineList ,getVehicleTextMsgInfo} from '@/api/warning-right'
+  import { getViolationTodayList,getOfflineList ,getTodayVehicleTextMsgInfo} from '@/api/warning-right'
 export default {
   name: 'WarningRight',
   data() {
@@ -113,7 +113,7 @@ export default {
       getOfflineList().then(response => {
         this.offlineList = response.data
       }),
-      getVehicleTextMsgInfo().then(response => {
+      getTodayVehicleTextMsgInfo().then(response => {
         this.textMsgList = response.data
       })
     },

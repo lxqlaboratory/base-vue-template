@@ -37,3 +37,10 @@ export function getVueAllOnlineRecordingInfo() {
     method: 'POST'
   })
 }
+export function getAllVehicleTextMsgInfo() {
+  return request({
+    url: '/func/web/getAllVehicleTextMsgInfo',
+    method: 'POST'
+  })
+}
+

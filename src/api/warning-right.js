@@ -12,9 +12,9 @@ export function getOfflineList(messageContent) {
     method: 'POST',
   })
 }
-export function getVehicleTextMsgInfo(messageContent) {
+export function getTodayVehicleTextMsgInfo(messageContent) {
   return request({
-    url: '/func/web/getVehicleTextMsgInfo',
+    url: '/func/web/getTodayVehicleTextMsgInfo',
     method: 'POST',
   })
 }

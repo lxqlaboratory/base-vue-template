@@ -8,7 +8,7 @@
       <div class="menu">功能4</div>
       <div class="menu">功能5</div>
     </div>-->
-    <el-dialog title="违章信息处理":visible.sync="warningRightVisible" style="width: 100%" class="el-dialog--centers" :center="true">
+    <el-dialog title="今日信息处理":visible.sync="warningRightVisible" style="width: 100%" class="el-dialog--centers" :center="true">
       <WarningRight v-if="warningRightVisible"/>
     </el-dialog>
     <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 74%">

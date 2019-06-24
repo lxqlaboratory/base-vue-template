@@ -155,13 +155,13 @@ export const constantRoutes = [
         name: 'terminalAlarm',
         component: () => import('@/views/history-search/terminal-alarm'),
         meta: { title: '終端报警历史', icon: 'history' }
-      }/*,
+      },
       {
-        path: 'checkHistory',
-        name: 'checkHistory',
-        component: () => import('@/views/history-search/check-history'),
-        meta: { title: '查岗历史查询', icon: 'history' }
-      }*/
+        path: 'vehicleTextmsg',
+        name: 'vehicleTextmsg',
+        component: () => import('@/views/history-search/vehicle-textmsg'),
+        meta: { title: '发送信息历史查询', icon: 'history' }
+      }
     ]
   },
   {
