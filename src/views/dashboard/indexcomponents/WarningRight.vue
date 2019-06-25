@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs style="height: 450px; width: 768px" v-model="activeName" type="border-card" :tab-position="left" :stretch="true">
+    <el-tabs style="height: 450px; width: 768px" v-model="activeName" type="border-card" :tab-position="tabPosition" :stretch="true">
       <el-tab-pane label="今日违章情况" name="first" >
         <el-table :data="violationList" border fit highlight-current-row height="380" style="margin-top:10px">
           <el-table-column align="center" label="ID" min-width="15">
@@ -120,23 +120,27 @@
   import { getViolationTodayList,getOfflineList ,getTodayVehicleTextMsgInfo,getTodayAlarmProcessInfo} from '@/api/warning-right'
 export default {
   name: 'WarningRight',
-  props:['activeNames'],
+  props: ["activeNames"],
   data() {
     return {
       activeName: 'first',
       violationList:[],
       offlineList:[],
       textMsgList:[],
-      alarmList:[]
+      alarmList:[],
+      tabPosition: 'top'
     };
   },
   mounted() {
-    let _this=this;
+    /*let _this=this;
     setTimeout(()=>{
       _this.activeName=_this.activeNames
       console.log(_this.activeName)
       console.log(_this.activeNames)
-    },2000)
+    },2000)*/
+    this.activeName=this.activeNames
+    console.log(this.activeName)
+    console.log(this.activeNames)
   },
   created() {
     this.fetchData()

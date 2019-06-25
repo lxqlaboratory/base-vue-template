@@ -322,9 +322,9 @@ export default {
       if (pic > 8) {
         pic = 8
       }
-      console.log('getImgPath')
-      console.log(direction)
-      console.log(is_online)
+      //console.log('getImgPath')
+      //console.log(direction)
+      //console.log(is_online)
       if (typeof (is_online) === 'undefined') {
         return parseInt(pic) + '.png'
       }
@@ -338,12 +338,12 @@ export default {
     },
     tableSelectRow(rowPlateNum) {
       this.carList.forEach(item => {
-        console.log('tableSelectRow')
-        console.log(rowPlateNum)
+        //console.log('tableSelectRow')
+        //console.log(rowPlateNum)
         if (rowPlateNum == item.plateNum) {
-          console.log('item.latitude+item.longitude')
-          console.log(item.latitude)
-          console.log(item.longitude)
+          //console.log('item.latitude+item.longitude')
+          //console.log(item.latitude)
+          //console.log(item.longitude)
           if (typeof (item.latitude) === 'undefined' || typeof (item.longitude) === 'undefined') {
             this.$message({
               showClose: true,
@@ -469,8 +469,9 @@ export default {
       this._getLocationDetailInfo({ lng: e.point.lng, lat: e.point.lat })
     },
     changeControlBottom() {
+      console.log('changeControlBottomAAAA')
       this.carList.forEach(item => {
-
+         console.log('changeControlBottom')
         //item.acc = false
         //item.direction = '1'
         //item.speed = 0
@@ -480,6 +481,10 @@ export default {
         this.$set(item, 'showFlag', false)
         this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction, item.is_online)))
         this.$set(item, 'locationDetail', this._getLocationDetailInfo({ lng: item.longitude, lat: item.latitude }))
+        if (typeof (this.locationDetail) != 'undefined') {
+          item.locationDetail=this.locationDetail
+        }
+        console.log(item.locationDetail)
       })
     },
     infoWindowClose(marker) { // infoWindow关闭
