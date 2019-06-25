@@ -87,12 +87,13 @@ export default {
         this.timeb = this.timeFormatToString(this.photoShotTime[1].toLocaleString())
         console.log(this.timea)
 
-        getVehiclePhotoInfoList('15153139702', this.timea, this.timeb).then(response => {
+        getVehiclePhotoInfoList(this.terminalPhone, this.timea, this.timeb).then(response => {
           console.log(response.data)
           this.listPhotoSrc = []
           const listData = response.data
           listData.filter(item => {
-            this.listPhotoSrc.push('http://202.194.14.73:8080/photos/15153139702/' + item + '.jpg')
+            //this.listPhotoSrc.push('http://202.194.14.73:8080/photos/15153139702/' + item + '.jpg')
+            this.listPhotoSrc.push('http://202.194.14.73:8080/photos/'+this.terminalPhone+'/' + item + '.jpg')
           })
         })
       }
