@@ -9,7 +9,7 @@
       <div class="menu">功能5</div>
     </div>-->
     <el-dialog title="今日信息处理":visible.sync="warningRightVisible" style="width: 100%" class="el-dialog--centers" :center="true">
-      <WarningRight v-if="warningRightVisible"/>
+      <warning-right v-if="warningRightVisible" :active-names="activeNames"/>
     </el-dialog>
     <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 74%">
       <div>
@@ -181,7 +181,6 @@
         <el-table-column prop="note" label="备注" sortable min-width="400" />-->
       </el-table>
     </div>
-
   </div>
 
 </template>
@@ -192,7 +191,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'ControlBottom',
   components: {
-    WarningRight:WarningRight,
+    warningRight:WarningRight,
   },
   data() {
     return {

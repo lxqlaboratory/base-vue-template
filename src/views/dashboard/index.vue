@@ -469,9 +469,8 @@ export default {
       this._getLocationDetailInfo({ lng: e.point.lng, lat: e.point.lat })
     },
     changeControlBottom() {
-      console.log('changeControlBottomAAAA')
       this.carList.forEach(item => {
-         console.log('changeControlBottom')
+        //console.log('changeControlBottom')
         //item.acc = false
         //item.direction = '1'
         //item.speed = 0
@@ -480,7 +479,7 @@ export default {
         // item.latitude=38.65221385853693
         this.$set(item, 'showFlag', false)
         this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction, item.is_online)))
-        this.$set(item, 'locationDetail', this._getLocationDetailInfo({ lng: item.longitude, lat: item.latitude }))
+        //this.$set(item, 'locationDetail', this._getLocationDetailInfo({ lng: item.longitude, lat: item.latitude }))
         if (typeof (this.locationDetail) != 'undefined') {
           item.locationDetail=this.locationDetail
         }

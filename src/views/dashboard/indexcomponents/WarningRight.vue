@@ -120,7 +120,13 @@
   import { getViolationTodayList,getOfflineList ,getTodayVehicleTextMsgInfo,getTodayAlarmProcessInfo} from '@/api/warning-right'
 export default {
   name: 'WarningRight',
-  props: ["activeNames"],
+  props: {
+    activeNames:
+    {
+     type: String,
+     default: 'first'
+    }
+  },
   data() {
     return {
       activeName: 'first',
@@ -138,6 +144,7 @@ export default {
       console.log(_this.activeName)
       console.log(_this.activeNames)
     },2000)*/
+    console.log(this.activeName)
     this.activeName=this.activeNames
     console.log(this.activeName)
     console.log(this.activeNames)

@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     changeBottoms(){
+      console.log('SSSSSSSSSSSSSS')
       this.$emit('changeBottom')
     },
     webSocket() {
