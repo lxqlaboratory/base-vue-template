@@ -168,6 +168,9 @@
                   />
                 </el-select>
               </el-form-item>
+              <el-form-item label="[运政]车牌颜色:">
+                <el-input v-model="save.plateColor1" style="width: 80%" autocomplete="off" />
+              </el-form-item>
               <!--<el-form-item label="所属司机(必选):">
                 <el-select v-model="driverNameQuery" filterable   style="margin-bottom: 10px" placeholder="请选择">
                   <el-option
@@ -203,9 +206,6 @@
               </el-form-item>
               <el-form-item label="[运政]燃料类型:">
                 <el-input v-model="save.fuelType1" style="width: 80%" autocomplete="off" />
-              </el-form-item>
-              <el-form-item label="[运政]车牌颜色:">
-                <el-input v-model="save.plateColor1" style="width: 80%" autocomplete="off" />
               </el-form-item>
               <el-form-item label="[运政]铭牌厂牌:">
                 <el-input v-model="save.nameplateBrand1" style="width: 80%" autocomplete="off" />
