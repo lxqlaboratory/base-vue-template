@@ -23,7 +23,7 @@ export default {
   created() {
   },
   mounted() {
-    this.peer = new WebSocket('ws://202.194.14.72:10004/hello')
+    this.peer = new WebSocket('ws://127.0.0.1:10004/hello')
     this.peer.push = this.peer.send
     this.peer.send = (data) => {
       this.peer.push(data)

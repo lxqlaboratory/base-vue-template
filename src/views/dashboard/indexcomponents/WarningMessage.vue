@@ -39,7 +39,7 @@ export default {
     },
     webSocket() {
       console.log('进入WarningMessage')
-      this.peer = new WebSocket('ws://202.194.14.72:15674/ws')
+      this.peer = new WebSocket('ws://211.87.225.205:15674/ws')
       const ref = this
       const client = Stomp.over(this.peer)
       const on_connect = function() {
@@ -450,7 +450,7 @@ export default {
       const on_error = function() {
         console.log('error')
       }
-      client.connect('admin', '123', on_connect, on_error, 'jt808')
+      client.connect('admin', 'admin', on_connect, on_error, 'jt808')
       this.changeBottoms()
     }
 

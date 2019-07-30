@@ -105,7 +105,8 @@
                     <span class="svg-container">
                       <svg-icon icon-class="direct" />
                     </span>
-                    <span class="popup-span" style="width:90%;font-weight:normal">{{ locationDetailInfo }}</span>
+                    <!--<span class="popup-span" style="width:90%;font-weight:normal">{{ locationDetailInfo }}</span>-->
+                    <span class="popup-span" style="width:90%;font-weight:normal">{{ marker.locationDetail }}</span>
                   </div>
                   <div class="popup-basic-line" style="border-bottom: none; float: left; height: 10%; margin-top:3px">
                     <div v-for="item in weatherInfo" style="float: left;">
@@ -434,7 +435,8 @@ export default {
     },
     toVideoMonitoring(phoneNum) {
       // mediaTransform(phoneNum, 1, 0).then()
-      this.$router.push({ path: '/videoMonitor/videoMonitor' })
+      console.log('phoneNum ' + phoneNum)
+      this.$router.push({ name: 'videoMonitor',params:{phoneNum} })
     },
     toTerminalParam(phoneNum) {
       getTerminalParam(phoneNum).then()

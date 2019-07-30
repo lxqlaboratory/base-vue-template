@@ -23,7 +23,7 @@
           class="vjs-custom-skin"
           :options="playerOptions"
         />-->
-        <players v-if="isRouterAlive" ref="players" />
+        <players :phonenum="phoneNum"  v-if="isRouterAlive" ref="players" />
       </el-main>
     </el-container>
   </div>
@@ -33,7 +33,7 @@
 import { mediaTransform } from '@/api/terminal'
 import 'video.js/dist/video-js.css'
 import 'vue-video-player/src/custom-theme.css'
-require('@videojs/http-streaming/dist/videojs-http-streaming.min')
+//require('@videojs/http-streaming/dist/videojs-http-streaming.min')
 import { mapGetters } from 'vuex'
 import Players from './players/players'
 
@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       isRouterAlive: true,
+      phoneNum:'',
       /**
        * terminal result
        * 0：成功∕确认
@@ -79,6 +80,11 @@ export default {
       'carTree'
     ])
   },
+  created:function () {
+    console.log(this.$route)
+    console.log(this.$route.params.phoneNum)
+    this.phoneNum=this.$route.params.phoneNum
+  },
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val)
@@ -87,18 +93,20 @@ export default {
   mounted: function() {
     this.data = this.carTree
   },
+
   methods: {
     filterNode(value, data) {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     },
-    testMethod() {
-      mediaTransform('15153139702', 64, 0).then(response => {
-        this.videoMonitoringResult = response.data.result
+   testMethod() {
+     mediaTransform('15153139702', 64, 0).then(response => {
+       this.videoMonitoringResult = response.data.result
+        console.log('this.$route.params.phoneNum ' + this.$route.params.phoneNum)
         console.log('response.data ' + response.data.result)
       })
       console.log('videoMonitoringResult ' + this.videoMonitoringResult)
-    },
+   },
     reload(event) {
       console.log(event)
       this.isRouterAlive = !this.isRouterAlive

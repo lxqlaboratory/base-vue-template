@@ -16,8 +16,16 @@ export default {
   data() {
     return {}
   },
+  props:{
+    phonenum:{
+      type:String,
+      default:function () {
+        return '15153139702'
+      }
+    }
+  },
   mounted: function() {
-    mediaTransform('15153139702', 1, 1).then(response => {
+    mediaTransform(this.phonenum, 1, 1).then(response => {
       console.info(response.data.result)
       if (FlvJs.isSupported()) {
         const flvPlayer1 = FlvJs.createPlayer({
@@ -25,7 +33,7 @@ export default {
           withCredentials: false,
           isLive: true,
           type: 'flv',
-          url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream=15153139702_1'
+          url: 'http://202.194.14.72:8080/live?port=1935&app=myapp&stream='+this.phonenum+'_1'
         })
         const flvPlayer2 = FlvJs.createPlayer({
           cors: true,
