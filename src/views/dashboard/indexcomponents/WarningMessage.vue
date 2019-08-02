@@ -39,7 +39,7 @@ export default {
     },
     webSocket() {
       console.log('进入WarningMessage')
-      this.peer = new WebSocket('ws://211.87.225.205:15674/ws')
+      this.peer = new WebSocket('ws://58.56.251.230:15674/ws')
       const ref = this
       const client = Stomp.over(this.peer)
       const on_connect = function() {

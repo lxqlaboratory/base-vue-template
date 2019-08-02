@@ -46,7 +46,7 @@
             :stroke-weight="2"
           />
           <bm-marker
-            v-for="marker of carList"
+            v-for="marker of carListShowMap"
             :key="marker.phoneNum"
             :position="{lng: marker.longitude, lat: marker.latitude}"
             :icon="{url: marker.imageUrl, size: {width: 30, height: 30}}"
@@ -296,6 +296,14 @@ export default {
           if (item2 === item.plateNum) { return true }
         })
         return false
+      })
+    },
+    'carListShowMap': function() {
+      return this.carList.filter(item => {
+        if(item.longitude==null||item.latitude==null)
+          return false
+        else
+          return true
       })
     }
   },

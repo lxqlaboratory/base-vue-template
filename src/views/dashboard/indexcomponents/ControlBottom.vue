@@ -105,7 +105,7 @@
       </div>
     </div>
     <div v-show="isShow" class="mapBottomTable">
-      <el-table :data="tableData" border style="width: 100%;max-height:40vh" @row-click="throwEmit" @row-contextmenu="row_contextmenu">
+      <el-table :data="tableData" border height="300" style="width: 100%;" @row-click="throwEmit" @row-contextmenu="row_contextmenu">
         <!--  <el-table-column type="selection" min-width="50" />-->
         <el-table-column type="expand">
           <template slot-scope="props">
