@@ -20,12 +20,12 @@ export default {
     phonenum:{
       type:String,
       default:function () {
-        return '23021181479'
+        return '23021181444'
       }
     }
   },
   mounted: function() {
-    mediaTransform('23021181479', 1, 1).then(response => {
+    mediaTransform(this.phonenum, 1, 1).then(response => {
       console.info(response.data.result)
       if (FlvJs.isSupported()) {
         const flvPlayer1 = FlvJs.createPlayer({
@@ -34,28 +34,28 @@ export default {
           isLive: true,
           type: 'flv',
           //url: 'http://http://58.56.251.230:8079/live?port=1935&app=myapp&stream='+this.phonenum+'_1'
-          url: 'http://58.56.251.230:8079/live?port=1935&app=myapp&stream=23021181479_1'
+          url: 'http://58.56.251.230:8079/live?port=1935&app=myapp&stream='+this.phonenum+'_1'
         })
         const flvPlayer2 = FlvJs.createPlayer({
           cors: true,
           withCredentials: false,
           isLive: true,
           type: 'flv',
-          url: 'http://58.56.251.230:8079/live?port=1935&app=myapp&stream=23021181479_2'
+          url: 'http://58.56.251.230:8079/live?port=1935&app=myapp&stream='+this.phonenum+'_2'
         })
         const flvPlayer3 = FlvJs.createPlayer({
           cors: true,
           withCredentials: false,
           isLive: true,
           type: 'flv',
-          url: 'http://58.56.251.230:8079/live?port=1935&app=myapp&stream=23021181479_3'
+          url: 'http://58.56.251.230:8079/live?port=1935&app=myapp&stream='+this.phonenum+'_3'
         })
         const flvPlayer4 = FlvJs.createPlayer({
           cors: true,
           withCredentials: false,
           isLive: true,
           type: 'flv',
-          url: 'hhttp://58.56.251.230:8079/live?port=1935&app=myapp&stream=23021181479_4'
+          url: 'http://58.56.251.230:8079/live?port=1935&app=myapp&stream='+this.phonenum+'_4'
         })
         flvPlayer1.attachMediaElement(this.$refs.channel1)
         flvPlayer2.attachMediaElement(this.$refs.channel2)
@@ -69,7 +69,7 @@ export default {
     })
   },
   destroyed: function() {
-    realTimeMediaControl('23021181479', 1, 0, 0, 0).then()
+    realTimeMediaControl(this.phonenum, 1, 1, 1, 1).then()
   }
 }
 

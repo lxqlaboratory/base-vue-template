@@ -81,8 +81,6 @@ export default {
     ])
   },
   created:function () {
-    console.log(this.$route)
-    console.log(this.$route.params.phoneNum)
     this.phoneNum=this.$route.params.phoneNum
   },
   watch: {
@@ -100,12 +98,9 @@ export default {
       return data.label.indexOf(value) !== -1
     },
    testMethod() {
-     mediaTransform('15153139702', 64, 0).then(response => {
+     mediaTransform(this.phonenum, 64, 0).then(response => {
        this.videoMonitoringResult = response.data.result
-        console.log('this.$route.params.phoneNum ' + this.$route.params.phoneNum)
-        console.log('response.data ' + response.data.result)
       })
-      console.log('videoMonitoringResult ' + this.videoMonitoringResult)
    },
     reload(event) {
       console.log(event)
