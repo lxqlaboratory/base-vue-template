@@ -108,7 +108,7 @@
           <el-form-item label="家庭住址:">
             <el-input v-model="save.driverAddress" style="width: 80%" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="选择车牌号码:">
+          <!--<el-form-item label="选择车牌号码:">
             <el-select v-model="plateValue"  style="width: 80%" filterable placeholder="请选择车牌号码">
               <el-option
                 v-for="item in plateList"
@@ -117,7 +117,7 @@
                 :value="item.plateNum"
               />
             </el-select>
-          </el-form-item>
+          </el-form-item>-->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogSaveFormVisible = false">取 消</el-button>
