@@ -250,6 +250,7 @@ export default {
       messageQuery: '',
       templateList: [],
       carList: [], // 车辆列表
+      carListTwo: [], // 车辆列表
       currentCarInfo: {}, // 当前infoWindow对应的车辆信息
       socketPlateNum: '',
       defaultProps: {
@@ -482,19 +483,25 @@ export default {
       this.carList.forEach(item => {
         //console.log('changeControlBottom')
         //item.acc = false
-        //item.direction = '1'
-        //item.speed = 0
-        //item.is_online = '离线'
-        // item.longitude=116.98695649121092
-        // item.latitude=38.65221385853693
+        //item.direction = '1
+        if (typeof (item.speed) == 'undefined') {
+          //this.carListTwo.add(item);
+          item.speed=-1;
+        }
+        if (typeof (item.longitude) != 'undefined') {
+        //item.longitude=116.98695649121092
+        //item.latitude=38.65221385853693
+        console.log(item.speed)
         this.$set(item, 'showFlag', false)
         this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction, item.is_online)))
         //this.$set(item, 'locationDetail', this._getLocationDetailInfo({ lng: item.longitude, lat: item.latitude }))
         if (typeof (this.locationDetail) != 'undefined') {
           item.locationDetail=this.locationDetail
         }
+        }
         console.log(item.locationDetail)
       })
+      console.log(this.carListTwo)
     },
     infoWindowClose(marker) { // infoWindow关闭
       marker.showFlag = false
