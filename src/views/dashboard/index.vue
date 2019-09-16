@@ -203,7 +203,7 @@
           <photo-manager :terminal-phone="phoneNum" />
         </el-dialog>
         <el-dialog title="轨迹回放" width="800px" :visible.sync="trackPlaybackVisible">
-          <TrackPlayback v-if="trackPlaybackVisible" />
+          <TrackPlayback v-if="trackPlaybackVisible" :phonenum="phoneNum"/>
         </el-dialog>
         <control-bottom ref="controlBottom" @selectrow="tableSelectRow" @changeBottom="changeControlBottom"/>
         <warning-message />
