@@ -301,7 +301,7 @@ export default {
     },
     'carListShowMap': function() {
       return this.carList.filter(item => {
-        if(item.longitude==null||item.latitude==null)
+        if(item.longitude==null||item.latitude==null||item.speed==-1)
           return false
         else
           return true
