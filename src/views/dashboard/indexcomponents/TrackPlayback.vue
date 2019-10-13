@@ -62,7 +62,7 @@
     },
     data() {
       return {
-        phoneNum:'23021181444',
+        phoneNum:'',
         TrackPlaybackShotTime: '',
         //trackPlaybackStartTime:'',
         //trackPlaybackEndTime:'',
@@ -86,6 +86,14 @@
       }
     },
     computed: {},
+    props:{
+      phonenum:{
+        type:String,
+        default:function () {
+          return ''
+        }
+      }
+    },
     methods: {
       trackPlaybackDraw() { // 查询一段时间间隔的坐标，画路径
         //this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
@@ -99,7 +107,8 @@
         }else{
           var trackPlaybackStartTime = this.TrackPlaybackShotTime[0].toLocaleString()
           var trackPlaybackEndTime = this.TrackPlaybackShotTime[1].toLocaleString()
-          getVehiclePositionFromList(this.phoneNum,trackPlaybackStartTime, trackPlaybackEndTime).then(response => {
+          console.log(this.phonenum+trackPlaybackStartTime+trackPlaybackEndTime)
+          getVehiclePositionFromList(this.phonenum,trackPlaybackStartTime, trackPlaybackEndTime).then(response => {
             this.vehiclePositionFromList = response.data
             console.log(this.vehiclePositionFromList)
             if (this.vehiclePositionFromList.length > 0) {
@@ -110,9 +119,6 @@
             }
             else{
               alert("数据为空!")
-              //演示的时候如果数据是空的就显示假数据
-              this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
-              this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
             }
           })
         }

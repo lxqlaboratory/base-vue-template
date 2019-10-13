@@ -398,7 +398,8 @@ export default {
                   duration: 8000
                 })
               }
-              if (p.beidou === true) {
+              /***
+               * if (p.beidou === true) {
                 ref.$message({
                   showClose: true,
                   message: '[' + ref.socketPlateNum + ']' + '未使用北斗卫星进行定位',
@@ -406,6 +407,7 @@ export default {
                   duration: 8000
                 })
               }
+               ***/
               if (p.GLONASS === true) {
                 ref.$message({
                   showClose: true,
