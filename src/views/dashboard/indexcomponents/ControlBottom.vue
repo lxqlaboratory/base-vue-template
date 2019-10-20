@@ -1,14 +1,6 @@
 <template>
   <div class="bottom-container" :class="{active:isShow}">
-
-    <!--<div id="menu">
-      <div class="menu">功能1</div>
-      <div class="menu">功能2</div>
-      <div class="menu">功能3</div>
-      <div class="menu">功能4</div>
-      <div class="menu">功能5</div>
-    </div>-->
-    <el-dialog title="今日信息处理":visible.sync="warningRightVisible" style="width: 100%" class="el-dialog--centers" :center="true">
+    <el-dialog title="今日信息处理" :visible.sync="warningRightVisible" style="width: 100%" class="el-dialog--centers" :center="true">
       <warning-right v-if="warningRightVisible" :active-names="activeNames"/>
     </el-dialog>
     <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 74%">
@@ -191,7 +183,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'ControlBottom',
   components: {
-    warningRight:WarningRight,
+    warningRight: WarningRight,
   },
   data() {
     return {
@@ -205,7 +197,7 @@ export default {
       tableData: [],
       startInput: null,
       endInput: null,
-      warningRightVisible:false,
+      warningRightVisible: false,
       simInput: null,
       onlineChecked: false,
       videoChecked: false,
@@ -231,7 +223,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'carList',
+      'carList'
     ]),
     'vehicle_num': function() {
       return this.carList.length

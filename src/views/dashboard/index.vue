@@ -109,12 +109,12 @@
                     <span class="popup-span" style="width:90%;font-weight:normal">{{ marker.locationDetail }}</span>
                   </div>
                   <div class="popup-basic-line" style="border-bottom: none; float: left; height: 10%; margin-top:3px">
-                    <div v-for="item in weatherInfo" style="float: left;">
-                      <img :src="item.dayPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
-                      <img :src="item.nightPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
-                      <span class="popup-span" style="font-weight:normal">{{ item.weather }}</span>
-                      <span class="popup-span" style="font-weight:normal">{{ item.dushu }}</span>
-                      <span class="popup-span" style="font-weight:normal">{{ item.wind }}</span>
+                    <div :weatherInfo="weatherInfo" style="float: left;">
+                      <img :src="weatherInfo.dayPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
+                      <img :src="weatherInfo.nightPictureUrl" class="popup-img" style="height: 20px; width: 28px;">
+                      <span class="popup-span" style="font-weight:normal">{{ weatherInfo.weather }}</span>
+                      <span class="popup-span" style="font-weight:normal">{{ weatherInfo.dushu }}</span>
+                      <span class="popup-span" style="font-weight:normal">{{ weatherInfo.wind }}</span>
                     </div>
                   </div>
                 </div>
@@ -205,6 +205,9 @@
         <el-dialog title="轨迹回放" width="800px" :visible.sync="trackPlaybackVisible">
           <TrackPlayback v-if="trackPlaybackVisible" :phonenum="phoneNum"/>
         </el-dialog>
+        <el-dialog title="视频监控" width="980px" :visible.sync="videoMonitoringVisible">
+          <VideoMonitor v-if="videoMonitoringVisible" :phonenum="phoneNum"/>
+        </el-dialog>
         <control-bottom ref="controlBottom" @selectrow="tableSelectRow" @changeBottom="changeControlBottom"/>
         <warning-message />
       </el-main>
@@ -218,6 +221,7 @@ import ControlBottom from './indexcomponents/ControlBottom'
 import TalkBack from './indexcomponents/TalkBack'
 import WarningMessage from './indexcomponents/WarningMessage'
 import WarningRight from './indexcomponents/WarningRight'
+import VideoMonitor from './indexcomponents/VideoMonitor'
 import TrackPlayback from './indexcomponents/TrackPlayback'
 import PhotoManager from './indexcomponents/PhotoManager'
 import { getTreeVehicleFormList } from '@/api/vehicle-list-index'
@@ -236,7 +240,8 @@ export default {
     TrackPlayback: TrackPlayback,
     photoManager: PhotoManager,
     warningMessage: WarningMessage,
-    WarningRight:WarningRight,
+    WarningRight: WarningRight,
+    VideoMonitor: VideoMonitor
   },
   data() {
     return {
@@ -444,8 +449,9 @@ export default {
     },
     toVideoMonitoring(phoneNum) {
       // mediaTransform(phoneNum, 1, 0).then()
-      console.log('phoneNum ' + phoneNum)
-      this.$router.push({ name: 'videoMonitor',params:{phoneNum} })
+      // this.$router.push({ name: 'videoMonitor', params: { phoneNum }})
+      this.phoneNum = phoneNum
+      this.videoMonitoringVisible = !this.videoMonitoringVisible
     },
     toTerminalParam(phoneNum) {
       getTerminalParam(phoneNum).then()
@@ -472,8 +478,6 @@ export default {
       this.textMsgVisible = !this.textMsgVisible
     },
     getClickInfo(e) {
-      console.log(e.point.lng)
-      console.log(e.point.lat)
       this.center.lng = e.point.lng
       this.center.lat = e.point.lat
       this._getWeatherInfo({ lng: e.point.lng, lat: e.point.lat })
@@ -495,8 +499,8 @@ export default {
         this.$set(item, 'showFlag', false)
         this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction, item.is_online)))
         //this.$set(item, 'locationDetail', this._getLocationDetailInfo({ lng: item.longitude, lat: item.latitude }))
-        if (typeof (this.locationDetail) != 'undefined') {
-          item.locationDetail=this.locationDetail
+        if (typeof (this.locationDetail) !== 'undefined') {
+          item.locationDetail = this.locationDetail
         }
         }
         console.log(item.locationDetail)
