@@ -158,7 +158,7 @@
             <div v-else>{{ '关' }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="卫星速度" sortable min-width="80">
+        <el-table-column prop="speed" label="卫星速度" sortable min-width="80">
           <template slot-scope="scope">
             <div v-if="scope.row.speed>75" style="color: red">{{ scope.row.speed }}</div>
             <div v-else>{{ scope.row.speed }}</div>
