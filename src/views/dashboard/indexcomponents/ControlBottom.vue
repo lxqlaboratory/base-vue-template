@@ -286,6 +286,7 @@ export default {
     showTable() {
       // this.fillTable()
       this.isShow = !this.isShow
+      this.tableData = this.carList
     },
     seachBottomTable() {
       var list = []
