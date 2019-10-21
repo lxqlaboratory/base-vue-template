@@ -204,7 +204,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
+  /* {
     path: '/videoMonitor',
     component: Layout,
     name: 'VideoMonitor',
@@ -215,7 +215,7 @@ export const constantRoutes = [
       component: () => import('@/views/video-monitor/index'),
       meta: { title: '视频监控', icon: 'conversation' }
     }]
-  },
+  },*/
   {
     path: '/terminalControl',
     component: Layout,
