@@ -24,6 +24,7 @@
           :value="item.value"
         />
       </el-select>
+      <el-button type="primary" round @click="exportToExcel()" style="margin-bottom: 10px">导出</el-button>
     </div>
 
     <el-table :data="tableList.slice((currentPage-1)*pageSize,currentPage*pageSize)" strip border fit highlight-current-row style="margin-top:10px">
@@ -162,7 +163,23 @@ export default {
     },
     current_change:function(currentPage){
       this.currentPage = currentPage;
-    }
+    },
+    exportToExcel() {
+      //excel数据导出
+      require.ensure([], () => {
+        const {
+          export_json_to_excel
+        } = require('../../assets/js/Export2Excel');
+        const tHeader = ['车牌号','报警类型', '报警时间', '车队名称', '公司名称', '位置'];
+        const filterVal = ['plateNum','violationParameterName', 'violationTime', 'fleetName', 'companyName', 'location'];
+        const list = this.tableList;
+        const data = this.formatJson(filterVal, list);
+        export_json_to_excel(tHeader, data, '违章历史');
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
+    },
   }
 }
 </script>

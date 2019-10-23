@@ -19,6 +19,7 @@
       />
     </el-select>
     <el-button type="primary" round @click="openSave()" style="margin-bottom: 10px">增加</el-button>
+    <el-button type="primary" round @click="exportToExcel()" style="margin-bottom: 10px">导出</el-button>
     <el-table
       :data="tableList"
       style="width: 100%">
@@ -452,7 +453,24 @@ export default {
     openSave(){
       this.dialogSaveFormVisible = true
     },
-    edit(item) {
+    exportToExcel() {
+        //excel数据导出
+        require.ensure([], () => {
+             const {
+               export_json_to_excel
+               } = require('../../assets/js/Export2Excel');
+            const tHeader = ['车牌号','所属车队', '司机姓名', 'SIM卡号'];
+             const filterVal = ['plateNum','fleetName', 'driverName', 'simNum'];
+             const list = this.tableList;
+             const data = this.formatJson(filterVal, list);
+             export_json_to_excel(tHeader, data, '车辆列表');
+           })
+         },
+       formatJson(filterVal, jsonData) {
+         return jsonData.map(v => filterVal.map(j => v[j]))
+          },
+
+edit(item) {
       this.insertRow = item
       this.dialogFormVisible = true
     },

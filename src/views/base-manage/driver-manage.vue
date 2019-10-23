@@ -10,6 +10,7 @@
       />
     </el-select>
     <el-button type="primary" round @click="openSave()">增加</el-button>
+    <el-button type="primary" round @click="exportToExcel()" style="margin-bottom: 10px">导出</el-button>
     <el-table
       :data="tableList"
       border
@@ -251,7 +252,23 @@ export default {
         });
       })
 
-    }
+    },
+    exportToExcel() {
+      //excel数据导出
+      require.ensure([], () => {
+        const {
+          export_json_to_excel
+        } = require('../../assets/js/Export2Excel');
+        const tHeader = ['姓名','联系电话', '出生日期', '家庭地址', '驾驶证号', '身份证号'];
+        const filterVal = ['driverName','driverPhoneNum', 'driverBirth', 'driverAddress', 'drivingLicenseNum', 'identificationCardNum'];
+        const list = this.tableList;
+        const data = this.formatJson(filterVal, list);
+        export_json_to_excel(tHeader, data, '驾驶员列表');
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
+    },
   }
 }
 </script>
