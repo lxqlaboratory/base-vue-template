@@ -46,14 +46,24 @@ export default {
         console.log('connected')
         client.subscribe('/exchange/jt808/location', function(message) {
           const p = JSON.parse(message.body)
-          console.log('ref.carList.filter进入')
           const terminalPhone = p.terminalPhone
           console.log(ref.carList)
           ref.carList.filter(item => {
+            /* item.time = '20' + p.time.substring(0, 2) + '-' + p.time.substring(2, 4) + '-' + p.time.substring(4, 6) +
+                      ' ' + p.time.substring(6, 8) + ':' + p.time.substring(8, 10) + ':' + p.time.substring(10, 12)
+            if (item.time !== 'undefined') {
+              const currentTime = ref.$getCurrentTime.getCurrentTime()
+              console.log(item.time)
+              const minutes = ref.$timeCompareMinute.timeCompareMinute(currentTime, item.time)
+              console.log(minutes)
+              item.is_online = minutes < 300
+              console.log(item.is_online)
+              if (!item.is_online) item.subTime = 0
+            } */
             if (item.phoneNum == terminalPhone) {
               ref.socketPlateNum = item.plateNum
               // 设置 carList 的值   "latitude" : 36665736, "longitude" : 117132753
-              var resultPoint = ref.$gpsToBaiduPoint.GpsToBaiduPoint(p.latitude / 1000000.0, p.longitude / 1000000.0)
+              let resultPoint = ref.$gpsToBaiduPoint.GpsToBaiduPoint(p.latitude / 1000000.0, p.longitude / 1000000.0)
               console.log(resultPoint)
               item.longitude = resultPoint[1]
               item.latitude = resultPoint[0]
@@ -65,17 +75,6 @@ export default {
               item.simulation = p.simulation
               item.wirelessIntensity = p.wirelessIntensity
               item.satellitesNum = p.satellitesNum
-              console.log(item.longitude + '--->' + item.latitude)
-              // p.time=190610093043
-              item.time = '20' + p.time.substring(0, 2) + '-' + p.time.substring(2, 4) + '-' + p.time.substring(4, 6) +
-                ' ' + p.time.substring(6, 8) + ':' + p.time.substring(8, 10) + ':' + p.time.substring(10, 12)
-              const currentTime = ref.$getCurrentTime.getCurrentTime()
-              const minutes = ref.$timeCompareMinute.timeCompareMinute(item.time, currentTime)
-              if (minutes < 1) {
-                item.is_online = '在线'
-              } else {
-                item.is_online = '离线'
-              }
               if (typeof (item.identityTime) !== 'undefined') {
                 const currentTimeDate = new Date()
                 const startTime = ref.$timeCompareMinute.strDateToDate(item.identityTime)

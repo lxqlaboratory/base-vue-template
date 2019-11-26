@@ -46,99 +46,98 @@
   </div>
 </template>
 <script>
-  import { mapGetters } from 'vuex'
-  import { getTreeVehicleFormList,getVehiclePositionFromList } from '@/api/vehicle-list-index'
-  import { cameraPhoto, textMsg, tempLocationTrack, getTerminalParam } from '@/api/terminal'
-  import BmLushu from '../../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
-  import Stomp from 'stompjs'
-  import { getWeatherInfo } from '@/api/weather'
-  import { getLocationDetailInfo } from '@/api/location'
-  import { getVehiclePhotoInfoList } from '@/api/photo-info'
-  import { getMessageTemplateList } from '@/api/template-manage'
-  export default {
-    name: 'TrackPlayback',
-    components: {
-      BmLushu,
-    },
-    data() {
-      return {
-        phoneNum:'',
-        TrackPlaybackShotTime: '',
-        //trackPlaybackStartTime:'',
-        //trackPlaybackEndTime:'',
-        center: { lng: 116.404844, lat: 39.911836 },
-        play: false,
-        path: [
+import { mapGetters } from 'vuex'
+import { getTreeVehicleFormList, getVehiclePositionFromList } from '@/api/vehicle-list-index'
+import { cameraPhoto, textMsg, tempLocationTrack, getTerminalParam } from '@/api/terminal'
+import BmLushu from '../../../../node_modules/vue-baidu-map/components/extra/Lushu.vue'
+import Stomp from 'stompjs'
+import { getWeatherInfo } from '@/api/weather'
+import { getLocationDetailInfo } from '@/api/location'
+import { getVehiclePhotoInfoList } from '@/api/photo-info'
+import { getMessageTemplateList } from '@/api/template-manage'
+export default {
+  name: 'TrackPlayback',
+  components: {
+    BmLushu
+  },
+  props: {
+    phonenum: {
+      type: String,
+      default: function() {
+        return ''
+      }
+    }
+  },
+  data() {
+    return {
+      phoneNum: '',
+      TrackPlaybackShotTime: '',
+      // trackPlaybackStartTime:'',
+      // trackPlaybackEndTime:'',
+      center: { lng: 116.404844, lat: 39.911836 },
+      play: false,
+      path: [
 
-        ],
-        icon: {
-          url: 'http://api.map.baidu.com/library/LuShu/1.2/examples/car.png',
-          size: { width: 52, height: 26 },
-          opts: { anchor: { width: 27, height: 13 }}
-        },
-        trackPlaybackStartPoint: { },
-        trackPlaybackEndPoint: { },
-        trackPlaybackWayPointList: [
-          /* { lng: 116.404844, lat: 39.911836 },
+      ],
+      icon: {
+        url: 'http://api.map.baidu.com/library/LuShu/1.2/examples/car.png',
+        size: { width: 52, height: 26 },
+        opts: { anchor: { width: 27, height: 13 }}
+      },
+      trackPlaybackStartPoint: { },
+      trackPlaybackEndPoint: { },
+      trackPlaybackWayPointList: [
+        /* { lng: 116.404844, lat: 39.911836 },
           { lng: 116.308102, lat: 40.056057 }*/
-        ],
-        vehiclePositionFromList:[{}],
+      ],
+      vehiclePositionFromList: [{}]
+    }
+  },
+  computed: {},
+  methods: {
+    trackPlaybackDraw() { // 查询一段时间间隔的坐标，画路径
+      // this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
+      // this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
+      if (this.TrackPlaybackShotTime == '') {
+        this.$message({
+          showClose: true,
+          message: '必须输入开始时间和结束时间',
+          type: 'error'
+        })
+      } else {
+        var trackPlaybackStartTime = this.TrackPlaybackShotTime[0].toLocaleString()
+        var trackPlaybackEndTime = this.TrackPlaybackShotTime[1].toLocaleString()
+        console.log(this.phonenum + trackPlaybackStartTime + trackPlaybackEndTime)
+        getVehiclePositionFromList(this.phonenum, trackPlaybackStartTime, trackPlaybackEndTime).then(response => {
+          this.vehiclePositionFromList = response.data
+          console.log(this.vehiclePositionFromList)
+          if (this.vehiclePositionFromList.length > 0) {
+            this.trackPlaybackStartPoint = { lng: this.vehiclePositionFromList[0].lng, lat: this.vehiclePositionFromList[0].lat }
+            this.center.lng = this.trackPlaybackStartPoint.longitude
+            this.center.lat = this.trackPlaybackStartPoint.latitude
+            this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lat }
+          } else {
+            alert('数据为空!')
+          }
+        })
       }
     },
-    computed: {},
-    props:{
-      phonenum:{
-        type:String,
-        default:function () {
-          return ''
-        }
-      }
+    reset() {
+      this.play = false
     },
-    methods: {
-      trackPlaybackDraw() { // 查询一段时间间隔的坐标，画路径
-        //this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
-       // this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
-        if (this.TrackPlaybackShotTime == '') {
-          this.$message({
-            showClose: true,
-            message: '必须输入开始时间和结束时间',
-            type: 'error'
-          })
-        }else{
-          var trackPlaybackStartTime = this.TrackPlaybackShotTime[0].toLocaleString()
-          var trackPlaybackEndTime = this.TrackPlaybackShotTime[1].toLocaleString()
-          console.log(this.phonenum+trackPlaybackStartTime+trackPlaybackEndTime)
-          getVehiclePositionFromList(this.phonenum,trackPlaybackStartTime, trackPlaybackEndTime).then(response => {
-            this.vehiclePositionFromList = response.data
-            console.log(this.vehiclePositionFromList)
-            if (this.vehiclePositionFromList.length > 0) {
-              this.trackPlaybackStartPoint = { lng: this.vehiclePositionFromList[0].lng, lat: this.vehiclePositionFromList[0].lat }
-              this.center.lng = this.trackPlaybackStartPoint.longitude
-              this.center.lat = this.trackPlaybackStartPoint.latitude
-              this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lat }
-            }
-            else{
-              alert("数据为空!")
-            }
-          })
-        }
-      },
-      reset() {
-        this.play = false
-      },
-      handleSearchComplete(res) {
-        this.path = res.getPlan(0).getRoute(0).getPath()
+    handleSearchComplete(res) {
+      this.path = res.getPlan(0).getRoute(0).getPath()
 
-        console.log(this.path)
-      },
-      trackPlaybackStart() { // 开始回放
-        this.$refs.lushu.$emit('start', this.$refs.lushu)
-        this.play = true
-      },
-      trackPlaybackStop() { // 停止回放
-        this.play = false
-      },
+      console.log(this.path)
+    },
+    trackPlaybackStart() { // 开始回放
+      this.$refs.lushu.$emit('start', this.$refs.lushu)
+      this.play = true
+    },
+    trackPlaybackStop() { // 停止回放
+      this.play = false
     }
   }
+}
 
 </script>

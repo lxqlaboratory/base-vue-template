@@ -21,7 +21,7 @@
           @check-change="getChecked"
         />
       </el-aside>
-      <el-main style="height: calc(100vh - 34px);padding:0px;">
+      <el-main style="height: calc(100vh - 34px); padding:0;">
         <baidu-map
           class="map"
           :center="center"
@@ -203,12 +203,12 @@
           <photo-manager :terminal-phone="phoneNum" />
         </el-dialog>
         <el-dialog title="轨迹回放" width="800px" :visible.sync="trackPlaybackVisible">
-          <TrackPlayback v-if="trackPlaybackVisible" :phonenum="phoneNum"/>
+          <TrackPlayback v-if="trackPlaybackVisible" :phonenum="phoneNum" />
         </el-dialog>
         <el-dialog title="视频监控" width="980px" :visible.sync="videoMonitoringVisible">
-          <VideoMonitor v-if="videoMonitoringVisible" :phonenum="phoneNum"/>
+          <VideoMonitor v-if="videoMonitoringVisible" :phonenum="phoneNum" />
         </el-dialog>
-        <control-bottom ref="controlBottom" @selectrow="tableSelectRow" @changeBottom="changeControlBottom"/>
+        <control-bottom ref="controlBottom" @selectrow="tableSelectRow" @changeBottom="changeControlBottom" />
         <warning-message />
       </el-main>
     </el-container>
@@ -306,10 +306,7 @@ export default {
     },
     'carListShowMap': function() {
       return this.carList.filter(item => {
-        if(item.longitude==null||item.latitude==null||item.speed==-1)
-          return false
-        else
-          return true
+        if (item.longitude == null || item.latitude == null || item.speed == -1) { return false } else { return true }
       })
     }
   },
@@ -337,28 +334,18 @@ export default {
       if (pic > 8) {
         pic = 8
       }
-      //console.log('getImgPath')
-      //console.log(direction)
-      //console.log(is_online)
       if (typeof (is_online) === 'undefined') {
         return parseInt(pic) + '.png'
       }
-      if (is_online === '熄火') {
-        return parseInt(pic + 8) + '.png'
-      } else if (is_online === '离线') {
-        return parseInt(pic + 16) + '.png'
-      } else {
+      if (is_online) {
         return parseInt(pic) + '.png'
+      } else {
+        return parseInt(pic + 16) + '.png'
       }
     },
     tableSelectRow(rowPlateNum) {
       this.carList.forEach(item => {
-        //console.log('tableSelectRow')
-        //console.log(rowPlateNum)
         if (rowPlateNum == item.plateNum) {
-          //console.log('item.latitude+item.longitude')
-          //console.log(item.latitude)
-          //console.log(item.longitude)
           if (typeof (item.latitude) === 'undefined' || typeof (item.longitude) === 'undefined') {
             this.$message({
               showClose: true,
@@ -485,23 +472,18 @@ export default {
     },
     changeControlBottom() {
       this.carList.forEach(item => {
-        //console.log('changeControlBottom')
-        //item.acc = false
-        //item.direction = '1
-        if (typeof (item.speed) == 'undefined') {
-          //this.carListTwo.add(item);
-          item.speed=-1;
+        if (typeof (item.speed) === 'undefined') {
+          // this.carListTwo.add(item);
+          item.speed = -1
         }
-        if (typeof (item.longitude) != 'undefined') {
-        //item.longitude=116.98695649121092
-        //item.latitude=38.65221385853693
-        console.log(item.speed)
-        this.$set(item, 'showFlag', false)
-        this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction, item.is_online)))
-        //this.$set(item, 'locationDetail', this._getLocationDetailInfo({ lng: item.longitude, lat: item.latitude }))
-        if (typeof (this.locationDetail) !== 'undefined') {
-          item.locationDetail = this.locationDetail
-        }
+        if (typeof (item.longitude) !== 'undefined') {
+          console.log(item.speed)
+          this.$set(item, 'showFlag', false)
+          this.$set(item, 'imageUrl', require('@/icons/svg/icon-car/' + this.getImgPath(item.direction, item.is_online)))
+          // this.$set(item, 'locationDetail', this._getLocationDetailInfo({ lng: item.longitude, lat: item.latitude }))
+          if (typeof (this.locationDetail) !== 'undefined') {
+            item.locationDetail = this.locationDetail
+          }
         }
         console.log(item.locationDetail)
       })
