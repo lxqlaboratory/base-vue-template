@@ -34,9 +34,9 @@ module.exports = {
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
-      //58.56.251.230:8081
+      //localhost:8080
       '/api': {
-        target: `http://58.56.251.230:9988/vehicle-monitoring/`,
+        target: `http://58.56.251.230:8081/vehicle-monitoring/`,
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/'

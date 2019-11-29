@@ -82,6 +82,16 @@ export default {
               }
 
               // ref.$getWarningMessage.getWarningMessage(p,ref.socketPlateNum)
+              if (p.p.speed / 10.0 >75) {
+                ref.$message({
+                  showClose: true,
+                  message: '[' + ref.socketPlateNum + ']' + '车辆即将超速',
+                  type: 'error',
+                  duration: 8000
+                })
+                console.log('车辆超速')
+                ref.$refs.audio.play()
+              }
               if (p.overSpeeding === true) {
                 ref.$message({
                   showClose: true,
