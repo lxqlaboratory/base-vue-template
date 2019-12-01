@@ -36,7 +36,7 @@ module.exports = {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       //58.56.251.230:8081
       '/api': {
-        target: `http://58.56.251.230:9988/vehicle-monitoring/`,
+        target: `http://58.56.251.230:8081/vehicle-monitoring/`,
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/'

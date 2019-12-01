@@ -159,10 +159,31 @@
        <!-- <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />-->
         <!-- <el-table-column prop="longitude" label="经度" sortable min-width="80" />
         <el-table-column prop="latitude" label="纬度" sortable min-width="80" />-->
-        <el-table-column prop="locationDetail" label="位置" sortable min-width="300" />
-        <el-table-column prop="subTime" label="连续驾驶时间" sortable min-width="120" />
-        <el-table-column prop="time" label="最后上线时间" sortable min-width="160" />
-        <el-table-column prop="driverName" label="驾驶员" sortable min-width="120" />
+        <el-table-column prop="locationDetail" label="位置" sortable min-width="300" >
+          <template slot-scope="scope">
+            <div v-if="scope.row.locationDetail==NULL" >暂无数据</div>
+            <div v-else>{{ scope.row.locationDetail }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="subTime" label="连续驾驶时间" sortable min-width="120" >
+        <template slot-scope="scope">
+          <div v-if="scope.row.is_online=='离线'&&scope.row.subTime==NULL" >未上线</div>
+          <div v-else-if="scope.row.is_online=='在线'&&scope.row.subTime==NULL">小于5分钟</div>
+          <div v-else>{{ scope.row.subTime }}</div>
+        </template>
+        </el-table-column>
+        <el-table-column prop="time" label="最后上线时间" sortable min-width="160" >
+          <template slot-scope="scope">
+            <div v-if="scope.row.time==NULL" >暂无数据</div>
+            <div v-else>{{ scope.row.time }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="driverName" label="驾驶员" sortable min-width="120" >
+        <template slot-scope="scope">
+          <div v-if="scope.row.driverName==NULL" >暂无驾驶员信息</div>
+          <div v-else>{{ scope.row.driverName }}</div>
+        </template>
+        </el-table-column>
         <!--<el-table-column prop="driverLicense" label="驾驶证号" sortable min-width="160" />-->
         <!--<el-table-column prop="driverCompany" label="车队名称" sortable min-width="220" />-->
         <!-- <el-table-column prop="vehicle_loc" label="位置信息" sortable min-width="400" />

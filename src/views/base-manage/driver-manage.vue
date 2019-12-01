@@ -10,7 +10,7 @@
       />
     </el-select>
     <el-button type="primary" round @click="openSave()">增加</el-button>
-    <el-button type="primary" round @click="exportToExcel()" style="margin-bottom: 10px">导出</el-button>
+    <!--<el-button type="primary" round @click="exportToExcel()" style="margin-bottom: 10px">导出</el-button>-->
     <el-table
       :data="tableList"
       border

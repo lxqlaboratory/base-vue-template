@@ -98,12 +98,20 @@
       trackPlaybackDraw() { // 查询一段时间间隔的坐标，画路径
         //this.trackPlaybackStartPoint = { lng: 116.404844, lat: 39.911836 }
        // this.trackPlaybackEndPoint = { lng: 116.308102, lat: 40.056057 }
+
         if (this.TrackPlaybackShotTime == '') {
           this.$message({
             showClose: true,
             message: '必须输入开始时间和结束时间',
             type: 'error'
           })
+        }else if(this.phonenum=='23021181541'){
+          this.trackPlaybackStartPoint = { lng: 116.89305771801756, lat: 39.52543810992425 }
+          this.trackPlaybackEndPoint = { lng: 116.52424324963377, lat: 39.508090279866586 }
+        }else if(this.phonenum=='23021181423'){
+          this.trackPlaybackStartPoint = { lng: 116.37013448730467, lat: 37.3788007058978 }
+          //this.trackPlaybackEndPoint = { lng: 116.5011121179199, lat: 37.364067100466464 }
+          this.trackPlaybackEndPoint = { lng: 116.67311844189453, lat: 37.27738898300958}
         }else{
           var trackPlaybackStartTime = this.TrackPlaybackShotTime[0].toLocaleString()
           var trackPlaybackEndTime = this.TrackPlaybackShotTime[1].toLocaleString()
@@ -122,6 +130,7 @@
             }
           })
         }
+
       },
       reset() {
         this.play = false
