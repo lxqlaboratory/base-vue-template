@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-container" :class="{active:isShow}">
     <el-dialog title="今日信息处理" :visible.sync="warningRightVisible" style="width: 100%" class="el-dialog--centers" :center="true">
-      <warning-right v-if="warningRightVisible" :active-names="activeNames"/>
+      <warning-right v-if="warningRightVisible" :active-names="activeNames" />
     </el-dialog>
     <el-dialog title="智能选车" :visible.sync="carSelectionVisible" :center="true" style="width: 74%">
       <div>
@@ -45,7 +45,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="carSelectionVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="seachBottomTable">查 询</el-button>
+        <el-button size="small" type="primary" @click="searchBottomTable">查 询</el-button>
       </span>
     </el-dialog>
 
@@ -68,11 +68,6 @@
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
-        <svg-icon icon-class="car_park" />
-        <el-button type="text" style="color:blueviolet" @click="showParking">停车</el-button>&nbsp;&nbsp;&nbsp;{{ parking }}
-      </div>
-      <div style="width: 1px;height: 4.5vh; background: gray;" />
-      <div class="item-mapbottom">
         <svg-icon icon-class="offline" />
         <el-button type="text" style="color:gray" @click="showOffline">离线</el-button>&nbsp;&nbsp;&nbsp;{{ offline_num }}
       </div>
@@ -88,7 +83,7 @@
       </div>
       <div style="width: 1px;height: 4.5vh; background: gray;" />
       <div class="item-mapbottom">
-        &nbsp;&nbsp;&nbsp;车辆在线数：&nbsp;{{ online_num }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当前在线率：&nbsp;{{ online_rate }}
+        &nbsp;&nbsp;&nbsp;车辆在线数：&nbsp;{{ running }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当前在线率：&nbsp;{{ online_rate }}
       </div>
 
       <div class="item-mapbottom-right">
@@ -143,20 +138,20 @@
         </el-table-column>
         <el-table-column prop="plateNum" label="车牌号" sortable min-width="100" />
         <!--<el-table-column prop="phoneNum" label="SIM卡号" sortable min-width="120" />-->
-        <el-table-column prop="is_online" label="是否在线" sortable min-width="80" />
-        <el-table-column prop="acc" label="ACC" sortable min-width="80">
+        <el-table-column prop="is_online" label="是否在线" sortable min-width="100" />
+        <el-table-column prop="acc" label="ACC" sortable min-width="100">
           <template slot-scope="scope">
             <div v-if="scope.row.acc">{{ '开' }}</div>
             <div v-else>{{ '关' }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="speed" label="卫星速度" sortable min-width="80">
+        <el-table-column prop="speed" label="卫星速度" sortable min-width="100">
           <template slot-scope="scope">
             <div v-if="scope.row.speed>75" style="color: red">{{ scope.row.speed }}</div>
             <div v-else>{{ scope.row.speed }}</div>
           </template>
         </el-table-column>
-       <!-- <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />-->
+        <!-- <el-table-column prop="gbRecSpeed" label="记录仪速度" sortable min-width="120" />-->
         <!-- <el-table-column prop="longitude" label="经度" sortable min-width="80" />
         <el-table-column prop="latitude" label="纬度" sortable min-width="80" />-->
         <el-table-column prop="locationDetail" label="位置" sortable min-width="300" >
@@ -204,7 +199,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'ControlBottom',
   components: {
-    warningRight: WarningRight,
+    warningRight: WarningRight
   },
   data() {
     return {
@@ -250,41 +245,21 @@ export default {
       return this.carList.length
     },
     'running': function() {
-      var num = 0
+      let num = 0
       this.carList.forEach(item => {
-        if (item.is_online === '在线') { num++ }
-      }
-      )
+        if (item.is_online) num++
+      })
       return num
     },
     'parking': function() {
-      var num = 0
-      this.carList.forEach(item => {
-        if (item.is_online === '熄火') { num++ }
-      }
-      )
-      return num
-    },
-    'online_num': function() {
-      var num = 0
-      this.carList.forEach(item => {
-        if (item.is_online === '在线') { num++ }
-      }
-      )
-      return num
+      return 0
     },
     'offline_num': function() {
-      var num = 0
-      this.carList.forEach(item => {
-        if (item.is_online === '离线') { num++ }
-      }
-      )
-      return num
+      return this.vehicle_num - this.running
     },
     'online_rate': function() {
-      return this.vehicle_num <= 0 ? '0%' : (Math.round(this.online_num / this.vehicle_num * 10000) / 100.00) + '%'
+      return this.vehicle_num <= 0 ? '0%' : (Math.round(this.running / this.vehicle_num * 10000) / 100.00) + '%'
     }
-
   },
   mounted() {
     const that = this
@@ -301,7 +276,7 @@ export default {
       this.isShow = !this.isShow
       this.tableData = this.carList
     },
-    seachBottomTable() {
+    searchBottomTable() {
       var list = []
       // 6个if
       // author：杨培林
@@ -311,7 +286,7 @@ export default {
             if (this.driverInput == null || item.driverName == this.driverInput) {
               if (this.fleetValue == null || item.fleetName.indexOf(this.fleetValue) >= 0) {
                 if (this.startSpeed == null || this.endSpeed == null || (item.speed > this.startSpeed && item.speed < this.endSpeed)) {
-                  if (!this.onlineChecked || item.is_online === '在线') { list.push(item) }
+                  if (!this.onlineChecked || item.is_online) { list.push(item) }
                 }
               }
             }
@@ -326,14 +301,6 @@ export default {
     isCarSelectionVisible() {
       this.carSelectionVisible = !this.carSelectionVisible
     },
-
-    clearFilter() {
-      this.$refs.filterTable.clearFilter()
-    },
-    filterHandler(value, row, column) {
-      const property = column['property']
-      return row[property] === value
-    },
     row_contextmenu(row, column, e) {
       e.preventDefault()
       const menu = document.querySelector('#menu')
@@ -347,28 +314,28 @@ export default {
     showRunning() {
       this.tableData = []
       this.carList.forEach(item => {
-        if (item.is_online == '在线') { this.tableData.push(item) }
+        if (item.is_online) { this.tableData.push(item) }
       })
     },
     showParking() {
       this.tableData = []
-      this.carList.forEach(item => {
-        if (item.is_online == '熄火') { this.tableData.push(item) }
-      })
+      /* this.carList.forEach(item => {
+        if (item.is_online) { this.tableData.push(item) }
+      }) */
     },
     showOffline() {
       this.tableData = []
       this.carList.forEach(item => {
-        if (item.is_online == '离线') { this.tableData.push(item) }
+        if (!item.is_online) { this.tableData.push(item) }
       })
     },
     showViolation() {
       this.warningRightVisible = !this.warningRightVisible
-      this.activeNames='first'
+      this.activeNames = 'first'
     },
     showAlarm() {
       this.warningRightVisible = !this.warningRightVisible
-      this.activeNames='third'
+      this.activeNames = 'third'
     }
   }
 }

@@ -92,8 +92,7 @@ export default {
           this.listPhotoSrc = []
           const listData = response.data
           listData.filter(item => {
-            //this.listPhotoSrc.push('http://202.194.14.73:8080/photos/15153139702/' + item + '.jpg')
-            this.listPhotoSrc.push('http://202.194.14.73:8080/photos/'+this.terminalPhone+'/' + item + '.jpg')
+            this.listPhotoSrc.push('http://58.56.251.230:8080/photos/' + this.terminalPhone + '/' + item + '.jpg')
           })
         })
       }
