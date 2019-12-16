@@ -485,6 +485,14 @@ export default {
             item.locationDetail = this.locationDetail
           }
         }
+        if (typeof (item.receiveData) !== 'undefined') {
+
+          item.is_online="在线";
+        }
+
+
+
+
         console.log(item.locationDetail)
       })
       console.log(this.carListTwo)

@@ -105,25 +105,35 @@
             message: '必须输入开始时间和结束时间',
             type: 'error'
           })
-        }else if(this.phonenum=='23021181541'){
+        }/*else if(this.phonenum=='23021181541'){
           this.trackPlaybackStartPoint = { lng: 116.89305771801756, lat: 39.52543810992425 }
           this.trackPlaybackEndPoint = { lng: 116.52424324963377, lat: 39.508090279866586 }
         }else if(this.phonenum=='23021181423'){
           this.trackPlaybackStartPoint = { lng: 116.37013448730467, lat: 37.3788007058978 }
           //this.trackPlaybackEndPoint = { lng: 116.5011121179199, lat: 37.364067100466464 }
           this.trackPlaybackEndPoint = { lng: 116.67311844189453, lat: 37.27738898300958}
-        }else{
+        }*/else{
           var trackPlaybackStartTime = this.TrackPlaybackShotTime[0].toLocaleString()
           var trackPlaybackEndTime = this.TrackPlaybackShotTime[1].toLocaleString()
           console.log(this.phonenum+trackPlaybackStartTime+trackPlaybackEndTime)
           getVehiclePositionFromList(this.phonenum,trackPlaybackStartTime, trackPlaybackEndTime).then(response => {
             this.vehiclePositionFromList = response.data
+            console.log("AAAAAAAAA")
             console.log(this.vehiclePositionFromList)
+
             if (this.vehiclePositionFromList.length > 0) {
+              this.vehiclePositionFromList[0].lng=this.vehiclePositionFromList[0].longitude/ 1000000.0
+              this.vehiclePositionFromList[0].lat=this.vehiclePositionFromList[0].latitude/ 1000000.0
+              this.vehiclePositionFromList[1].lng=this.vehiclePositionFromList[1].longitude/ 1000000.0
+              this.vehiclePositionFromList[1].lat=this.vehiclePositionFromList[1].latitude/ 1000000.0
               this.trackPlaybackStartPoint = { lng: this.vehiclePositionFromList[0].lng, lat: this.vehiclePositionFromList[0].lat }
-              this.center.lng = this.trackPlaybackStartPoint.longitude
+              this.center.lng = this.trackPlaybackStartPoint.longitue
               this.center.lat = this.trackPlaybackStartPoint.latitude
-              this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lng, lat: this.vehiclePositionFromList[ this.vehiclePositionFromList.length - 1].lat }
+
+              this.trackPlaybackEndPoint = { lng: this.vehiclePositionFromList[1].lng, lat: this.vehiclePositionFromList[1].lat}
+              console.log("BBBBBBB")
+              console.log(this.trackPlaybackStartPoint)
+              console.log(this.trackPlaybackEndPoint)
             }
             else{
               alert("数据为空!")
@@ -136,6 +146,8 @@
         this.play = false
       },
       handleSearchComplete(res) {
+        console.log("SSSSSSSSS")
+        console.log(res);
         this.path = res.getPlan(0).getRoute(0).getPath()
 
         console.log(this.path)
